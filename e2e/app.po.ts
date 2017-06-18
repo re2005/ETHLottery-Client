@@ -1,6 +1,6 @@
 import { browser, by, element } from 'protractor';
 
-export class ETHLoterryClientPage {
+export class ethlotteryClientPage {
   navigateTo() {
     return browser.get('/');
   }

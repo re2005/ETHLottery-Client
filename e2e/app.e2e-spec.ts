@@ -1,10 +1,10 @@
-import { ETHLoterryClientPage } from './app.po';
+import { ethlotteryClientPage } from './app.po';
 
-describe('ethloterry-client App', () => {
-  let page: ETHLoterryClientPage;
+describe('ethlottery-client App', () => {
+  let page: ethlotteryClientPage;
 
   beforeEach(() => {
-    page = new ETHLoterryClientPage();
+    page = new ethlotteryClientPage();
   });
 
   it('should display welcome message', () => {
