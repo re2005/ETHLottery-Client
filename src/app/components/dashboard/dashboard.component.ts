@@ -10,18 +10,33 @@ import {GethContractManagerService} from '../../services/geth-contract-manager/g
 })
 export class DashboardComponent implements OnInit {
 
+    public contracts = [];
+
     /**
      *
-     * @param gethConnectService
-     * @param gethContractService
-     * @param gethContractManagerService
+     * @param {GethConnectService} gethConnectService
+     * @param {GethContractService} gethContractService
+     * @param {GethContractManagerService} gethContractManagerService
      */
     constructor(private gethConnectService: GethConnectService,
-                private gethContractService: GethContractService,
-                private gethContractManagerService: GethContractManagerService) {
+                private contractService: GethContractService,
+                private contractManagerService: GethContractManagerService) {
+    }
+
+    loadContracts() {
+        const currentContracts = this.contractManagerService.getCurrentContract();
+        currentContracts.forEach(contract => {
+            this.contracts.push(this.contractService.getContract(contract));
+        });
+        // debugger
+    }
+
+    makeLotteryList() {
+        this.loadContracts();
     }
 
     ngOnInit() {
+        this.makeLotteryList();
     }
 }
 

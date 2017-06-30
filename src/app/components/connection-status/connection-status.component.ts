@@ -14,7 +14,6 @@ export class ConnectionStatusComponent implements OnInit {
 
     constructor(private ls: GethConnectService) {
         this.ls.getConnected().subscribe(connected => {
-            console.log('Receiving logged user Component B');
             this.isWeb3Connected = connected;
         });
     }

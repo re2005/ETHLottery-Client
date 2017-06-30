@@ -11,6 +11,7 @@ export class UserConnectedComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log('re');
     }
 
 }

@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
 import {UserConnectedComponent} from './components/user-connected/user-connected.component';

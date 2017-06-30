@@ -1,3 +1,13 @@
-<h1>
-    Pick a lottery to play
-</h1>
+<div class="dashboard">
+    <h1>
+        Pick a lottery to play
+    </h1>
+
+    <ul>
+        <li *ngFor="let contract of contracts">
+            <a routerLink="/lottery/{{contract.address}}">
+                {{contract.address}}
+            </a>
+        </li>
+    </ul>
+</div>
