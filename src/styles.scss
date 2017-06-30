@@ -1,0 +1,19 @@
+@import "assets/css/reset.css";
+@import "assets/css/globals.scss";
+@import "assets/fonts/fonts.css";
+
+body, html {
+    height: 100%;
+    width: 100%;
+    background-color: $color-background;
+}
+
+.logo {
+    background: url('./assets/images/logo.svg') center center no-repeat;
+    background-size: 100%;
+}
+
+.logo-pic {
+    background: url('./assets/images/logo-pic.svg') left center no-repeat;
+    background-size: 30px;
+}

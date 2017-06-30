@@ -6,13 +6,9 @@ import {GethContractManagerService} from '../../services/geth-contract-manager/g
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.css']
+    styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
-    _contract: any;
-    _isWeb3Connected: boolean;
-    _currentNodeConnection: string;
 
     /**
      *
@@ -25,22 +21,11 @@ export class DashboardComponent implements OnInit {
                 private gethContractManagerService: GethContractManagerService) {
     }
 
-    updateConnectionStatus(data) {
-
-        if (data.connection) {
-            const currentContract = this.gethContractManagerService.getCurrentContract();
-            this._contract = this.gethContractService.getContract(currentContract);
-            this._isWeb3Connected = true;
-            this._currentNodeConnection = data.server;
-        } else {
-            this._isWeb3Connected = false;
-        }
-    }
-
-
-
     ngOnInit() {
-        this.gethConnectService.startConnection().then((data) => this.updateConnectionStatus(data));
     }
+}
 
+declare global {
+    interface Window { Web3: any,web3: any
+    }
 }

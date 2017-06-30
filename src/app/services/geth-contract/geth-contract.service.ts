@@ -12,4 +12,5 @@ export class GethContractService {
     getContract(contractAddress) {
         return window.web3.eth.contract(abi).at(contractAddress);
     }
+
 }

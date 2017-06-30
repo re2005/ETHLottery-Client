@@ -1,10 +1,29 @@
-<div>
-    <h1>
-        ETH Lottery Client
-    </h1>
+<div class="app-body app-body--background">
 
-    <a routerLink="dashboard">home</a>
-    <a routerLink="user">user</a>
+    <div [hidden]="isAppLoaded"
+         class="app-loading">
+        <div class="logo"></div>
+        loading . . .
+        <span>
+            connecting failure {{retryConnect}}
+        </span>
+    </div>
+
+    <div [ngClass]="{'is-loaded': isAppLoaded}"
+         class="app-content">
+
+        <header>
+            <h1 class="logo-pic">
+                E-LOTHERY <i>alpha</i>
+            </h1>
+            <app-connection-status></app-connection-status>
+        </header>
+
+        <router-outlet></router-outlet>
+    </div>
+
 </div>
 
-<router-outlet></router-outlet>
+
+<!--<a routerLink="dashboard">home</a>-->
+<!--<button (click)="getAccounts()">bet contracts</button>-->

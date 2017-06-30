@@ -1,0 +1,91 @@
+@import "../assets/css/globals";
+
+.app-body {
+    overflow: hidden;
+    font-family: $primary-font;
+
+    &--background {
+
+        height: 100%;
+        position: relative;
+        color: aliceblue;
+        z-index: 0;
+
+        &:after, &:before {
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: -1;
+            content: '';
+            position: absolute;
+            opacity: 0.7;
+        }
+
+        &:before {
+            background: url('../assets/images/backgrounds/bg-top.jpg') top center no-repeat;
+            background-size: 110%;
+
+        }
+
+        &:after {
+            background: url('../assets/images/backgrounds/bg-bottom.jpg') bottom center no-repeat;
+            background-size: 150%;
+        }
+
+        @include breakpoint_max(sm) {
+            &:after, &:before {
+                background-size: 800px;
+            }
+        }
+    }
+
+    @include breakpoint(sm) {
+        box-shadow: 0 2px 200px rgba(57, 17, 32, 0.9);
+        max-width: 560px;
+        max-height: 700px;
+        margin: auto;
+    }
+
+}
+
+.app-loading {
+    text-align: center;
+
+    .logo {
+        width: 200px;
+        display: block;
+        height: 200px;
+        margin: 100px auto 0;
+    }
+
+    span {
+        font-size: 11px;
+        opacity: 0.4;
+        display: block;
+        margin: 20px;
+    }
+}
+
+.app-content {
+    transform: translate3d(100%, 0px, 0px);
+    padding: 20px;
+
+    &.is-loaded {
+        transition: all .3s ease;
+        transform: none;
+    }
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+
+    h1 {
+        font-size: 18px;
+        padding: 10px 0 10px 40px;
+    }
+    i {
+        font-size: 10px;
+    }
+}
