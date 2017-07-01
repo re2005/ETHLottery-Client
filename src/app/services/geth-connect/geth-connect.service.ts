@@ -1,7 +1,6 @@
 'use strict';
 import {Injectable} from '@angular/core';
 import web3 from 'web3';
-
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {Connected} from './connected';
@@ -30,7 +29,7 @@ export class GethConnectService {
     }
 
     startConnection() {
-        const promise = new Promise((resolve) => {
+        return new Promise((resolve) => {
             if (typeof window.web3 !== 'undefined' && window.web3.currentProvider.host !== 'http://localhost:8545') {
                 window.web3 = new window.Web3(window.web3.currentProvider);
                 console.warn('You are connected to MetaMask');
@@ -39,13 +38,12 @@ export class GethConnectService {
                 window.web3 = new web3(new web3.providers.HttpProvider('http://localhost:8545'));
                 if (window.web3 && this.isConnected()) {
                     resolve({server: 'localhost', connection: true});
-                    console.warn('You are connected to Localhost');
+                    console.warn('You are connected to localhost');
                 } else {
                     resolve({server: 'localhost', connection: false});
                 }
             }
         });
-        return promise;
     }
 }
 

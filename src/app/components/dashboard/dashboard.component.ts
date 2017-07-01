@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {GethConnectService} from '../../services/geth-connect/geth-connect.service';
 import {GethContractService} from '../../services/geth-contract/geth-contract.service';
 import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
 
@@ -14,12 +13,10 @@ export class DashboardComponent implements OnInit {
 
     /**
      *
-     * @param {GethConnectService} gethConnectService
      * @param {GethContractService} gethContractService
      * @param {GethContractManagerService} gethContractManagerService
      */
-    constructor(private gethConnectService: GethConnectService,
-                private contractService: GethContractService,
+    constructor(private contractService: GethContractService,
                 private contractManagerService: GethContractManagerService) {
     }
 
@@ -28,7 +25,6 @@ export class DashboardComponent implements OnInit {
         currentContracts.forEach(contract => {
             this.contracts.push(this.contractService.getContract(contract));
         });
-        // debugger
     }
 
     makeLotteryList() {

@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
+import {Router, ActivatedRoute, Params} from '@angular/router';
+
+
 @Component({
     selector: 'app-user-connected',
     templateUrl: './user-connected.component.html',
@@ -7,11 +10,15 @@ import {Component, OnInit} from '@angular/core';
 })
 export class UserConnectedComponent implements OnInit {
 
-    constructor() {
+    constructor(private activatedRoute: ActivatedRoute) {
     }
 
+
     ngOnInit() {
-        console.log('re');
+        this.activatedRoute.params.subscribe((params: Params) => {
+            const id = params['id'];
+            console.log(id);
+        });
     }
 
 }
