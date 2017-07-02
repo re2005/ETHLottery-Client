@@ -13,8 +13,8 @@ export class DashboardComponent implements OnInit {
 
     /**
      *
-     * @param {GethContractService} gethContractService
-     * @param {GethContractManagerService} gethContractManagerService
+     * @param {GethContractService} contractService
+     * @param {GethContractManagerService} contractManagerService
      */
     constructor(private contractService: GethContractService,
                 private contractManagerService: GethContractManagerService) {
@@ -37,6 +37,6 @@ export class DashboardComponent implements OnInit {
 }
 
 declare global {
-    interface Window { Web3: any,web3: any
+    interface Window { Web3: any, web3: any
     }
 }

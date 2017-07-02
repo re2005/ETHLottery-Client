@@ -1,7 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {GethConnectService} from './services/geth-connect/geth-connect.service';
-import {GethContractService} from './services/geth-contract/geth-contract.service';
-import {GethContractManagerService} from './services/geth-contract-manager/geth-contract-manager.service';
 import {Connected} from './services/geth-connect/connected';
 
 @Component({
@@ -13,52 +11,38 @@ export class AppComponent implements OnInit {
 
     public isWeb3Connected: Connected;
     public isAppLoaded = false;
-    private _contract: any;
     public currentNodeConnection: string;
     public retryConnect = 0;
 
 
     /**
      *
-     * @param gethConnectService
-     * @param gethContractService
-     * @param gethContractManagerService
+     * @param {GethConnectService} connectService
      */
-    constructor(private gethConnectService: GethConnectService,
-                private gethContractService: GethContractService,
-                private gethContractManagerService: GethContractManagerService) {
-    }
-
-    getAccounts() {
-        window.web3.eth.getAccounts((err, accounts) => {
-            if (!err) {
-                console.log(accounts);
-            }
-        });
+    constructor(private connectService: GethConnectService) {
     }
 
     loadApp(data) {
-        this.isAppLoaded = data.connection;
+        this.isAppLoaded = data.isConnected;
         this.currentNodeConnection = data.server;
     }
 
     keepAlive() {
         setInterval(() => {
-            this.isWeb3Connected = this.gethConnectService.isConnected();
-            this.gethConnectService.setConnected(this.isWeb3Connected);
-            // TODO Check how to keep MetaMask connection alive;
+            this.isWeb3Connected = this.connectService.isConnected();
+            this.connectService.setConnected(this.isWeb3Connected);
         }, 1000);
     }
 
     tryReconnect() {
         setTimeout(() => {
             this.retryConnect++;
-            this.gethConnectService.startConnection().then((data) => this.updateConnectionStatus(data));
+            this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
         }, 2000);
     }
 
     updateConnectionStatus(data) {
-        if (data.connection) {
+        if (data.isConnected) {
             this.loadApp(data);
             this.keepAlive();
         } else {
@@ -67,11 +51,6 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.gethConnectService.startConnection().then((data) => this.updateConnectionStatus(data));
-    }
-}
-
-declare global {
-    interface Window { Web3: any,web3: any
+        this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
     }
 }

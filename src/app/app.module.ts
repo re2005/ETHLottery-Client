@@ -25,7 +25,8 @@ import {ConnectionStatusComponent} from './components/connection-status/connecti
     ],
     providers: [GethConnectService,
         GethContractService,
-        GethContractManagerService],
+        GethContractManagerService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
