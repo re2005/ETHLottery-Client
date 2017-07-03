@@ -1,10 +1,14 @@
 <a routerLink="/">home</a>
 
 <h1>
-    {{lotteryData?.data.address}}
-    {{lotteryData?.data.fee}}
-    {{lotteryData?.data.isOpen}}
-    {{lotteryData?.data.result}}
+    {{lotteryAddress}}
+    {{lotteryData?.fee}}
+    {{lotteryData?.ownerFee}}
+    {{lotteryData?.open}}
+    {{lotteryData?.result}}
+    {{isConnected}}
 </h1>
+
+<button (click)="play()">play</button>
 
 

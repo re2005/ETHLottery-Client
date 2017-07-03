@@ -1,43 +1,77 @@
 'use strict';
 import {Injectable} from '@angular/core';
 import abi from './abi';
-import {ContractData} from './contractData';
 
 
 @Injectable()
 export class GethContractService {
 
-    private lottery: any;
+    private _lottery: any;
+    private _lotteryData: any;
 
     constructor() {
     }
 
-    public getContractData(address) {
+    public getContractData(lottery) {
 
-        Promise.all([this.getIsOpen, this.getFee]).then(values => {
-            console.log(values);
+        this._lottery = lottery;
+
+        return Promise.all([this.getIsOpen(),
+            this.getFee(),
+            this.getOwnerFee(),
+            this.getTotal(),
+            this.getResult()]).then(values => {
+            this._lotteryData = {
+                open: values[0],
+                fee: values[1],
+                ownerFee: values[2],
+                total: values[3],
+                result: values[4]
+            };
+            return this._lotteryData;
         });
 
-        return new ContractData(
-            {
-                fee: 2,
-                address: address,
-                total: 2,
-                open: true,
-                owner: 'rt',
-                result: 'rt',
-                isOpen: false
-            });
     }
 
+    getResult() {
+        return new Promise((resolve, reject) => {
+            this._lottery.result((error, result) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(result);
+            });
+        });
+    }
 
     getTotal() {
-        return 203;
+        console.log('total');
+        return new Promise((resolve, reject) => {
+            this._lottery.total((error, total) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(total);
+            });
+        });
+    }
+
+    getOwnerFee() {
+        console.log('owner_fee');
+        return new Promise((resolve, reject) => {
+            this._lottery.owner_fee((error, owner_fee) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(owner_fee);
+            });
+        });
     }
 
     getFee() {
+        console.log('fee');
         return new Promise((resolve, reject) => {
-            this.lottery.fee((error, fee) => {
+            this._lottery.fee((error, fee) => {
                 if (error) {
                     reject(error);
                 }
@@ -47,8 +81,9 @@ export class GethContractService {
     }
 
     getIsOpen() {
+        console.log('open');
         return new Promise((resolve, reject) => {
-            this.lottery.open((error, isOpen) => {
+            this._lottery.open((error, isOpen) => {
                 if (error) {
                     reject(error);
                 }
@@ -57,8 +92,11 @@ export class GethContractService {
         });
     }
 
+    /**
+     *
+     * @param {String} contractAddress
+     */
     public getContract(contractAddress) {
         return window.web3.eth.contract(abi).at(contractAddress);
     }
-
 }
