@@ -36,20 +36,20 @@ export class UserConnectedComponent implements OnInit {
         const gas = 140000;
         const pass = 'pass';
 
-        window.web3.personal.unlockAccount(participant, pass);
+        // window.web3.personal.unlockAccount(participant, pass);
 
         this._lottery.play(guess, {from: participant, value: fee, gas: gas}, function (e, c) {
             console.log(e, c);
-            window.web3.personal.lockAccount(participant);
+            // window.web3.personal.lockAccount(participant);
         });
     }
 
     loadLottery() {
         this._lottery = this.contractService.getContract(this.lotteryAddress);
-
         this.contractService.getContractData(this._lottery).then(data => {
             this.lotteryData = data;
         });
+
         this.accounts = this.getAccounts();
     }
 
@@ -79,6 +79,5 @@ export class UserConnectedComponent implements OnInit {
             this.lotteryAddress = params['address'];
             this.bootstrap();
         });
-
     }
 }
