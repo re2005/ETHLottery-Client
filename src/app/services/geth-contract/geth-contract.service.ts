@@ -15,25 +15,26 @@ export class GethContractService {
     public getContractData(contract) {
 
         this._contract = contract;
-        return Promise.all([this.getIsOpen(contract),
-            this.getFee(contract),
-            this.getOwnerFee(contract),
-            this.getTotal(contract),
-            this.getResult(contract)]).then(values => {
+
+        return Promise.all([this.getIsOpen(),
+            this.getFee(),
+            this.getOwnerFee(),
+            this.getTotal(),
+            this.getResult()]).then(values => {
             return this._contractData = {
                 open: values[0],
                 fee: values[1],
                 ownerFee: values[2],
                 total: values[3],
                 result: values[4],
-                address: contract.address
+                address: this._contract.address
             };
         });
     }
 
-    getResult(contract) {
+    getResult() {
         return new Promise((resolve, reject) => {
-            contract.result((error, result) => {
+            this._contract.result((error, result) => {
                 if (error) {
                     reject(error);
                 }
@@ -42,10 +43,10 @@ export class GethContractService {
         });
     }
 
-    getTotal(contract) {
+    getTotal() {
         console.log('total');
         return new Promise((resolve, reject) => {
-            contract.total((error, total) => {
+            this._contract.total((error, total) => {
                 if (error) {
                     reject(error);
                 }
@@ -54,10 +55,10 @@ export class GethContractService {
         });
     }
 
-    getOwnerFee(contract) {
+    getOwnerFee() {
         console.log('owner_fee');
         return new Promise((resolve, reject) => {
-            contract.owner_fee((error, owner_fee) => {
+            this._contract.owner_fee((error, owner_fee) => {
                 if (error) {
                     reject(error);
                 }
@@ -66,10 +67,10 @@ export class GethContractService {
         });
     }
 
-    getFee(contract) {
+    getFee() {
         console.log('fee');
         return new Promise((resolve, reject) => {
-            contract.fee((error, fee) => {
+            this._contract.fee((error, fee) => {
                 if (error) {
                     reject(error);
                 }
@@ -78,10 +79,10 @@ export class GethContractService {
         });
     }
 
-    getIsOpen(contract) {
+    getIsOpen() {
         console.log('open');
         return new Promise((resolve, reject) => {
-            contract.open((error, isOpen) => {
+            this._contract.open((error, isOpen) => {
                 if (error) {
                     reject(error);
                 }
