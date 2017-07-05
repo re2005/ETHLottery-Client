@@ -59,6 +59,17 @@ export class GethContractService {
         });
     }
 
+    private getIsOpenEvent() {
+        return new Promise((resolve, reject) => {
+            this._contract.Open((error, isOpen) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(isOpen);
+            });
+        });
+    }
+
     private getIsOpen() {
         console.log('open');
         return new Promise((resolve, reject) => {
@@ -71,7 +82,6 @@ export class GethContractService {
         });
     }
 
-
     public getContractData(contract) {
 
         this._contract = contract;
@@ -82,12 +92,21 @@ export class GethContractService {
             this.getTotal(),
             this.getResult()]).then(values => {
             return this._contractData = {
-                open: values[0],
-                fee: values[1],
-                ownerFee: values[2],
-                total: values[3],
-                result: values[4],
-                address: this._contract.address
+                // open: values[0],
+                // fee: values[1],
+                // ownerFee: values[2],
+                // total: values[3],
+                // result: values[4],
+                // address: this._contract.address
+                Open: this.getIsOpenEvent(),
+                open: true,
+                fee: 0.1,
+                ownerFee: 2,
+                total: 4.4,
+                result: null,
+                address: this._contract.address,
+                jackpot: 10,
+                type: 1,
             };
         });
     }

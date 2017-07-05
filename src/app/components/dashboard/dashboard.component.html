@@ -3,12 +3,15 @@
         Pick a lottery to play
     </h1>
 
-    <ul>
+    <ul [ngClass]="{'is-loaded': !isLoading}"
+        class="lottery-list">
         <li *ngFor="let contract of contracts">
             <a routerLink="/lottery/{{contract.address}}">
                 <h1 [innerHtml]="contract?.fee"></h1>
                 <h2 [innerHtml]="contract?.ownerFee"></h2>
                 <h3 [innerHtml]="contract?.result"></h3>
+                <h3 [innerHtml]="contract?.jackpot"></h3>
+                <h3 [innerHtml]="contract?.type"></h3>
                 <h3 [innerHtml]="contract?.open"></h3>
             </a>
         </li>

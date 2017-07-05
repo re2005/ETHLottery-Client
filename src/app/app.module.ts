@@ -2,7 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {AppComponent} from './app.component';
-import {UserConnectedComponent} from './components/user-connected/user-connected.component';
+import {LotteryComponent} from './components/lottery/lottery.component';
 import {AppRoutingModule} from './app-routing.module';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {GethConnectService} from './services/geth-connect/geth-connect.service';
@@ -14,7 +14,7 @@ import {ConnectionStatusComponent} from './components/connection-status/connecti
 @NgModule({
     declarations: [
         AppComponent,
-        UserConnectedComponent,
+        LotteryComponent,
         DashboardComponent,
         ConnectionStatusComponent
     ],

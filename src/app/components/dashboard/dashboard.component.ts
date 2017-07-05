@@ -4,7 +4,6 @@ import {GethContractManagerService} from '../../services/geth-contract-manager/g
 import {GethConnectService} from '../../services/geth-connect/geth-connect.service';
 import {Connected} from '../../services/geth-connect/connected';
 
-
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
@@ -15,6 +14,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public contracts = [];
     public isConnected: Connected;
     private getConnectedListener: any;
+    public isLoading = true;
 
     /**
      * @param {GethContractService} contractService
@@ -35,6 +35,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         Promise.all(contractsPromise).then(data => {
             this.contracts = data;
+            this.isLoading = false;
         });
     }
 
@@ -61,7 +62,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         let isContractLoaded = false;
         this.getConnectedListener = this.connectService.getConnected().subscribe(connected => {
             this.isConnected = connected;
-            console.log(connected);
             if (connected && !isContractLoaded) {
                 this.bootstrap();
                 isContractLoaded = !isContractLoaded;

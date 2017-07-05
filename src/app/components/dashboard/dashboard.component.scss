@@ -8,7 +8,14 @@
         font-size: 16px;
     }
     ul {
-        margin-top: 20px;
+        margin-top: 80px;
+        opacity: 0;
+        transition: all 0.4s ease;
+
+        &.is-loaded {
+            opacity: 1;
+            margin-top: 30px;
+        }
 
         li {
 
@@ -24,5 +31,8 @@
             }
         }
     }
+}
 
+header {
+    margin-left: -100%;
 }

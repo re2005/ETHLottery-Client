@@ -41,8 +41,8 @@
     }
 
     @include breakpoint(sm) {
-        box-shadow: 0 2px 200px rgba(57, 17, 32, 0.9);
-        max-width: 560px;
+        //box-shadow: 0 2px 200px rgba(57, 17, 32, 0.9);
+        max-width: 500px;
         max-height: 700px;
         margin: auto;
     }
@@ -60,19 +60,30 @@
     }
 
     span {
-        font-size: 11px;
-        opacity: 0.4;
-        display: block;
+        line-height: 20px;
+        font-size: 12px;
+        opacity: 0.6;
+        display: none;
         margin: 20px;
+
+        .loading {
+            @extend .color-loop;
+        }
+
+        &.show {
+            display: block !important;
+        }
     }
 }
 
 .app-content {
-    transform: translate3d(100%, 0px, 0px);
+    opacity: 0;
+    transform: translate3d(0px, -50px, 0px);
     padding: 20px;
 
     &.is-loaded {
-        transition: all .3s ease;
+        transition: all .4s ease;
+        opacity: 1;
         transform: none;
     }
 }
@@ -87,5 +98,27 @@ header {
     }
     i {
         font-size: 10px;
+    }
+}
+
+.color-loop {
+    animation: color-loop 1s infinite;
+}
+
+@keyframes color-loop {
+    0% {
+        color: red;
+    }
+    25% {
+        color: yellow;
+    }
+    50% {
+        color: blue;
+    }
+    75% {
+        color: green;
+    }
+    100% {
+        color: red;
     }
 }

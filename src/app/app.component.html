@@ -3,17 +3,29 @@
     <div [hidden]="isAppLoaded"
          class="app-loading">
         <div class="logo"></div>
-        loading . . .
-        <span>
+
+        <h1 class="color-loop">loading</h1>
+
+        <span [ngClass]="{'show': retryConnect > 0}">
             {{retryConnect}}<br>
-            connecting failure
+            attempts to connect
+        </span>
+        <span [ngClass]="{'show': retryConnect > 5}">
+            Please check if META MASK is working or your GETH node was started with these options:<br>
+            <i>./geth --testnet --fast --rpc --rpcapi db,eth,net,web3,personal --rpccorsdomain="*"</i>
+        </span>
+        <span [ngClass]="{'show': retryConnect > 10}">
+            You may refresh this page and check again GETH and METAMASK
+        </span>
+        <span [ngClass]="{'show': retryConnect > 15}">
+            Don't dive up.. this will connect :D
         </span>
     </div>
 
     <div [ngClass]="{'is-loaded': isAppLoaded}"
          class="app-content">
 
-        <header>
+        <header [ngClass]>
             <h1 class="logo-pic">
                 E-LOTHERY <i>alpha</i>
             </h1>

@@ -5,17 +5,18 @@ import {GethConnectService} from '../../services/geth-connect/geth-connect.servi
 import {Connected} from '../../services/geth-connect/connected';
 
 @Component({
-    selector: 'app-user-connected',
-    templateUrl: './user-connected.component.html',
-    styleUrls: ['./user-connected.component.scss']
+    selector: 'app-lottery',
+    templateUrl: './lottery.component.html',
+    styleUrls: ['./lottery.component.scss']
 })
-export class UserConnectedComponent implements OnInit {
+export class LotteryComponent implements OnInit {
 
     private _lottery: any;
     public lotteryAddress: string;
     public lotteryData: any;
     public accounts: Array<any>;
     public isConnected: Connected;
+    public playErrorMessage: any;
 
     /**
      *
@@ -28,8 +29,22 @@ export class UserConnectedComponent implements OnInit {
                 private connectService: GethConnectService) {
     }
 
-    public play() {
+    private playSucess(result) {
+        console.log(result);
+    }
 
+    private parsePlayErrorMessage(errorMessage) {
+        const userDenied = errorMessage.message.indexOf('User denied transaction signature');
+        const unknownAddress = errorMessage.message.indexOf('Unknown address');
+        if (userDenied > 0) {
+            return String('You need to Acept this request on MetaMask to continue');
+        }
+        if (unknownAddress > 0) {
+            return String('Unknown address, please unlock your account');
+        }
+    }
+
+    public play() {
         const guess = 'aa';
         const participant = '0x9b7d8Bd164dd966481fdD3B4a6E304e9dF6f25CD';
         const fee = 1;
@@ -37,10 +52,13 @@ export class UserConnectedComponent implements OnInit {
         const pass = 'pass';
 
         // window.web3.personal.unlockAccount(participant, pass);
+        // window.web3.personal.lockAccount(participant);
 
-        this._lottery.play(guess, {from: participant, value: fee, gas: gas}, function (e, c) {
-            console.log(e, c);
-            // window.web3.personal.lockAccount(participant);
+        this._lottery.play(guess, {from: participant, value: fee, gas: gas}, (error, result) => {
+            if (error) {
+                this.playErrorMessage = this.parsePlayErrorMessage(error);
+            }
+            this.playSucess(result);
         });
     }
 
@@ -56,7 +74,6 @@ export class UserConnectedComponent implements OnInit {
     getAccounts() {
         return window.web3.eth.getAccounts((error, accounts) => {
             if (!error) {
-                console.log(accounts);
                 return accounts;
             }
         });

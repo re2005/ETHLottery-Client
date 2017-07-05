@@ -1,11 +1,11 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {UserConnectedComponent} from './components/user-connected/user-connected.component';
+import {LotteryComponent} from './components/lottery/lottery.component';
 import {DashboardComponent} from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
-    {path: 'lottery/:address', component: UserConnectedComponent},
+    {path: 'lottery/:address', component: LotteryComponent},
     {path: '**', component: DashboardComponent}
 ];
 
