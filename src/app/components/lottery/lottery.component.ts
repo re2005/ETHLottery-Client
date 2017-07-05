@@ -30,6 +30,7 @@ export class LotteryComponent implements OnInit {
     }
 
     private playSucess(result) {
+        this.playErrorMessage = '';
         console.log(result);
     }
 
