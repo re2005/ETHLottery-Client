@@ -12,6 +12,66 @@ export class GethContractService {
     constructor() {
     }
 
+    private getResult() {
+        return new Promise((resolve, reject) => {
+            this._contract.result((error, result) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(result);
+            });
+        });
+    }
+
+    private getTotal() {
+        console.log('total');
+        return new Promise((resolve, reject) => {
+            this._contract.total((error, total) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(total);
+            });
+        });
+    }
+
+    private getOwnerFee() {
+        console.log('owner_fee');
+        return new Promise((resolve, reject) => {
+            this._contract.owner_fee((error, owner_fee) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(owner_fee);
+            });
+        });
+    }
+
+    private getFee() {
+        console.log('fee');
+        return new Promise((resolve, reject) => {
+            this._contract.fee((error, fee) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(fee);
+            });
+        });
+    }
+
+    private getIsOpen() {
+        console.log('open');
+        return new Promise((resolve, reject) => {
+            this._contract.open((error, isOpen) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(isOpen);
+            });
+        });
+    }
+
+
     public getContractData(contract) {
 
         this._contract = contract;
@@ -29,65 +89,6 @@ export class GethContractService {
                 result: values[4],
                 address: this._contract.address
             };
-        });
-    }
-
-    getResult() {
-        return new Promise((resolve, reject) => {
-            this._contract.result((error, result) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(result);
-            });
-        });
-    }
-
-    getTotal() {
-        console.log('total');
-        return new Promise((resolve, reject) => {
-            this._contract.total((error, total) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(total);
-            });
-        });
-    }
-
-    getOwnerFee() {
-        console.log('owner_fee');
-        return new Promise((resolve, reject) => {
-            this._contract.owner_fee((error, owner_fee) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(owner_fee);
-            });
-        });
-    }
-
-    getFee() {
-        console.log('fee');
-        return new Promise((resolve, reject) => {
-            this._contract.fee((error, fee) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(fee);
-            });
-        });
-    }
-
-    getIsOpen() {
-        console.log('open');
-        return new Promise((resolve, reject) => {
-            this._contract.open((error, isOpen) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(isOpen);
-            });
         });
     }
 

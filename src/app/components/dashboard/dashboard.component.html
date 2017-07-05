@@ -6,10 +6,10 @@
     <ul>
         <li *ngFor="let contract of contracts">
             <a routerLink="/lottery/{{contract.address}}">
-                {{contract.fee}}
-                {{contract.ownerFee}}
-                {{contract.result}}
-                {{contract.open}}
+                <h1 [innerHtml]="contract?.fee"></h1>
+                <h2 [innerHtml]="contract?.ownerFee"></h2>
+                <h3 [innerHtml]="contract?.result"></h3>
+                <h3 [innerHtml]="contract?.open"></h3>
             </a>
         </li>
     </ul>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GethContractService} from '../../services/geth-contract/geth-contract.service';
 import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
 import {GethConnectService} from '../../services/geth-connect/geth-connect.service';
@@ -10,10 +10,11 @@ import {Connected} from '../../services/geth-connect/connected';
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
     public contracts = [];
     public isConnected: Connected;
+    private getConnectedListener: any;
 
     /**
      * @param {GethContractService} contractService
@@ -58,13 +59,18 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
         let isContractLoaded = false;
-        this.connectService.getConnected().subscribe(connected => {
+        this.getConnectedListener = this.connectService.getConnected().subscribe(connected => {
             this.isConnected = connected;
+            console.log(connected);
             if (connected && !isContractLoaded) {
                 this.bootstrap();
                 isContractLoaded = !isContractLoaded;
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.getConnectedListener.unsubscribe();
     }
 }
 
