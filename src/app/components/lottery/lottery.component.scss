@@ -46,3 +46,16 @@ div {
         display: block;
     }
 }
+
+.you-win {
+    text-align: center;
+    background: red;
+    padding: 20px;
+    left: 0;
+    right: 0;
+    display: none;
+
+    &.is-winner {
+        display: block;
+    }
+}

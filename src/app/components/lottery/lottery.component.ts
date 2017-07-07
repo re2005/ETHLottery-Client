@@ -23,6 +23,8 @@ export class LotteryComponent implements OnInit, OnDestroy {
     public isContractLoaded = false;
     public bets = ['a', 'b', 'c', 'd', 'e', 'f', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     public lotteryBets = [];
+    public isWinner: boolean;
+    public withdrawMessage: string;
 
     /**
      *
@@ -37,8 +39,24 @@ export class LotteryComponent implements OnInit, OnDestroy {
                 private storage: StorageService) {
     }
 
+    public withdraw(account, gas) {
+        this._lottery.withdraw(({from: account, gas: gas}), (error, withdraw) => {
+            if (!error) {
+                this.withdrawMessage = withdraw;
+            } else {
+                this.withdrawMessage = error;
+            }
+        })
+    }
+
+    public checkResult(result) {
+        this.lotteryBets.forEach(bet => {
+            result === '0x' + bet.bet ? this.isWinner = true : this.isWinner = false;
+        })
+    }
+
     public setJackpot() {
-        this.lotteryData.jackpot = this.lotteryData.total / (this.lotteryData.ownerFee / 100);
+        // this.lotteryData.jackpot = this.lotteryData.total / (this.lotteryData.ownerFee / 100);
     }
 
     private onPlaySuccess(result, _bet) {
@@ -80,12 +98,19 @@ export class LotteryComponent implements OnInit, OnDestroy {
         });
     }
 
+    private updateLotteryBets() {
+        this.lotteryBets.forEach(bet => {
+            // console.log(bet.newHash);
+        });
+    }
+
     private updateContractTotal(total) {
         this.lotteryData.total = total.args.total;
     }
 
     private updateContractResult(result) {
         this.lotteryData.result = result.args.result;
+        this.checkResult(result);
     }
 
     private updateContractOpen(open) {
@@ -148,6 +173,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
         this.isContractLoaded = false;
         this.getConnectedListener = this.connectService.getConnected().subscribe(connected => {
             this.isConnected = connected;
+            this.updateLotteryBets();
             if (connected && !this.isContractLoaded) {
                 this.loadLottery();
                 this.isContractLoaded = !this.isContractLoaded;

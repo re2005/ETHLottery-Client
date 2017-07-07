@@ -67,6 +67,17 @@ export class GethContractService {
         });
     }
 
+    private getJackpot() {
+        return new Promise((resolve, reject) => {
+            this._contract.jackpot((error, jackpot) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(jackpot);
+            });
+        });
+    }
+
     private getName() {
         return new Promise((resolve, reject) => {
             // this._contract.name((error, name) => {
@@ -90,7 +101,8 @@ export class GethContractService {
             this.getOwnerFee(),
             this.getTotal(),
             this.getResult(),
-            this.getName()
+            this.getName(),
+            this.getJackpot()
         ]).then(values => {
             return this._contractData = {
                 open: values[0],
@@ -99,6 +111,7 @@ export class GethContractService {
                 total: values[3],
                 result: values[4],
                 name: values[5],
+                getJackpot: values[6],
                 address: contract.address
             };
         });

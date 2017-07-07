@@ -45,6 +45,20 @@
         <div class="success" [innerHtml]="playSuccessMessage"></div>
     </div>
 
+    <a (click)="checkResult('0xbe')">result checker</a>
+
+    <div class="you-win" [ngClass]="{'is-winner' : isWinner}">
+        YOU WIN!
+    </div>
+
+    <div>
+        Withdraw
+        <select #accountWithdraw id="accounts">
+            <option *ngFor="let acount of accounts">{{acount}}</option>
+        </select>
+        GAS: <input #gasWithdraw size="10" value="140000">
+        <a (click)="withdraw(accountWithdraw.value, gasWithdraw.value)">withdraw</a>
+    </div>
 
     <div>
         Lottery:
@@ -64,6 +78,7 @@
                     {{lotteryBet?.newHash}}
                 </a>
                 <div>bet {{lotteryBet?.bet}}</div>
+                {{lotteryBet?.isconfirmed}}
             </li>
         </ul>
     </div>
