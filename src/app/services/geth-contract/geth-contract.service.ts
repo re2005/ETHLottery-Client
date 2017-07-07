@@ -24,7 +24,6 @@ export class GethContractService {
     }
 
     private getTotal() {
-        console.log('total');
         return new Promise((resolve, reject) => {
             this._contract.total((error, total) => {
                 if (error) {
@@ -36,7 +35,6 @@ export class GethContractService {
     }
 
     private getOwnerFee() {
-        console.log('owner_fee');
         return new Promise((resolve, reject) => {
             this._contract.owner_fee((error, owner_fee) => {
                 if (error) {
@@ -48,7 +46,6 @@ export class GethContractService {
     }
 
     private getFee() {
-        console.log('fee');
         return new Promise((resolve, reject) => {
             this._contract.fee((error, fee) => {
                 if (error) {
@@ -59,9 +56,9 @@ export class GethContractService {
         });
     }
 
-    private getIsOpenEvent() {
+    private getIsOpen() {
         return new Promise((resolve, reject) => {
-            this._contract.Open((error, isOpen) => {
+            this._contract.open((error, isOpen) => {
                 if (error) {
                     reject(error);
                 }
@@ -70,15 +67,17 @@ export class GethContractService {
         });
     }
 
-    private getIsOpen() {
-        console.log('open');
+    private getName() {
         return new Promise((resolve, reject) => {
-            this._contract.open((error, isOpen) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(isOpen);
-            });
+            // this._contract.name((error, name) => {
+            //     if (error) {
+            //         reject(error);
+            //     }
+            //     resolve(name);
+            // });
+            setTimeout(() => {
+                resolve('renatex');
+            }, 100)
         });
     }
 
@@ -90,23 +89,17 @@ export class GethContractService {
             this.getFee(),
             this.getOwnerFee(),
             this.getTotal(),
-            this.getResult()]).then(values => {
+            this.getResult(),
+            this.getName()
+        ]).then(values => {
             return this._contractData = {
-                // open: values[0],
-                // fee: values[1],
-                // ownerFee: values[2],
-                // total: values[3],
-                // result: values[4],
-                // address: this._contract.address
-                Open: this.getIsOpenEvent(),
-                open: true,
-                fee: 0.1,
-                ownerFee: 2,
-                total: 4.4,
-                result: null,
-                address: this._contract.address,
-                jackpot: 10,
-                type: 1,
+                open: values[0],
+                fee: values[1],
+                ownerFee: values[2],
+                total: values[3],
+                result: values[4],
+                name: values[5],
+                address: contract.address
             };
         });
     }
