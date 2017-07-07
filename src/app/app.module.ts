@@ -9,6 +9,7 @@ import {GethConnectService} from './services/geth-connect/geth-connect.service';
 import {GethContractService} from './services/geth-contract/geth-contract.service';
 import {GethContractManagerService} from './services/geth-contract-manager/geth-contract-manager.service';
 import {ConnectionStatusComponent} from './components/connection-status/connection-status.component';
+import {StorageService} from './services/storage/storage.service'
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {ConnectionStatusComponent} from './components/connection-status/connecti
     ],
     providers: [GethConnectService,
         GethContractService,
-        GethContractManagerService
+        GethContractManagerService,
+        StorageService
     ],
     bootstrap: [AppComponent]
 })
