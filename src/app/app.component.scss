@@ -1,7 +1,7 @@
 @import "../assets/css/globals";
 
 .app-body {
-    overflow: hidden;
+    overflow-x: hidden;
     font-family: $primary-font;
 
     &--background {
