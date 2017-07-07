@@ -1,93 +1,149 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {GethContractService} from '../../services/geth-contract/geth-contract.service';
 import {GethConnectService} from '../../services/geth-connect/geth-connect.service';
 import {Connected} from '../../services/geth-connect/connected';
+import {StorageService} from '../../services/storage/storage.service';
 
 @Component({
     selector: 'app-lottery',
     templateUrl: './lottery.component.html',
     styleUrls: ['./lottery.component.scss']
 })
-export class LotteryComponent implements OnInit {
+export class LotteryComponent implements OnInit, OnDestroy {
 
+    private getConnectedListener: any;
     private _lottery: any;
     public lotteryAddress: string;
     public lotteryData: any;
     public accounts: Array<any>;
     public isConnected: Connected;
     public playErrorMessage: any;
+    public isContractLoaded = false;
+    public bets = ['a', 'b', 'c', 'd', 'e', 'f', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    public lotteryBets = [];
 
     /**
      *
      * @param activatedRoute
      * @param {GethContractService} contractService
      * @param {GethConnectService} connectService
+     * @param {StorageService} storage
      */
     constructor(private activatedRoute: ActivatedRoute,
                 private contractService: GethContractService,
-                private connectService: GethConnectService) {
+                private connectService: GethConnectService,
+                private storage: StorageService) {
     }
 
-    private playSucess(result) {
+    public setJackpot() {
+        this.lotteryData.jackpot = this.lotteryData.total / (this.lotteryData.ownerFee / 100);
+    }
+
+    private onPlaySuccess(result) {
         this.playErrorMessage = '';
-        console.log(result);
+        this.lotteryBets.push({blockNumber: null, blockHash: null, newHash: result});
+        this.storage.set(this.lotteryAddress, this.lotteryBets);
     }
 
-    private parsePlayErrorMessage(errorMessage) {
+    private onPlayError(errorMessage) {
+
         const userDenied = errorMessage.message.indexOf('User denied transaction signature');
         const unknownAddress = errorMessage.message.indexOf('Unknown address');
         if (userDenied > 0) {
             return String('You need to Acept this request on MetaMask to continue');
-        }
-        if (unknownAddress > 0) {
+        } else if (unknownAddress > 0) {
             return String('Unknown address, please unlock your account');
+        } else {
+            return (errorMessage);
         }
     }
 
-    public play() {
-        const guess = 'aa';
-        const participant = '0x9b7d8Bd164dd966481fdD3B4a6E304e9dF6f25CD';
-        const fee = 1;
-        const gas = 140000;
-        const pass = 'pass';
+    public play(account, gas, bet1, bet2) {
 
-        // window.web3.personal.unlockAccount(participant, pass);
+        const _bet = bet1 + bet2;
+        // window.web3.personal.unlockAccount(account, password);
         // window.web3.personal.lockAccount(participant);
-
-        this._lottery.play(guess, {from: participant, value: fee, gas: gas}, (error, result) => {
+        this._lottery.play(_bet, {from: account, value: this.lotteryData.fee, gas: gas}, (error, result) => {
             if (error) {
-                this.playErrorMessage = this.parsePlayErrorMessage(error);
+                this.playErrorMessage = this.onPlayError(error);
+            } else {
+                this.onPlaySuccess(result);
             }
-            this.playSucess(result);
         });
     }
 
-    loadLottery() {
+    private updateContractTotal(total) {
+        this.lotteryData.total = total.args.total;
+    }
+
+    private updateContractResult(result) {
+        this.lotteryData.result = result.args.result;
+    }
+
+    private updateContractOpen(open) {
+        this.lotteryData.open = open.args.open;
+    }
+
+    private setListeners() {
+
+        this._lottery.Total((error, total) => {
+            if (!error) {
+                this.updateContractTotal(total);
+            }
+        });
+
+        this._lottery.Result((error, result) => {
+            if (!error) {
+                this.updateContractResult(result);
+            }
+        });
+
+        this._lottery.Open((error, open) => {
+            if (!error) {
+                this.updateContractOpen(open);
+            }
+        });
+    }
+
+    private getAccounts() {
+        return window.web3.eth.getAccounts((error, accounts) => {
+            if (!error) {
+                this.accounts = accounts;
+                if (accounts.length === 0) {
+                    alert('Please unlock your account');
+                }
+            }
+        });
+    }
+
+    private loadLotteryBets() {
+        this.storage.get(this.lotteryAddress).then(bets => {
+            this.lotteryBets = bets;
+            if (!bets) {
+                this.lotteryBets = [];
+            }
+        });
+    }
+
+    private loadLottery() {
         this._lottery = this.contractService.getContract(this.lotteryAddress);
         this.contractService.getContractData(this._lottery).then(data => {
             this.lotteryData = data;
-        });
-
-        this.accounts = this.getAccounts();
-    }
-
-    getAccounts() {
-        return window.web3.eth.getAccounts((error, accounts) => {
-            if (!error) {
-                return accounts;
-            }
+            this.setListeners();
+            this.getAccounts();
+            this.loadLotteryBets();
+            this.setJackpot();
         });
     }
 
     bootstrap() {
-        let isContractLoaded = false;
-        this.connectService.getConnected().subscribe(connected => {
-
+        this.isContractLoaded = false;
+        this.getConnectedListener = this.connectService.getConnected().subscribe(connected => {
             this.isConnected = connected;
-            if (connected && !isContractLoaded) {
+            if (connected && !this.isContractLoaded) {
                 this.loadLottery();
-                isContractLoaded = !isContractLoaded;
+                this.isContractLoaded = !this.isContractLoaded;
             }
         });
     }
@@ -97,5 +153,9 @@ export class LotteryComponent implements OnInit {
             this.lotteryAddress = params['address'];
             this.bootstrap();
         });
+    }
+
+    ngOnDestroy() {
+        this.getConnectedListener.unsubscribe();
     }
 }

@@ -1,15 +1,72 @@
-<a routerLink="/">home</a>
+<a routerLink="/">< back</a>
 
-<h1>
-    {{lotteryAddress}}
-    {{lotteryData?.fee}}
-    {{lotteryData?.ownerFee}}
-    {{lotteryData?.open}}
-    {{lotteryData?.result}}
-    {{isConnected}}
-</h1>
 
-<button (click)="play()">play</button>
+<div [ngClass]="{'show': isContractLoaded}" class="content">
 
-{{playErrorMessage}}
+    <div>
+        <h3>Name: <span [innerHtml]="lotteryData?.name"></span></h3>
+        <h3>Open: <span [innerHtml]="lotteryData?.open"></span></h3>
+        <h3>Total: <span [innerHtml]="lotteryData?.total"></span></h3>
+        <h3>Fee: <span [innerHtml]="lotteryData?.fee"></span></h3>
+        <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span>%</h3>
+        <h3>Result: <span [innerHtml]="lotteryData?.result"></span></h3>
+        <h3>Jackpot: <span [innerHtml]="lotteryData?.jackpot"></span></h3>
+    </div>
+
+
+    <div class="play" [ngClass]="{'is-open': lotteryData?.open}">
+        <h1>Play</h1>
+        <label for="accounts">
+            Choose an account:
+        </label>
+        <select #account id="accounts">
+            <option *ngFor="let acount of accounts">{{acount}}</option>
+        </select>
+        <!--<input type="password" #password placeholder="password">-->
+        <div>
+            GAS: <input #gas size="10" value="140000">
+        </div>
+        <div>
+            GUESS LAST BLOCK HASH BYTE:
+            0xD1498F1c4AAafcd1eAA1b6e3594a
+            <select #bet1>
+                <option disabled>$</option>
+                <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
+            </select>
+            <select #bet2>
+                <option disabled>$</option>
+                <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
+            </select>
+        </div>
+        <button (click)="play(account.value, gas.value, bet1.value, bet2.value)">
+            GO lucky byte, do your magic...
+        </button>
+        <div class="error">{{playErrorMessage}}</div>
+    </div>
+
+
+    <div>
+        Lottery:
+        <a href="https://ropsten.etherscan.io/address/{{lotteryAddress}}"
+           target="_blank">
+            {{lotteryAddress}}
+        </a>
+    </div>
+
+    <div class="bets" [hidden]="lotteryBets.length < 1">
+        <h2>
+            Your bets, click for more info:
+        </h2>
+        <ul>
+            <li *ngFor="let lotteryBet of lotteryBets">
+                <a href="https://ropsten.etherscan.io/tx/{{lotteryBet?.newHash}}" target="_blank">
+                    {{lotteryBet?.blockNumber}}
+                    {{lotteryBet?.blockHash}}
+                    {{lotteryBet?.newHash}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
 

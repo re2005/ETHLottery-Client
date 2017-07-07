@@ -1,0 +1,48 @@
+a {
+    color: #fff;
+    padding: 10px 0;
+    display: block;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+        color: lightgreen;
+    }
+}
+
+button {
+    margin: 20px 0;
+}
+
+input {
+    padding: 4px;
+    font-size: 12px;
+}
+
+select {
+    color: white;
+}
+
+div {
+    margin: 10px 0;
+}
+
+.content {
+    opacity: 0;
+    margin-top: 50px;
+    transition: all 0.4s ease;
+
+    &.show {
+        opacity: 1;
+        margin-top: 20px;
+
+    }
+}
+
+.play {
+    margin: 20px 0;
+    display: none;
+    &.is-open {
+        display: block;
+    }
+}
