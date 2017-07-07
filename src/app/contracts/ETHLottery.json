@@ -1,173 +1,223 @@
-{
-  "contract_name": "ETHLottery",
-  "abi": [
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "owner_fee",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "getValue",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": true,
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "destruct",
-      "outputs": [],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "total",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "withdraw",
-      "outputs": [],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_char",
-          "type": "bytes1"
-        }
-      ],
-      "name": "lottery",
-      "outputs": [],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "result",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bytes1"
-        }
-      ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "jackpot",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "_char",
-          "type": "bytes1"
-        }
-      ],
-      "name": "play",
-      "outputs": [],
-      "payable": true,
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "fee",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "open",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "name": "_fee",
-          "type": "uint256"
-        },
-        {
-          "name": "_jackpot",
-          "type": "uint256"
-        },
-        {
-          "name": "_owner_fee",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "type": "constructor"
-    }
-  ],
-  "unlinked_binary": "0x6060604052341561000c57fe5b60405160608061064b8339810160409081528151602083015191909201515b6000805474010000000000000000000000000000000000000000600160a060020a031990911633600160a060020a03161760a060020a60ff021916179055670de0b6b3a7640000838102600355820260015560048190555b5050505b6105b5806100966000396000f3006060604052361561009e5763ffffffff60e060020a60003504166314ce405981146100a057806320965255146100c25780632b68b9c6146100dc5780632ddbd13a146100ee5780633ccfd60b146101105780633fd964df1461012257806365372147146101415780636b31ee011461016e5780638da5cb5b14610190578063be3e33d5146101bc578063ddca3f43146101d3578063fcfff16f146101f5575bfe5b34156100a857fe5b6100b0610219565b60408051918252519081900360200190f35b6100b061021f565b60408051918252519081900360200190f35b34156100e457fe5b6100ec610224565b005b34156100f657fe5b6100b061026a565b60408051918252519081900360200190f35b341561011857fe5b6100ec610270565b005b341561012a57fe5b6100ec600160f860020a03196004351661030f565b005b341561014957fe5b6101516103f4565b60408051600160f860020a03199092168252519081900360200190f35b341561017657fe5b6100b0610400565b60408051918252519081900360200190f35b341561019857fe5b6101a0610406565b60408051600160a060020a039092168252519081900360200190f35b6100ec600160f860020a031960043516610415565b005b34156101db57fe5b6100b0610528565b60408051918252519081900360200190f35b34156101fd57fe5b61020561052e565b604080519115158252519081900360200190f35b60045481565b345b90565b60005460a060020a900460ff161561023c5760006000fd5b60005433600160a060020a039081169116146102585760006000fd5b600054600160a060020a0316ff5b5b5b565b60025481565b6000805460a060020a900460ff16156102895760006000fd5b600160a060020a033316600090815260076020526040812054116102ad5760006000fd5b50600160a060020a033316600081815260076020526040808220805490839055905190929183156108fc02918491818181858888f19350505050151561030957600160a060020a03331660009081526007602052604090208190555b5b5b5b50565b600080548190819060a060020a900460ff161561032c5760006000fd5b60005433600160a060020a039081169116146103485760006000fd5b6005805460ff191660f860020a808704919091179182905502600160f860020a031916600090815260066020526040902080546002549194509081151561038b57fe5b049150600090505b82548110156103eb57816007600085848154811015156103af57fe5b906000526020600020900160005b9054600160a060020a036101009290920a90041681526020810191909152604001600020555b600101610393565b5b5b5b50505050565b60055460f860020a0281565b60015481565b600054600160a060020a031681565b6000805460a060020a900460ff16151561042f5760006000fd5b60035434101561043f5760006000fd5b600160f860020a031982166000908152600660205260409020805460018101610468838261053e565b916000526020600020900160005b8154600160a060020a033381166101009390930a9283029202191617905550600280543401908190556001549010610520576000805460a060020a60ff0219169055600454600254606491025b600280549290910491829003905560008054604051929350600160a060020a03169183156108fc0291849190818181858888f1935050505015156105205760028054820190556000805460a060020a60ff02191660a060020a1790555b5b5b5b5b5050565b60035481565b60005460a060020a900460ff1681565b81548183558181151161056257600083815260209020610562918101908301610568565b5b505050565b61022191905b80821115610582576000815560010161056e565b5090565b905600a165627a7a72305820b0c7603bd540d629aea30e02f4321e3fc2910666befa53223a181ed10a98b72f0029",
-  "networks": {},
-  "schema_version": "0.0.5",
-  "updated_at": 1497474180151
-}
+[
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "name",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner_fee",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "destruct",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "total",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "result_block",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "result",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes1"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "jackpot",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "lottery",
+    "outputs": [],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_char",
+        "type": "bytes1"
+      }
+    ],
+    "name": "play",
+    "outputs": [],
+    "payable": true,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "result_hash",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "fee",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "open",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "name": "_fee",
+        "type": "uint256"
+      },
+      {
+        "name": "_jackpot",
+        "type": "uint256"
+      },
+      {
+        "name": "_owner_fee",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "total",
+        "type": "uint256"
+      }
+    ],
+    "name": "Total",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "result",
+        "type": "bytes1"
+      }
+    ],
+    "name": "Result",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "name": "open",
+        "type": "bool"
+      }
+    ],
+    "name": "Open",
+    "type": "event"
+  }
+]
