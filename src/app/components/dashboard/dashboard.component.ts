@@ -52,6 +52,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
 
+    public refreshList() {
+        this.contracts = [];
+        this.isLoading = true;
+        this.bootstrap();
+    }
+
     bootstrap() {
         this._getContracts().then(contracts => {
             this._loadContractData(contracts);

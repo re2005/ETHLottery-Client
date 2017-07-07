@@ -41,7 +41,8 @@
         <button (click)="play(account.value, gas.value, bet1.value, bet2.value)">
             GO lucky byte, do your magic...
         </button>
-        <div class="error">{{playErrorMessage}}</div>
+        <div class="error" [innerHtml]="playErrorMessage"></div>
+        <div class="success" [innerHtml]="playSuccessMessage"></div>
     </div>
 
 
@@ -55,15 +56,14 @@
 
     <div class="bets" [hidden]="lotteryBets.length < 1">
         <h2>
-            Your bets, click for more info:
+            Your bets <span>{{lotteryBets.length}}</span>
         </h2>
         <ul>
             <li *ngFor="let lotteryBet of lotteryBets">
                 <a href="https://ropsten.etherscan.io/tx/{{lotteryBet?.newHash}}" target="_blank">
-                    {{lotteryBet?.blockNumber}}
-                    {{lotteryBet?.blockHash}}
                     {{lotteryBet?.newHash}}
                 </a>
+                <div>bet {{lotteryBet?.bet}}</div>
             </li>
         </ul>
     </div>

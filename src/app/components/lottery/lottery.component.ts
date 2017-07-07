@@ -18,7 +18,8 @@ export class LotteryComponent implements OnInit, OnDestroy {
     public lotteryData: any;
     public accounts: Array<any>;
     public isConnected: Connected;
-    public playErrorMessage: any;
+    public playErrorMessage: string;
+    public playSuccessMessage: any;
     public isContractLoaded = false;
     public bets = ['a', 'b', 'c', 'd', 'e', 'f', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     public lotteryBets = [];
@@ -40,10 +41,16 @@ export class LotteryComponent implements OnInit, OnDestroy {
         this.lotteryData.jackpot = this.lotteryData.total / (this.lotteryData.ownerFee / 100);
     }
 
-    private onPlaySuccess(result) {
+    private onPlaySuccess(result, _bet) {
         this.playErrorMessage = '';
-        this.lotteryBets.push({blockNumber: null, blockHash: null, newHash: result});
+        this.lotteryBets.push({
+            blockNumber: null,
+            blockHash: null,
+            newHash: result,
+            bet: _bet
+        });
         this.storage.set(this.lotteryAddress, this.lotteryBets);
+        this.playSuccessMessage = 'Your bet is made! you can have more info by clicking below '
     }
 
     private onPlayError(errorMessage) {
@@ -68,7 +75,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
             if (error) {
                 this.playErrorMessage = this.onPlayError(error);
             } else {
-                this.onPlaySuccess(result);
+                this.onPlaySuccess(result, _bet);
             }
         });
     }
