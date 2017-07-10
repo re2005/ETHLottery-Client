@@ -6,7 +6,7 @@
     <ul [ngClass]="{'is-loaded': !isLoading}"
         class="lottery-list">
         <li *ngFor="let contract of contracts">
-            <a routerLink="/lottery/{{contract.address}}">
+            <a routerLink="/lottery/{{contract.address}}" [ngClass]="{'open': contract?.open}">
                 <h1>Total: <span [innerHtml]="contract?.total"></span></h1>
                 <h1>Fee: <span [innerHtml]="contract?.fee"></span></h1>
                 <h1>Owner fee: <span [innerHtml]="contract?.ownerFee"></span></h1>
