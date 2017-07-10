@@ -10,7 +10,7 @@ import {GethContractService} from './services/geth-contract/geth-contract.servic
 import {GethContractManagerService} from './services/geth-contract-manager/geth-contract-manager.service';
 import {ConnectionStatusComponent} from './components/connection-status/connection-status.component';
 import {StorageService} from './services/storage/storage.service'
-
+import {HttpModule, JsonpModule} from '@angular/http';
 
 @NgModule({
     declarations: [
@@ -22,7 +22,9 @@ import {StorageService} from './services/storage/storage.service'
     imports: [
         BrowserModule,
         AppRoutingModule,
-        RouterModule
+        RouterModule,
+        HttpModule,
+        JsonpModule
     ],
     providers: [GethConnectService,
         GethContractService,

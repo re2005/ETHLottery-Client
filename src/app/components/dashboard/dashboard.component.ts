@@ -41,14 +41,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private _getContracts() {
 
-        const currentContracts = this.contractManagerService.getCurrentContract();
+        // const currentContracts = this.contractManagerService.getCurrentContract();
+
         return new Promise((resolve) => {
-            currentContracts.forEach(contractAddress => {
-                const _contract = this.contractService.getContract(contractAddress);
-                _contract.address = contractAddress;
-                this.contracts.push(_contract);
-            });
-            resolve(this.contracts);
+            this.contractManagerService.getCurrentContract()
+                .map(res => res.json())
+                .subscribe(currentContracts => {
+                    currentContracts.forEach(contractAddress => {
+                        const _contract = this.contractService.getContract(contractAddress);
+                        _contract.address = contractAddress;
+                        this.contracts.push(_contract);
+                    });
+                    resolve(this.contracts);
+                });
         });
     }
 

@@ -6,11 +6,13 @@
     <div>
         <!--<h3>Name: <span [innerHtml]="lotteryData?.name"></span></h3>-->
         <h3>Open: <span [innerHtml]="lotteryData?.open"></span></h3>
-        <h3>Total: <span [innerHtml]="lotteryData?.total"></span></h3>
+        <h3>Total: <span [innerHtml]="lotteryData?.total/1000000000000000000"></span> ETH</h3>
         <h3>Fee: <span [innerHtml]="lotteryData?.fee/1000000000000000000"></span>ETH</h3>
-        <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span>%</h3>
+        <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span> %</h3>
         <h3>Result: <span [innerHtml]="lotteryData?.result"></span></h3>
-        <h3>Jackpot: <span [innerHtml]="lotteryData?.jackpot"></span></h3>
+        <h3>Jackpot: <span
+                [innerHtml]="lotteryData?.total/1000000000000000000 - (lotteryData?.total/2000000000000000000)"></span>
+        </h3>
     </div>
 
 

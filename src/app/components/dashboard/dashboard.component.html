@@ -7,12 +7,13 @@
         class="lottery-list">
         <li *ngFor="let contract of contracts">
             <a routerLink="/lottery/{{contract.address}}" [ngClass]="{'open': contract?.open}">
-                <h1>Total: <span [innerHtml]="contract?.total"></span></h1>
-                <h1>Fee: <span [innerHtml]="contract?.fee"></span></h1>
-                <h1>Owner fee: <span [innerHtml]="contract?.ownerFee"></span></h1>
+                <h1>Total: <span [innerHtml]="contract?.total/1000000000000000000"></span> ETH</h1>
+                <h1>Fee: <span [innerHtml]="contract?.fee/1000000000000000000"></span> ETH</h1>
+                <h1>Owner fee: <span [innerHtml]="contract?.ownerFee"></span> %</h1>
                 <h1>Result: <span [innerHtml]="contract?.result"></span></h1>
-                <h1>Jackpot: <span [innerHtml]="contract?.jackpot"></span></h1>
-                <h1>Type: <span [innerHtml]="contract?.type"></span></h1>
+                <h1>Jackpot: <span
+                        [innerHtml]="(contract?.total - (contract?.total/200))/1000000000000000000"></span> ETH
+                </h1>
                 <h1>Open: <span [innerHtml]="contract?.open"></span></h1>
             </a>
         </li>
