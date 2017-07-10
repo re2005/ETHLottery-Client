@@ -10,6 +10,7 @@ import {StorageService} from '../../services/storage/storage.service';
     templateUrl: './lottery.component.html',
     styleUrls: ['./lottery.component.scss']
 })
+
 export class LotteryComponent implements OnInit, OnDestroy {
 
     private getConnectedListener: any;
@@ -25,6 +26,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
     public lotteryBets = [];
     public isWinner: boolean;
     public withdrawMessage: string;
+    public isBetValid = false;
 
     /**
      *
@@ -68,7 +70,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
             bet: _bet
         });
         this.storage.set(this.lotteryAddress, this.lotteryBets);
-        this.playSuccessMessage = 'Your bet is made! you can have more info by clicking below '
+        this.playSuccessMessage = 'Your bet is made: ' + _bet + '! you can have more info by clicking below '
     }
 
     private onPlayError(errorMessage) {
@@ -76,9 +78,9 @@ export class LotteryComponent implements OnInit, OnDestroy {
         const userDenied = errorMessage.message.indexOf('User denied transaction signature');
         const unknownAddress = errorMessage.message.indexOf('Unknown address');
         if (userDenied > 0) {
-            return String('You need to Acept this request on MetaMask to continue');
+            return String('You need to ACCEPT the payment request on MetaMask to continue');
         } else if (unknownAddress > 0) {
-            return String('Unknown address, please unlock your account');
+            return String('Unknown address, please unlock your account on MetaMask');
         } else {
             return (errorMessage);
         }
@@ -86,9 +88,13 @@ export class LotteryComponent implements OnInit, OnDestroy {
 
     public play(account, gas, bet1, bet2) {
 
+        if (bet1 === '$' || bet2 === '$') {
+            this.isBetValid = true;
+            return;
+        }
         const _bet = bet1 + bet2;
-        // window.web3.personal.unlockAccount(account, password);
-        // window.web3.personal.lockAccount(participant);
+        this.isBetValid = false;
+
         this._lottery.play(_bet, {from: account, value: this.lotteryData.fee, gas: gas}, (error, result) => {
             if (error) {
                 this.playErrorMessage = this.onPlayError(error);
@@ -100,7 +106,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
 
     private updateLotteryBets() {
         this.lotteryBets.forEach(bet => {
-            // console.log(bet.newHash);
+            console.log(bet.newHash);
         });
     }
 
@@ -143,7 +149,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
             if (!error) {
                 this.accounts = accounts;
                 if (accounts.length === 0) {
-                    alert('Please unlock your account');
+                    alert('Please unlock your account and refresh this page');
                 }
             }
         });
@@ -167,13 +173,21 @@ export class LotteryComponent implements OnInit, OnDestroy {
             this.loadLotteryBets();
             this.setJackpot();
         });
+
+        // this._lottery.block_result((error, block_result) => {
+        //     if (error) {
+        //         console.log(error)
+        //     }
+        //     console.log(block_result);
+        // });
     }
 
     bootstrap() {
         this.isContractLoaded = false;
+
+        // This listener will be updated every second.
         this.getConnectedListener = this.connectService.getConnected().subscribe(connected => {
             this.isConnected = connected;
-            this.updateLotteryBets();
             if (connected && !this.isContractLoaded) {
                 this.loadLottery();
                 this.isContractLoaded = !this.isContractLoaded;

@@ -6,7 +6,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "bytes32"
+        "type": "bytes32",
+        "value": "0x4554484c6f7474657279202d204c61737420312042797465204c6f7474657279"
       }
     ],
     "payable": false,
@@ -19,7 +20,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "value": "2"
       }
     ],
     "payable": false,
@@ -40,7 +42,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "value": "0"
       }
     ],
     "payable": false,
@@ -61,7 +64,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "value": "0"
       }
     ],
     "payable": false,
@@ -74,7 +78,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "bytes1"
+        "type": "bytes1",
+        "value": "0x00"
       }
     ],
     "payable": false,
@@ -87,7 +92,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "value": "10000000000000000000"
       }
     ],
     "payable": false,
@@ -100,7 +106,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "address"
+        "type": "address",
+        "value": "0xc0cd4ce9649ce764c0116ddbb474941ef0c5ed3d"
       }
     ],
     "payable": false,
@@ -134,7 +141,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "bytes32"
+        "type": "bytes32",
+        "value": "0x0000000000000000000000000000000000000000000000000000000000000000"
       }
     ],
     "payable": false,
@@ -147,7 +155,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "uint256"
+        "type": "uint256",
+        "value": "1000000000000000000"
       }
     ],
     "payable": false,
@@ -160,7 +169,8 @@
     "outputs": [
       {
         "name": "",
-        "type": "bool"
+        "type": "bool",
+        "value": true
       }
     ],
     "payable": false,
@@ -170,15 +180,33 @@
     "inputs": [
       {
         "name": "_fee",
-        "type": "uint256"
+        "type": "uint256",
+        "index": 0,
+        "typeShort": "uint",
+        "bits": "256",
+        "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;fee",
+        "template": "elements_input_uint",
+        "value": "1"
       },
       {
         "name": "_jackpot",
-        "type": "uint256"
+        "type": "uint256",
+        "index": 1,
+        "typeShort": "uint",
+        "bits": "256",
+        "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;jackpot",
+        "template": "elements_input_uint",
+        "value": "10"
       },
       {
         "name": "_owner_fee",
-        "type": "uint256"
+        "type": "uint256",
+        "index": 2,
+        "typeShort": "uint",
+        "bits": "256",
+        "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;owner&thinsp;<span class=\"punctuation\">_</span>&thinsp;fee",
+        "template": "elements_input_uint",
+        "value": "2"
       }
     ],
     "payable": false,

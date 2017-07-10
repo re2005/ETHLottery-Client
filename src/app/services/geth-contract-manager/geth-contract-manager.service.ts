@@ -4,6 +4,7 @@ import {Injectable} from '@angular/core';
 export class GethContractManagerService {
 
     private _contracts = [
+        '0x9f13727801463Dc625fb24d15Aa65B7E4D0EC2E7',
         '0x077321dD767ea9182C17bC2E0A6aE32642A91dbb',
         '0x817a5B1cd7EA408b0f4898ba79E2AAA15F4EB792',
         '0x022Ddd4FaaFa3d4b2d1Dd0e42e1BfAe460c5fE82',

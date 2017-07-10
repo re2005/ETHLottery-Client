@@ -4,10 +4,10 @@
 <div [ngClass]="{'show': isContractLoaded}" class="content">
 
     <div>
-        <h3>Name: <span [innerHtml]="lotteryData?.name"></span></h3>
+        <!--<h3>Name: <span [innerHtml]="lotteryData?.name"></span></h3>-->
         <h3>Open: <span [innerHtml]="lotteryData?.open"></span></h3>
         <h3>Total: <span [innerHtml]="lotteryData?.total"></span></h3>
-        <h3>Fee: <span [innerHtml]="lotteryData?.fee"></span></h3>
+        <h3>Fee: <span [innerHtml]="lotteryData?.fee/1000000000000000000"></span>ETH</h3>
         <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span>%</h3>
         <h3>Result: <span [innerHtml]="lotteryData?.result"></span></h3>
         <h3>Jackpot: <span [innerHtml]="lotteryData?.jackpot"></span></h3>
@@ -27,7 +27,7 @@
             GAS: <input #gas size="10" value="140000">
         </div>
         <div>
-            GUESS LAST BLOCK HASH BYTE:
+            Your bet:<br>
             0xD1498F1c4AAafcd1eAA1b6e3594a
             <select #bet1>
                 <option disabled>$</option>
@@ -37,28 +37,40 @@
                 <option disabled>$</option>
                 <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
             </select>
+
+            <div [hidden]="!isBetValid"
+                 class="alerts">
+                <div>
+                    Please choose your bet.
+                </div>
+            </div>
         </div>
         <button (click)="play(account.value, gas.value, bet1.value, bet2.value)">
             GO lucky byte, do your magic...
         </button>
-        <div class="error" [innerHtml]="playErrorMessage"></div>
-        <div class="success" [innerHtml]="playSuccessMessage"></div>
+
+        <div class="alerts">
+            <div class="error" [innerHtml]="playErrorMessage"
+                 *ngIf="playErrorMessage"></div>
+            <div class="success" [innerHtml]="playSuccessMessage"
+                 *ngIf="playSuccessMessage"></div>
+        </div>
     </div>
 
-    <a (click)="checkResult('0xbe')">result checker</a>
+    <!--<a (click)="checkResult('0xbe')">result checker</a>-->
 
     <div class="you-win" [ngClass]="{'is-winner' : isWinner}">
         YOU WIN!
     </div>
 
-    <div>
-        Withdraw
-        <select #accountWithdraw id="accounts">
-            <option *ngFor="let acount of accounts">{{acount}}</option>
-        </select>
-        GAS: <input #gasWithdraw size="10" value="140000">
-        <a (click)="withdraw(accountWithdraw.value, gasWithdraw.value)">withdraw</a>
-    </div>
+    <!--<div>-->
+    <!--Withdraw-->
+    <!--<select #accountWithdraw id="accounts">-->
+    <!--<option *ngFor="let acount of accounts">{{acount}}</option>-->
+    <!--</select>-->
+    <!--GAS: <input #gasWithdraw size="10" value="140000">-->
+    <!--<a (click)="withdraw(accountWithdraw.value, gasWithdraw.value)">withdraw</a>-->
+    <!--</div>-->
 
     <div>
         Lottery:
@@ -70,15 +82,15 @@
 
     <div class="bets" [hidden]="lotteryBets.length < 1">
         <h2>
-            Your bets <span>{{lotteryBets.length}}</span>
+            Your bets [<span [innerHtml]="lotteryBets.length"></span>]
         </h2>
         <ul>
             <li *ngFor="let lotteryBet of lotteryBets">
+                <div>bet {{lotteryBet?.bet}}</div>
                 <a href="https://ropsten.etherscan.io/tx/{{lotteryBet?.newHash}}" target="_blank">
                     {{lotteryBet?.newHash}}
                 </a>
-                <div>bet {{lotteryBet?.bet}}</div>
-                {{lotteryBet?.isconfirmed}}
+                {{lotteryBet?.isConfirmed}}
             </li>
         </ul>
     </div>

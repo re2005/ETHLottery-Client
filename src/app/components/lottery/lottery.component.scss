@@ -27,6 +27,13 @@ div {
     margin: 10px 0;
 }
 
+h3 {
+    margin: 10px 0;
+}
+button {
+    font-size: 20px;
+    padding: 10px;
+}
 .content {
     opacity: 0;
     margin-top: 50px;
@@ -57,5 +64,11 @@ div {
 
     &.is-winner {
         display: block;
+    }
+}
+
+.bets {
+    span {
+        font-size: 12px;
     }
 }

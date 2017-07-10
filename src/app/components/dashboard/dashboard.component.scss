@@ -31,6 +31,19 @@
             }
         }
     }
+
+    a {
+        color: #fff;
+        padding: 10px 0;
+        display: block;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+            color: lightgreen;
+        }
+    }
+
 }
 
 header {

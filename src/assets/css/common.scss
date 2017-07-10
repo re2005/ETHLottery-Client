@@ -1,0 +1,16 @@
+.alerts {
+
+    div {
+        border: 1px solid gray;
+        background: rgba(123, 123, 123, 0.2);
+        padding: 20px;
+    }
+
+    .success {
+        border: 1px solid greenyellow;
+    }
+
+    .error {
+        border: 1px solid red;
+    }
+}
