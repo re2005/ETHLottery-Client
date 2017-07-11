@@ -3,6 +3,7 @@ a {
     padding: 10px 0;
     display: block;
     text-decoration: none;
+    word-break: break-all;
 
     &:hover {
         text-decoration: underline;
@@ -12,6 +13,12 @@ a {
 
 button {
     margin: 20px 0;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 10px;
+    &:hover {
+        animation: color-loop 1s infinite;
+    }
 }
 
 input {
@@ -30,10 +37,7 @@ div {
 h3 {
     margin: 10px 0;
 }
-button {
-    font-size: 20px;
-    padding: 10px;
-}
+
 .content {
     opacity: 0;
     margin-top: 50px;
@@ -69,6 +73,34 @@ button {
 
 .bets {
     span {
-        font-size: 12px;
+        font-size: 14px;
+    }
+    li {
+        margin: 20px 0;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.1);
+
+        &.is-confirmed {
+            border: 1px solid rgba(104, 214, 2, 0.3);
+            background: rgba(104, 214, 2, 0.1);
+        }
+
+        i {
+            animation: color-loop 1s infinite;
+        }
+
+        &.is-confirmed i {
+            animation: none;
+        }
+    }
+}
+
+.alert-result {
+    display: none;
+
+    &.waiting {
+        display: block;
+        animation: color-loop 1s infinite;
     }
 }

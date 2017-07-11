@@ -87,7 +87,7 @@ export class GethContractService {
             //     resolve(name);
             // });
             setTimeout(() => {
-                resolve('renatex');
+                resolve('');
             }, 100)
         });
     }
@@ -111,7 +111,7 @@ export class GethContractService {
                 total: values[3],
                 result: values[4],
                 name: values[5],
-                getJackpot: values[6],
+                jackpot: values[6],
                 address: contract.address
             };
         });

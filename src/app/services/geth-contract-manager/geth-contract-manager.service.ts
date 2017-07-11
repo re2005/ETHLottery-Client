@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
 import {environment} from '../../../environments/environment'
+import {contracts} from './contracts';
 
 @Injectable()
 export class GethContractManagerService {
@@ -12,6 +13,7 @@ export class GethContractManagerService {
     }
 
     getCurrentContract() {
-        return this.http.get(this.contractsUrl);
+        return contracts.apiData;
+        // return this.http.get(this.contractsUrl);
     }
 }

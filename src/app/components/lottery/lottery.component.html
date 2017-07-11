@@ -1,18 +1,25 @@
 <a routerLink="/">< back</a>
 
-
 <div [ngClass]="{'show': isContractLoaded}" class="content">
 
     <div>
-        <!--<h3>Name: <span [innerHtml]="lotteryData?.name"></span></h3>-->
         <h3>Open: <span [innerHtml]="lotteryData?.open"></span></h3>
-        <h3>Total: <span [innerHtml]="lotteryData?.total/1000000000000000000"></span> ETH</h3>
-        <h3>Fee: <span [innerHtml]="lotteryData?.fee/1000000000000000000"></span>ETH</h3>
-        <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span> %</h3>
         <h3>Result: <span [innerHtml]="lotteryData?.result"></span></h3>
         <h3>Jackpot: <span
-                [innerHtml]="lotteryData?.total/1000000000000000000 - (lotteryData?.total/2000000000000000000)"></span>
+                [innerHtml]="(lotteryData?.total - (lotteryData?.total*lotteryData?.ownerFee))/1000000000000000000"> ETH</span>
         </h3>
+        <h3>Total: <span [innerHtml]="lotteryData?.total/1000000000000000000"></span>/<span
+                [innerHtml]="lotteryData?.jackpot/1000000000000000000"></span> ETH</h3>
+        <h3>Fee: <span [innerHtml]="lotteryData?.fee/1000000000000000000"></span>ETH</h3>
+        <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span> %</h3>
+    </div>
+
+
+    <div class="alerts alert-result"
+         [ngClass]="{'waiting': !lotteryData?.open && !hasResult && (lotteryData?.result === '0x00')}">
+        <div>
+            Waiting result any moment
+        </div>
     </div>
 
 
@@ -29,7 +36,7 @@
             GAS: <input #gas size="10" value="140000">
         </div>
         <div>
-            Your bet:<br>
+            <h1>Your bet:</h1>
             0xD1498F1c4AAafcd1eAA1b6e3594a
             <select #bet1>
                 <option disabled>$</option>
@@ -87,12 +94,13 @@
             Your bets [<span [innerHtml]="lotteryBets.length"></span>]
         </h2>
         <ul>
-            <li *ngFor="let lotteryBet of lotteryBets">
-                <div>bet {{lotteryBet?.bet}}</div>
+            <li *ngFor="let lotteryBet of lotteryBets" [ngClass]="{'is-confirmed' : lotteryBet?.isConfirmed}">
+                <div>bet 0x{{lotteryBet?.bet}}</div>
+                <p>{{lotteryBet?.timestamp}}</p>
                 <a href="https://ropsten.etherscan.io/tx/{{lotteryBet?.newHash}}" target="_blank">
                     {{lotteryBet?.newHash}}
                 </a>
-                {{lotteryBet?.isConfirmed}}
+                <i>Transaction confirmed: {{lotteryBet?.isConfirmed}}</i>
             </li>
         </ul>
     </div>

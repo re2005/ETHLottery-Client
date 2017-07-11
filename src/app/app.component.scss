@@ -104,21 +104,3 @@ header {
 .color-loop {
     animation: color-loop 1s infinite;
 }
-
-@keyframes color-loop {
-    0% {
-        color: red;
-    }
-    25% {
-        color: yellow;
-    }
-    50% {
-        color: blue;
-    }
-    75% {
-        color: green;
-    }
-    100% {
-        color: red;
-    }
-}

@@ -6,3 +6,39 @@ $color-white: #ffffff;
 
 // Fonts
 $primary-font: 'FilsonProMedium';
+
+@keyframes color-loop {
+    0% {
+        color: red;
+    }
+    25% {
+        color: yellow;
+    }
+    50% {
+        color: blue;
+    }
+    75% {
+        color: green;
+    }
+    100% {
+        color: red;
+    }
+}
+
+@keyframes bg-loop {
+    0% {
+        background: red !important;
+    }
+    25% {
+        background: yellow !important;
+    }
+    50% {
+        background: blue !important;
+    }
+    75% {
+        background: green !important;
+    }
+    100% {
+        background: red !important;
+    }
+}
