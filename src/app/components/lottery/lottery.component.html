@@ -25,10 +25,8 @@
         </div>
         Closed on block{{blockNumber}} <br>
         Current Block {{currentBlock}}<br>
-        Remaining blocks {{(currentBlock - blockNumber) - 10}}
+        Remaining blocks {{currentBlock - blockNumber}}
     </div>
-
-    {{lotteryMessage}}
 
     <!--<button (click)="lottery()">-->
     <!--lottery-->
@@ -40,14 +38,13 @@
             Choose an account:
         </label>
         <div [hidden]="accounts?.length > 0" disabled>Loading...</div>
-        <select #account id="accounts" [hidden]="!accounts?.length > 0">
+        <select #account id="accounts" [hidden]="accounts?.length === 0">
             <option *ngFor="let acount of accounts">{{acount}}</option>
         </select>
 
         <!--<input type="password" #password placeholder="password">-->
         <div>
-            GAS: <input #gas
-                        size="10"
+            GAS: <input #gas size="10"
                         value="140000"
                         type="range"
                         min="11000"
@@ -109,6 +106,15 @@
            target="_blank">
             {{lotteryAddress}}
         </a>
+    </div>
+
+
+    <div *ngFor="let event of lotteryAllEvents">
+        {{event.address}}
+        {{event.blockHash}}
+        {{event.blockNumber}}
+        {{event.event}}
+        {{event.transactionHash}}
     </div>
 
     <div class="bets" [hidden]="lotteryBets.length < 1">

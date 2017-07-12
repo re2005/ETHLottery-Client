@@ -17,12 +17,14 @@ export class LotteryComponent implements OnInit, OnDestroy {
     private _lottery: any;
     private _totalEvents: any;
     private _getConnectedListener: any;
+    public lotteryAllEvents = [];
     public isLotterySync: boolean;
     public isConnected: Connected;
     public isContractLoaded = false;
     public isWinner: boolean;
     public isBetValid = false;
-    public blockNumber: string;
+    public blockNumber: number;
+    public remaimingBlocks: number;
     public currentBlock: number;
     public lotteryAddress: string;
     public lotteryData: any;
@@ -80,6 +82,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
 
     public checkResult(result) {
         this.storage.get(this.makeStorageName(this._constants.STORAGE_KEY_BETS)).then(bets => {
+            if (!bets) return false;
             bets.forEach(bet => {
                 let checkResult = (result.args.result === '0x' + bet.bet);
                 if (!this.isWinner && checkResult) {
@@ -87,7 +90,6 @@ export class LotteryComponent implements OnInit, OnDestroy {
                 }
             });
         });
-        console.log(this.isWinner);
     }
 
     private onPlaySuccess(result, _bet) {
@@ -176,6 +178,8 @@ export class LotteryComponent implements OnInit, OnDestroy {
 
     private updateContractAllEvents(event) {
 
+        this.lotteryAllEvents.push(event);
+
         if (event.event === 'Open') {
             this.updateContractOpen(event);
         }
@@ -257,8 +261,11 @@ export class LotteryComponent implements OnInit, OnDestroy {
 
     updateBlockNumber() {
         window.web3.eth.getBlockNumber((error, block) => {
-            if (error) return false;
+            if (error) {
+                return false;
+            }
             this.currentBlock = block
+            this.remaimingBlocks = this.currentBlock - this.blockNumber;
         })
     }
 
