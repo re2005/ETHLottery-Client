@@ -7,6 +7,15 @@ $color-white: #ffffff;
 // Fonts
 $primary-font: 'FilsonProMedium';
 
+
+.color-loop {
+    animation: color-loop 1s infinite;
+}
+
+.bg-loop {
+    animation: bg-loop 1s infinite;
+}
+
 @keyframes color-loop {
     0% {
         color: red;

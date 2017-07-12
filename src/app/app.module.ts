@@ -11,6 +11,7 @@ import {GethContractManagerService} from './services/geth-contract-manager/geth-
 import {ConnectionStatusComponent} from './components/connection-status/connection-status.component';
 import {StorageService} from './services/storage/storage.service'
 import {HttpModule, JsonpModule} from '@angular/http';
+import {ApiStateService} from './services/api-state/api-state.service';
 
 @NgModule({
     declarations: [
@@ -24,12 +25,13 @@ import {HttpModule, JsonpModule} from '@angular/http';
         AppRoutingModule,
         RouterModule,
         HttpModule,
-        JsonpModule
+        JsonpModule,
     ],
     providers: [GethConnectService,
         GethContractService,
         GethContractManagerService,
-        StorageService
+        StorageService,
+        ApiStateService
     ],
     bootstrap: [AppComponent]
 })

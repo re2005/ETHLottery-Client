@@ -4,6 +4,7 @@ import {GethContractService} from '../../services/geth-contract/geth-contract.se
 import {GethConnectService} from '../../services/geth-connect/geth-connect.service';
 import {Connected} from '../../services/geth-connect/connected';
 import {StorageService} from '../../services/storage/storage.service';
+import {ApiStateService} from '../../services/api-state/api-state.service';
 
 @Component({
     selector: 'app-lottery',
@@ -13,21 +14,26 @@ import {StorageService} from '../../services/storage/storage.service';
 
 export class LotteryComponent implements OnInit, OnDestroy {
 
-    private _getConnectedListener: any;
     private _lottery: any;
     private _totalEvents: any;
+    private _getConnectedListener: any;
+    public isLotterySync: boolean;
+    public isConnected: Connected;
+    public isContractLoaded = false;
+    public isWinner: boolean;
+    public isBetValid = false;
+    public blockNumber: string;
+    public currentBlock: number;
     public lotteryAddress: string;
     public lotteryData: any;
     public accounts: Array<any>;
-    public isConnected: Connected;
+    public currentAccount: string;
     public playErrorMessage: string;
     public playSuccessMessage: any;
-    public isContractLoaded = false;
+    public lotteryMessage: any;
     public bets = ['a', 'b', 'c', 'd', 'e', 'f', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     public lotteryBets = [];
-    public isWinner: boolean;
     public withdrawMessage: string;
-    public isBetValid = false;
     public hasResult = false;
 
     private _constants = {
@@ -42,12 +48,15 @@ export class LotteryComponent implements OnInit, OnDestroy {
      * @param {GethContractService} contractService
      * @param {GethConnectService} connectService
      * @param {StorageService} storage
+     * @param {ApiStateService} apiStateService
      */
     constructor(private activatedRoute: ActivatedRoute,
                 private contractService: GethContractService,
                 private connectService: GethConnectService,
-                private storage: StorageService) {
+                private storage: StorageService,
+                private apiStateService: ApiStateService) {
     }
+
 
     public withdraw(account, gas) {
         this._lottery.withdraw(({from: account, gas: gas}), (error, withdraw) => {
@@ -59,10 +68,23 @@ export class LotteryComponent implements OnInit, OnDestroy {
         })
     }
 
+    public lottery() {
+        this._lottery.lottery({from: this.currentAccount, gas: 200000}, (error, lottery) => {
+            if (!error) {
+                this.lotteryMessage = lottery;
+            } else {
+                this.lotteryMessage = error;
+            }
+        });
+    }
+
     public checkResult(result) {
         this.storage.get(this.makeStorageName(this._constants.STORAGE_KEY_BETS)).then(bets => {
             bets.forEach(bet => {
-                result === '0x' + bet.bet ? this.isWinner = true : this.isWinner = false;
+                let checkResult = (result.args.result === '0x' + bet.bet);
+                if (!this.isWinner && checkResult) {
+                    this.isWinner = true
+                }
             });
         });
         console.log(this.isWinner);
@@ -120,12 +142,14 @@ export class LotteryComponent implements OnInit, OnDestroy {
     }
 
     private updateLotteryBets(total) {
-        this.lotteryBets.forEach(bet => {
-            if (!bet.isConfirmed) {
-                bet.isConfirmed = total.transactionHash === bet.newHash;
-            }
-        });
-        this.storage.set(this.makeStorageName(this._constants.STORAGE_KEY_BETS), this.lotteryBets);
+        if (this.lotteryBets.length > 0) {
+            this.lotteryBets.forEach(bet => {
+                if (!bet.isConfirmed) {
+                    bet.isConfirmed = total.transactionHash === bet.newHash;
+                }
+            });
+            this.storage.set(this.makeStorageName(this._constants.STORAGE_KEY_BETS), this.lotteryBets);
+        }
     }
 
     private updateContractTotal(total) {
@@ -134,7 +158,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
         }
         this.lotteryData.total = total.args.total;
         this._totalEvents.push(total);
-        this.storage.set(this.makeStorageName(this._constants.STORAGE_KEY_TOTAL), total);
+        this.storage.set(this.makeStorageName(this._constants.STORAGE_KEY_TOTAL), this._totalEvents);
         this.updateLotteryBets(total);
     }
 
@@ -145,16 +169,27 @@ export class LotteryComponent implements OnInit, OnDestroy {
 
     private updateContractOpen(open) {
         this.lotteryData.open = open.args.open;
+        if (!open.args.open) {
+            this.blockNumber = open.blockNumber;
+        }
     }
 
     private updateContractAllEvents(event) {
+
+        if (event.event === 'Open') {
+            this.updateContractOpen(event);
+        }
+
         if (event.event === 'Total') {
             this.updateContractTotal(event);
         }
 
         if (event.event === 'Result') {
             this.hasResult = true;
+            this.checkResult(event);
         }
+
+        this.isLotterySync = true;
     }
 
     private setListeners() {
@@ -191,6 +226,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
         return window.web3.eth.getAccounts((error, accounts) => {
             if (!error) {
                 this.accounts = accounts;
+                this.currentAccount = accounts[0];
                 if (accounts.length === 0) {
                     alert('Please unlock your account and refresh this page');
                 }
@@ -198,7 +234,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
         });
     }
 
-    // TODO Move this method to lottery service
+// TODO Move this method to lottery service
     private loadLotteryBets() {
         this.storage.get(this.makeStorageName(this._constants.STORAGE_KEY_BETS)).then(bets => {
             this.lotteryBets = bets;
@@ -209,6 +245,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
     }
 
     private loadLottery() {
+        this.apiStateService.setIsApiLoaded({isLoaded: true});
         this._lottery = this.contractService.getContract(this.lotteryAddress);
         this.contractService.getContractData(this._lottery).then(data => {
             this.lotteryData = data;
@@ -216,21 +253,25 @@ export class LotteryComponent implements OnInit, OnDestroy {
             this.getAccounts();
             this.loadLotteryBets();
         });
+    }
 
-        // this._lottery.block_result((error, block_result) => {
-        //     if (error) {
-        //         console.log(error)
-        //     }
-        //     console.log(block_result);
-        // });
+    updateBlockNumber() {
+        window.web3.eth.getBlockNumber((error, block) => {
+            if (error) return false;
+            this.currentBlock = block
+        })
     }
 
     bootstrap() {
         this.isContractLoaded = false;
+        this.isLotterySync = false;
 
-        // This listener will be updated every second.
+        // This listener will be updated every 2 seconds.
         this._getConnectedListener = this.connectService.getConnected().subscribe(connected => {
             this.isConnected = connected;
+            if (connected) {
+                this.updateBlockNumber();
+            }
             if (connected && !this.isContractLoaded) {
                 this.loadLottery();
                 this.isContractLoaded = !this.isContractLoaded;
@@ -243,6 +284,8 @@ export class LotteryComponent implements OnInit, OnDestroy {
             this.lotteryAddress = params['address'];
             this.bootstrap();
         });
+
+        this.apiStateService.setIsApiLoaded({isLoaded: false});
     }
 
     ngOnDestroy() {

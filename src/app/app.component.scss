@@ -41,15 +41,16 @@
     }
 
     @include breakpoint(sm) {
-        //box-shadow: 0 2px 200px rgba(57, 17, 32, 0.9);
-        max-width: 500px;
-        max-height: 700px;
+        box-shadow: 0 20px 500px rgba(255, 255, 255, 0.1);
+        max-width: 600px;
         margin: auto;
     }
-
 }
 
 .app-loading {
+    position: absolute;
+    right: 0;
+    left: 0;
     text-align: center;
 
     .logo {
@@ -99,8 +100,4 @@ header {
     i {
         font-size: 10px;
     }
-}
-
-.color-loop {
-    animation: color-loop 1s infinite;
 }

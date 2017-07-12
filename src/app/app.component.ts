@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GethConnectService} from './services/geth-connect/geth-connect.service';
 import {Connected} from './services/geth-connect/connected';
+import {ApiStateService} from './services/api-state/api-state.service';
 
 @Component({
     selector: 'app-root',
@@ -11,27 +12,27 @@ export class AppComponent implements OnInit {
 
     public isWeb3Connected: Connected;
     public isAppLoaded = false;
-    public currentNodeConnection: string;
+    public currentNodeConnection: { any };
     public retryConnect = 0;
-
 
     /**
      *
      * @param {GethConnectService} connectService
+     * @param {ApiStateService} apiStateService
      */
-    constructor(private connectService: GethConnectService) {
+    constructor(private connectService: GethConnectService,
+                private apiStateService: ApiStateService) {
     }
 
     loadApp(data) {
-        this.isAppLoaded = data.isConnected;
-        this.currentNodeConnection = data.server;
+        this.currentNodeConnection = data;
     }
 
     keepAlive() {
         setInterval(() => {
             this.isWeb3Connected = this.connectService.isConnected();
             this.connectService.setConnected(this.isWeb3Connected);
-        }, 1000);
+        }, 2000);
     }
 
     tryReconnect() {
@@ -50,7 +51,16 @@ export class AppComponent implements OnInit {
         }
     }
 
+    onApiServiceWasChanged(apiState) {
+        this.isAppLoaded = apiState.isLoaded;
+    }
+
     ngOnInit() {
         this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
+        this.apiStateService.setIsApiLoaded({isLoaded: false});
+        this.apiStateService.getIsApiLoaded().subscribe(apiState => {
+            this.onApiServiceWasChanged(apiState);
+        });
+
     }
 }

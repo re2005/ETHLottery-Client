@@ -3,7 +3,6 @@
     <div [hidden]="isAppLoaded"
          class="app-loading">
         <div class="logo"></div>
-
         <h1 class="color-loop">loading</h1>
 
         <span [ngClass]="{'show': retryConnect > 0}">
@@ -22,7 +21,7 @@
         </span>
     </div>
 
-    <div [ngClass]="{'is-loaded': isAppLoaded}"
+    <div [ngClass]="{'is-loaded': isWeb3Connected}"
          class="app-content">
 
         <header>

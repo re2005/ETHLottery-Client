@@ -3,6 +3,7 @@ import {GethContractService} from '../../services/geth-contract/geth-contract.se
 import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
 import {GethConnectService} from '../../services/geth-connect/geth-connect.service';
 import {Connected} from '../../services/geth-connect/connected';
+import {ApiStateService} from '../../services/api-state/api-state.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -20,10 +21,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
      * @param {GethContractService} contractService
      * @param {GethContractManagerService} contractManagerService
      * @param {GethConnectService} connectService
+     * @param {ApiStateService} apiStateService
      */
     constructor(private contractService: GethContractService,
                 private contractManagerService: GethContractManagerService,
-                private connectService: GethConnectService) {
+                private connectService: GethConnectService,
+                private apiStateService: ApiStateService) {
     }
 
     private _loadContractData(contracts) {
@@ -36,6 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         Promise.all(contractsPromise).then(data => {
             this.contracts = data;
             this.isLoading = false;
+            this.apiStateService.setIsApiLoaded({isLoaded: true});
         });
     }
 
@@ -78,6 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.apiStateService.setIsApiLoaded({isLoaded: false});
         let isContractLoaded = false;
         this.getConnectedListener = this.connectService.getConnected().subscribe(connected => {
             this.isConnected = connected;

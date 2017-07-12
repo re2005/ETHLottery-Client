@@ -14,26 +14,45 @@
         <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span> %</h3>
     </div>
 
+    <div class="is-lottery-sync color-loop" [hidden]="isLotterySync">
+        receiving update {{isLotterySync}}
+    </div>
 
     <div class="alerts alert-result"
          [ngClass]="{'waiting': !lotteryData?.open && !hasResult && (lotteryData?.result === '0x00')}">
         <div>
             Waiting result any moment
         </div>
+        Closed on block{{blockNumber}} <br>
+        Current Block {{currentBlock}}<br>
+        Remaining blocks {{(currentBlock - blockNumber) - 10}}
     </div>
 
+    {{lotteryMessage}}
+
+    <!--<button (click)="lottery()">-->
+    <!--lottery-->
+    <!--</button>-->
 
     <div class="play" [ngClass]="{'is-open': lotteryData?.open}">
         <h1>Play</h1>
         <label for="accounts">
             Choose an account:
         </label>
-        <select #account id="accounts">
+        <div [hidden]="accounts?.length > 0" disabled>Loading...</div>
+        <select #account id="accounts" [hidden]="!accounts?.length > 0">
             <option *ngFor="let acount of accounts">{{acount}}</option>
         </select>
+
         <!--<input type="password" #password placeholder="password">-->
         <div>
-            GAS: <input #gas size="10" value="140000">
+            GAS: <input #gas
+                        size="10"
+                        value="140000"
+                        type="range"
+                        min="10000"
+                        max="500000"
+                        step="500">{{gas.value}}
         </div>
         <div>
             <h1>Your bet:</h1>
@@ -72,14 +91,17 @@
         YOU WIN!
     </div>
 
-    <!--<div>-->
-    <!--Withdraw-->
-    <!--<select #accountWithdraw id="accounts">-->
-    <!--<option *ngFor="let acount of accounts">{{acount}}</option>-->
-    <!--</select>-->
-    <!--GAS: <input #gasWithdraw size="10" value="140000">-->
-    <!--<a (click)="withdraw(accountWithdraw.value, gasWithdraw.value)">withdraw</a>-->
-    <!--</div>-->
+    <div *ngIf="isWinner">
+        Withdraw
+        <div>
+            <select #accountWithdraw id="accounts">
+                <option *ngFor="let acount of accounts">{{acount}}</option>
+            </select>
+        </div>
+        GAS: <input #gasWithdraw size="10" value="140000">
+        <button (click)="withdraw(accountWithdraw.value, gasWithdraw.value)">withdraw</button>
+        {{withdrawMessage}}
+    </div>
 
     <div>
         Lottery:
@@ -105,5 +127,3 @@
         </ul>
     </div>
 </div>
-
-
