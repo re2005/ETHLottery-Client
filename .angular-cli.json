@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "elothery",
+      "outDir": "./submodules",
       "assets": [
         "assets",
         "favicon.ico"

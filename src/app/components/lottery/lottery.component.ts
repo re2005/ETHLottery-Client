@@ -71,7 +71,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
     }
 
     public lottery() {
-        this._lottery.lottery({from: this.currentAccount, gas: 200000}, (error, lottery) => {
+        this._lottery.lottery((error, lottery) => {
             if (!error) {
                 this.lotteryMessage = lottery;
             } else {

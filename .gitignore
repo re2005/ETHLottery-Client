@@ -40,5 +40,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-/scripts/deploy.js
+/scripts/deploy-freegeeks.js
 dist.zip
+/README.md

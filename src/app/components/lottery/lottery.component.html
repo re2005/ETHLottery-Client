@@ -25,12 +25,16 @@
         </div>
         Closed on block{{blockNumber}} <br>
         Current Block {{currentBlock}}<br>
-        Remaining blocks {{currentBlock - blockNumber}}
-    </div>
+        Counting blocks {{currentBlock - blockNumber}}
 
+    </div>
+    <!--*ngIf="(currentBlock - blockNumber) > 10"-->
+    <!--<div>-->
     <!--<button (click)="lottery()">-->
-    <!--lottery-->
+    <!--RUN LOTTERY-->
     <!--</button>-->
+    <!--</div>-->
+
 
     <div class="play" [ngClass]="{'is-open': lotteryData?.open}">
         <h1>Play</h1>
@@ -99,6 +103,7 @@
         <button (click)="withdraw(accountWithdraw.value, gasWithdraw.value)">withdraw</button>
         {{withdrawMessage}}
     </div>
+
 
     <div>
         Lottery:
