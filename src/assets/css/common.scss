@@ -1,3 +1,5 @@
+@import "variables";
+
 .alerts {
 
     div {
@@ -14,7 +16,6 @@
         border: 1px solid red;
     }
 }
-
 
 .color-loop {
     animation: color-loop 1s infinite;

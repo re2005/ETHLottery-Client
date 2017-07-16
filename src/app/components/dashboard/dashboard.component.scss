@@ -1,4 +1,4 @@
-@import "../../../assets/css/globals";
+@import "../../../assets/css/index";
 
 .dashboard {
 
@@ -55,4 +55,12 @@
 
 header {
     margin-left: -100%;
+}
+
+span {
+    width: 100%;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
 }

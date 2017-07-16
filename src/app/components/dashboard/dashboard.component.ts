@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {GethContractService} from '../../services/geth-contract/geth-contract.service';
-import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
 import {GethConnectService} from '../../services/geth-connect/geth-connect.service';
 import {Connected} from '../../services/geth-connect/connected';
 import {ApiStateService} from '../../services/api-state/api-state.service';
@@ -12,72 +11,70 @@ import {ApiStateService} from '../../services/api-state/api-state.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
-    public contracts = [];
+    public contractsData: any;
     public isConnected: Connected;
     private getConnectedListener: any;
     public isLoading = true;
 
     /**
      * @param {GethContractService} contractService
-     * @param {GethContractManagerService} contractManagerService
      * @param {GethConnectService} connectService
      * @param {ApiStateService} apiStateService
      */
     constructor(private contractService: GethContractService,
-                private contractManagerService: GethContractManagerService,
                 private connectService: GethConnectService,
                 private apiStateService: ApiStateService) {
     }
 
-    private _loadContractData(contracts) {
-
-        const contractsPromise = [];
-        contracts.forEach(contract => {
-            contractsPromise.push(this.contractService.getContractData(contract));
-        });
-
-        Promise.all(contractsPromise).then(data => {
-            this.contracts = data;
-            this.isLoading = false;
-            this.apiStateService.setIsApiLoaded({isLoaded: true});
-        });
+    public openLottery(address) {
+        this._getLotteryByAddress(address);
     }
 
-    private _getContracts() {
+    private _getLotteryByAddress(address) {
+        this.contractsData.forEach(contract => {
+            if (address === contract.address) {
 
-        // const currentContracts = this.contractManagerService.getCurrentContract();
+            }
+        })
+    }
 
-        return new Promise((resolve) => {
+    updateContractAllEvents(event) {
 
-            const currentContracts = this.contractManagerService.getCurrentContract();
-            currentContracts.forEach(contractAddress => {
-                const _contract = this.contractService.getContract(contractAddress);
-                _contract.address = contractAddress;
-                this.contracts.push(_contract);
-            });
-            resolve(this.contracts);
-            // this.contractManagerService.getCurrentContract()
-            //     .map(res => res.json())
-            //     .subscribe(currentContracts => {
-            //         currentContracts.forEach(contractAddress => {
-            //             const _contract = this.contractService.getContract(contractAddress);
-            //             _contract.address = contractAddress;
-            //             this.contracts.push(_contract);
-            //         });
-            //         resolve(this.contracts);
-            //     });
-        });
+        this.contractsData.forEach(contract => {
+
+            if (!contract.contractEvents) {
+                contract.contractEvents = [];
+            }
+            if (event.address.toLowerCase() === contract.address.toLowerCase()) {
+                contract.contractEvents.push(event);
+                if (event.event === 'Total') {
+                    contract.contractData.total = event.args.total;
+                }
+                if (event.event === 'Open') {
+                    contract.contractData.open = event.args.open;
+                }
+                if (event.event === 'Result') {
+                    contract.contractData.result = event.args.result;
+                }
+            }
+        })
     }
 
     public refreshList() {
-        this.contracts = [];
-        this.isLoading = true;
-        this.bootstrap();
+        // this.contractsData = [];
+        // this.isLoading = true;
+        // this._loadContractData();
     }
 
     bootstrap() {
-        this._getContracts().then(contracts => {
-            this._loadContractData(contracts);
+        this.contractService.getEvents().subscribe(contractsEvents => {
+            this.updateContractAllEvents(contractsEvents)
+        });
+
+        this.contractService.getContractsData().then((data) => {
+            this.contractsData = data;
+            this.apiStateService.setIsApiLoaded({isLoaded: true});
+            this.isLoading = false;
         });
     }
 

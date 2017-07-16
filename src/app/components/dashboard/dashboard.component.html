@@ -5,18 +5,24 @@
 
     <ul [ngClass]="{'is-loaded': !isLoading}"
         class="lottery-list">
-        <li *ngFor="let contract of contracts">
-            <a routerLink="/lottery/{{contract.address}}" [ngClass]="{'open': contract?.open}">
+        <li *ngFor="let contract of contractsData">
+            <a routerLink="/lottery/{{contract.address}}" [ngClass]="{'open': contract.contractData?.open}">
                 <h1>Jackpot: <span
-                        [innerHtml]="(contract?.total - (contract?.total*(contract?.ownerFee/100)))/1000000000000000000"></span>
+                        [innerHtml]="(contract.contractData?.jackpot - (contract.contractData?.jackpot*(contract.contractData?.ownerFee/100)))/1000000000000000000"></span>
                     ETH
                 </h1>
-                <h1>Total: <span [innerHtml]="contract?.total/1000000000000000000"></span> / <span
-                        [innerHtml]="contract?.jackpot/1000000000000000000"></span>ETH</h1>
-                <h1>Fee: <span [innerHtml]="contract?.fee/1000000000000000000"></span> ETH</h1>
-                <h1>Owner fee: <span [innerHtml]="contract?.ownerFee"></span> %</h1>
-                <h1>Result: <span [innerHtml]="contract?.result"></span></h1>
-                <h1>Open: <span [innerHtml]="contract?.open"></span></h1>
+                <h1>Total: <span [innerHtml]="contract.contractData?.total/1000000000000000000"></span> / <span
+                        [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>ETH</h1>
+                <h1>Fee: <span [innerHtml]="contract.contractData?.fee/1000000000000000000"></span> ETH</h1>
+                <h1>Owner fee: <span [innerHtml]="contract.contractData?.ownerFee"></span> %</h1>
+                <h1>Result: <span [innerHtml]="contract.contractData?.result"></span></h1>
+                <h1>Open: <span [innerHtml]="contract.contractData?.open"></span></h1>
+                <!--<span *ngFor="let event of contract?.contractEvents">-->
+                    <!--blockHash: {{event.blockHash}}<br>-->
+                    <!--blockNumber: {{event.blockNumber}}<br>-->
+                    <!--event: {{event.event}}<br>-->
+                    <!--transactionHash: {{event.transactionHash}}<br>-->
+                <!--</span>-->
             </a>
         </li>
     </ul>

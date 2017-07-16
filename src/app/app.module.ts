@@ -12,6 +12,7 @@ import {ConnectionStatusComponent} from './components/connection-status/connecti
 import {StorageService} from './services/storage/storage.service'
 import {HttpModule, JsonpModule} from '@angular/http';
 import {ApiStateService} from './services/api-state/api-state.service';
+import {AccountService} from './services/account/account.service';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import {ApiStateService} from './services/api-state/api-state.service';
         GethContractService,
         GethContractManagerService,
         StorageService,
-        ApiStateService
+        ApiStateService,
+        AccountService
     ],
     bootstrap: [AppComponent]
 })

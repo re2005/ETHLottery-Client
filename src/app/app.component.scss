@@ -1,7 +1,6 @@
-@import "../assets/css/globals";
+@import "../assets/css/index";
 
 .app-body {
-    overflow-x: hidden;
     font-family: $primary-font;
 
     &--background {
@@ -25,7 +24,6 @@
         &:before {
             background: url('../assets/images/backgrounds/bg-top.jpg') top center no-repeat;
             background-size: 110%;
-
         }
 
         &:after {
@@ -41,9 +39,7 @@
     }
 
     @include breakpoint(sm) {
-        box-shadow: 0 20px 500px rgba(255, 255, 255, 0.1);
-        max-width: 600px;
-        margin: auto;
+        margin: 50px 100px;
     }
 }
 

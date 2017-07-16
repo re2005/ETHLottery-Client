@@ -84,8 +84,8 @@ export class LotteryComponent implements OnInit, OnDestroy {
         this.storage.get(this.makeStorageName(this._constants.STORAGE_KEY_BETS)).then(bets => {
             if (!bets) return false;
             bets.forEach(bet => {
-                let checkResult = (result.args.result === '0x' + bet.bet);
-                if (!this.isWinner && checkResult) {
+                const checkResult = (result.args.result === '0x' + bet.bet);
+                if (!this.isWinner && checkResult && bet.isConfirmed) {
                     this.isWinner = true
                 }
             });
@@ -232,7 +232,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
                 this.accounts = accounts;
                 this.currentAccount = accounts[0];
                 if (accounts.length === 0) {
-                    alert('Please unlock your account and refresh this page');
+                    alert('Please unlock your account on META MASK and refresh this page');
                 }
             }
         });

@@ -1,16 +1,37 @@
 'use strict';
 import {Injectable} from '@angular/core';
 import abi from './abi';
+import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
 
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
+import {Contract} from './contract';
 
 @Injectable()
 export class GethContractService {
 
+    private _contracts: any;
     private _contract: any;
     private _contractData: Object;
+    private contractEvents: Contract;
+    private subject: Subject<Contract> = new Subject<Contract>();
 
-    constructor() {
+    /**
+     *
+     * @param {GethContractManagerService} _contractManagerService
+     */
+    constructor(private _contractManagerService: GethContractManagerService) {
     }
+
+    setEvent(contract: Contract): void {
+        this.contractEvents = contract;
+        this.subject.next(contract);
+    }
+
+    getEvents(): Observable<Contract> {
+        return this.subject.asObservable();
+    }
+
 
     private getResult() {
         return new Promise((resolve, reject) => {
@@ -114,6 +135,37 @@ export class GethContractService {
                 jackpot: values[6],
                 address: contract.address
             };
+        });
+    }
+
+    public getContractsData() {
+        const contractsPromise = [];
+        this._contracts.forEach(contract => {
+            contractsPromise.push(this.getContractData(contract));
+        });
+        return new Promise((resolve) => {
+            Promise.all(contractsPromise).then(data => {
+                for (let _i = 0; _i < data.length; _i++) {
+                    this._contracts[_i]['contractData'] = data[_i];
+                }
+                resolve(this._contracts);
+            });
+        });
+    }
+
+    public getContracts() {
+        const that = this;
+        this._contracts = [];
+        const currentContracts = this._contractManagerService.getCurrentContract();
+        return new Promise((resolve) => {
+            currentContracts.forEach(contractAddress => {
+                const _contract = this.getContract(contractAddress);
+                _contract.address = contractAddress;
+                that._contracts.push(_contract);
+            });
+            this.getContractsData().then(() => {
+                resolve(this._contracts);
+            });
         });
     }
 

@@ -3,13 +3,14 @@
 <div [ngClass]="{'show': isContractLoaded}" class="content">
 
     <div>
+        <h1>Jackpot: <span
+                [innerHtml]="(lotteryData?.jackpot - (lotteryData?.jackpot*(lotteryData?.ownerFee/100)))/1000000000000000000"></span>
+            ETH
+        </h1>
+        <h1>Total: <span [innerHtml]="lotteryData?.total/1000000000000000000"></span> / <span
+                [innerHtml]="lotteryData?.jackpot/1000000000000000000"></span>ETH</h1>
         <h3>Open: <span [innerHtml]="lotteryData?.open"></span></h3>
         <h3>Result: <span [innerHtml]="lotteryData?.result"></span></h3>
-        <h3>Jackpot: <span
-                [innerHtml]="(lotteryData?.total - (lotteryData?.total*lotteryData?.ownerFee))/1000000000000000000"> ETH</span>
-        </h3>
-        <h3>Total: <span [innerHtml]="lotteryData?.total/1000000000000000000"></span>/<span
-                [innerHtml]="lotteryData?.jackpot/1000000000000000000"></span> ETH</h3>
         <h3>Fee: <span [innerHtml]="lotteryData?.fee/1000000000000000000"></span>ETH</h3>
         <h3>Owner fee: <span [innerHtml]="lotteryData?.ownerFee"></span> %</h3>
     </div>
@@ -51,8 +52,8 @@
             GAS: <input #gas size="10"
                         value="140000"
                         type="range"
-                        min="11000"
-                        max="500000"
+                        min="70000"
+                        max="200000"
                         step="500">{{gas.value}}
         </div>
         <div>
@@ -113,15 +114,6 @@
         </a>
     </div>
 
-
-    <div *ngFor="let event of lotteryAllEvents">
-        {{event.address}}
-        {{event.blockHash}}
-        {{event.blockNumber}}
-        {{event.event}}
-        {{event.transactionHash}}
-    </div>
-
     <div class="bets" [hidden]="lotteryBets.length < 1">
         <h2>
             Your bets [<span [innerHtml]="lotteryBets.length"></span>]
@@ -136,5 +128,15 @@
                 <i>Transaction confirmed: {{lotteryBet?.isConfirmed}}</i>
             </li>
         </ul>
+    </div>
+
+    <div class="logs">
+        <h1>Log</h1>
+        <div *ngFor="let event of lotteryAllEvents">
+            blockHash: {{event.blockHash}}<br>
+            blockNumber: {{event.blockNumber}}<br>
+            event: {{event.event}}<br>
+            transactionHash: {{event.transactionHash}}<br>
+        </div>
     </div>
 </div>
