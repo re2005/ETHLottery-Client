@@ -2,7 +2,6 @@
 import {Injectable} from '@angular/core';
 import abi from './abi';
 import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
-
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import {Contract} from './contract';
@@ -14,7 +13,7 @@ export class GethContractService {
     private _contract: any;
     private _contractData: Object;
     private contractEvents: Contract;
-    private subject: Subject<Contract> = new Subject<Contract>();
+    private subject: Subject<any> = new Subject<any>();
 
     /**
      *
@@ -22,6 +21,15 @@ export class GethContractService {
      */
     constructor(private _contractManagerService: GethContractManagerService) {
     }
+
+    setContractObservable(contract: any): void {
+        this.subject.next(contract);
+    }
+
+    getContractsObservable(): Observable<any> {
+        return this.subject.asObservable();
+    }
+
 
     setEvent(contract: Contract): void {
         this.contractEvents = contract;
@@ -161,6 +169,7 @@ export class GethContractService {
             currentContracts.forEach(contractAddress => {
                 const _contract = this.getContract(contractAddress);
                 _contract.address = contractAddress;
+                _contract.contractBets = [{address: '213123'}];
                 that._contracts.push(_contract);
             });
             this.getContractsData().then(() => {

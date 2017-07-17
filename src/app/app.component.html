@@ -31,7 +31,43 @@
             <app-connection-status></app-connection-status>
         </header>
 
-        <router-outlet></router-outlet>
+        <div class="dashboard">
+            <h1>
+                Pick a lottery to play <a (click)="refreshList()">refresh list</a>
+            </h1>
+
+            <app-play *ngIf="isPlay" class="play" [play]="playContract"></app-play>
+
+            <ul [ngClass]="{'is-loaded': !isLoading}"
+                class="lottery-list">
+                <li *ngFor="let contract of contracts">
+                    <a [ngClass]="{'open': contract.contractData?.open}">
+                        <h1>Jackpot: <span
+                                [innerHtml]="(contract.contractData?.jackpot - (contract.contractData?.jackpot*(contract.contractData?.ownerFee/100)))/1000000000000000000"></span>
+                            ETH
+                        </h1>
+                        <h1>Total: <span [innerHtml]="contract.contractData?.total/1000000000000000000"></span> / <span
+                                [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>ETH</h1>
+                        <h1>Fee: <span [innerHtml]="contract.contractData?.fee/1000000000000000000"></span> ETH</h1>
+                        <h1>Owner fee: <span [innerHtml]="contract.contractData?.ownerFee"></span> %</h1>
+                        <h1>Result: <span [innerHtml]="contract.contractData?.result"></span></h1>
+                        <h1>Open: <span [innerHtml]="contract.contractData?.open"></span></h1>
+                        <!--<span *ngFor="let event of contract?.contractEvents">-->
+                        <!--blockHash: {{event.blockHash}}<br>-->
+                        <!--blockNumber: {{event.blockNumber}}<br>-->
+                        <!--event: {{event.event}}<br>-->
+                        <!--transactionHash: {{event.transactionHash}}<br>-->
+                        <!--</span>-->
+                        <button (click)="play(contract.contractData?.address)">play</button>
+                        <ul>
+                            <li *ngFor="let bets of contract.contractBets">
+                                {{bets.address}}
+                            </li>
+                        </ul>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 
 </div>

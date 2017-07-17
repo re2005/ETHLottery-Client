@@ -61,7 +61,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
 
 
     public withdraw(account, gas) {
-        this._lottery.withdraw(({from: account, gas: gas}), (error, withdraw) => {
+        this._lottery.withdraw({from: account, gas: gas}, (error, withdraw) => {
             if (!error) {
                 this.withdrawMessage = withdraw;
             } else {
