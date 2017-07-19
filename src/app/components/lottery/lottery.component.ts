@@ -130,7 +130,7 @@ export class LotteryComponent implements OnInit, OnDestroy {
         const _bet = bet1 + bet2;
         this.isBetValid = false;
 
-        this._lottery.play(_bet, {from: account, value: this.lotteryData.fee, gas: gas}, (error, result) => {
+        this._lottery.play('0x' + _bet, {from: account, value: this.lotteryData.fee, gas: gas}, (error, result) => {
             if (error) {
                 this.playErrorMessage = this.onPlayError(error);
             } else {
