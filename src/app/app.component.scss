@@ -1,67 +1,120 @@
 @import "../assets/css/index";
 
 .app-body {
+    margin: auto;
+    max-width: 1000px;
     font-family: $primary-font;
+}
 
-    &--background {
+.container {
+    position: relative;
 
-        height: 100%;
-        position: relative;
-        color: aliceblue;
-        z-index: 0;
-
-        &:after, &:before {
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            z-index: -1;
-            content: '';
-            position: absolute;
-            opacity: 0.7;
-        }
-
-        &:before {
-            background: url('../assets/images/backgrounds/bg-top.jpg') top center no-repeat;
-            background-size: 110%;
-        }
-
-        &:after {
-            background: url('../assets/images/backgrounds/bg-bottom.jpg') bottom center no-repeat;
-            background-size: 150%;
-        }
-
-        @include breakpoint_max(sm) {
-            &:after, &:before {
-                background-size: 800px;
-            }
-        }
+    &--flex {
+        display: flex;
     }
 
-    @include breakpoint(sm) {
-        margin: 50px 100px;
+    &__label {
+        z-index: 0;
+        margin-top: 50px;
+        line-height: 40px;
+        position: relative;
+        color: $color-white;
+
+        &:before {
+            content: '';
+            top: -40px;
+            z-index: -1;
+            left: -999px;
+            bottom: -20px;
+            right: -999px;
+            position: absolute;
+            background: $color-green;
+            transform: rotate(-1deg);
+        }
+
+        h1 {
+            margin: 5px 0;
+            font-size: 28px;
+        }
     }
 }
 
+.sidebar {
+    flex: 1;
+    z-index: 1;
+    padding: 20px;
+    margin-top: -90px;
+    background: #F5F5F5;
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.30);
+
+    &__title {
+        z-index: 1;
+        font-size: 20px;
+        margin-top: 30px;
+        font-weight: 100;
+        position: relative;
+        color: $color-white;
+
+        &:before {
+            top: -30px;
+            z-index: -1;
+            content: '';
+            left: -49px;
+            right: -20px;
+            bottom: -40px;
+            position: absolute;
+            background-size: 100%;
+            background: url("../assets/images/label-red.svg") no-repeat;
+
+        }
+    }
+}
+
+.bets {
+    display: flex;
+    margin-top: 40px;
+    max-height: 600px;
+    min-height: 300px;
+    overflow: auto;
+    flex-direction: column;
+
+    li {
+        margin: 14px 0;
+        display: block;
+        width: 100%;
+
+        img {
+            margin-right: 10px;
+            width: 30px;
+            height: 30px;
+            float: left;
+        }
+    }
+}
+
+@include breakpoint(sm) {
+    margin: 50px 100px;
+}
+
 .app-loading {
-    position: absolute;
     right: 0;
     left: 0;
+    position: absolute;
     text-align: center;
 
     .logo {
         width: 200px;
-        display: block;
         height: 200px;
+        display: block;
         margin: 100px auto 0;
     }
 
     span {
-        line-height: 20px;
-        font-size: 12px;
+        margin: 20px;
         opacity: 0.6;
         display: none;
-        margin: 20px;
+        font-size: 12px;
+        line-height: 20px;
 
         .loading {
             @extend .color-loop;
@@ -75,27 +128,75 @@
 
 .app-content {
     opacity: 0;
-    transform: translate3d(0px, -50px, 0px);
     padding: 20px;
+    transform: translate3d(0px, -50px, 0px);
+    pointer-events: none;
 
     &.is-loaded {
-        transition: all .4s ease;
         opacity: 1;
         transform: none;
+        pointer-events: auto;
+        transition: all .4s ease;
     }
 }
 
 header {
     display: flex;
+    height: 80px;
     justify-content: space-between;
 
     h1 {
-        font-size: 18px;
-        padding: 10px 0 10px 40px;
+        font-size: 38px;
+        display: inline-table;
+        padding: 10px 0 10px 50px;
     }
     i {
         font-size: 10px;
     }
+    button {
+        border: 0;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+        padding: 5px 20px;
+        border-radius: 10px;
+        color: $color-white;
+        background: $color-green;
+
+        &:hover {
+            filter: brightness(0.9);
+        }
+    }
 }
 
-@import "./components/dashboard/dashboard.component";
+.play {
+    position: relative;
+    transform: translate3d(200px, 0px, 0px);
+    transition: all .4s ease;
+
+    &.is-play {
+        transform: none;
+    }
+
+    &__close {
+        top: 53px;
+        z-index: 1;
+        width: 30px;
+        height: 30px;
+        left: -686px;
+        cursor: pointer;
+        line-height: 30px;
+        text-align: center;
+        position: absolute;
+        color: $color-white;
+        border-radius: 100%;
+        border: 1px solid $color-white;
+
+        &:hover {
+            background: $color-white;
+            color: $color-blue;
+        }
+    }
+}
+
+@import "./app.component-lottery-list";

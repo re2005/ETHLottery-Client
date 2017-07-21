@@ -1,25 +1,7 @@
-<div class="app-body app-body--background">
+<div class="app-body" (window:keydown)="onKey($event)">
 
-    <div [hidden]="isAppLoaded"
-         class="app-loading">
-        <div class="logo"></div>
-        <h1 class="color-loop">loading</h1>
-
-        <span [ngClass]="{'show': retryConnect > 0}">
-            {{retryConnect}}<br>
-            attempts to connect
-        </span>
-        <span [ngClass]="{'show': retryConnect > 5}">
-            Please check if META MASK is working or your GETH node was started with these options:<br>
-            <i>./geth --testnet --fast --rpc --rpcapi db,eth,net,web3,personal --rpccorsdomain="*"</i>
-        </span>
-        <span [ngClass]="{'show': retryConnect > 10}">
-            You may refresh this page and check again GETH and METAMASK
-        </span>
-        <span [ngClass]="{'show': retryConnect > 15}">
-            Don't dive up.. this will connect :D
-        </span>
-    </div>
+    <app-loading [hidden]="isWeb3Connected"
+                 [retryConnect]="retryConnect"></app-loading>
 
     <div [ngClass]="{'is-loaded': isWeb3Connected}"
          class="app-content">
@@ -28,45 +10,76 @@
             <h1 class="logo-pic">
                 E-LOTHERY <i>alpha</i>
             </h1>
-            <app-connection-status></app-connection-status>
+            <div>
+                <button>how to play</button>
+            </div>
         </header>
 
-        <div class="dashboard">
-            <h1>
-                Pick a lottery to play <a (click)="refreshList()">refresh list</a>
-            </h1>
+        <div class="container">
 
-            <app-play *ngIf="isPlay" class="play" [play]="playContract"></app-play>
+            <div class="container__label">
+                <h1>
+                    Try your luck with<br>
+                    blockchain lottery
+                </h1>
+            </div>
 
-            <ul [ngClass]="{'is-loaded': !isLoading}"
-                class="lottery-list">
-                <li *ngFor="let contract of contracts">
-                    <a [ngClass]="{'open': contract.contractData?.open}">
-                        <h1>Jackpot: <span
-                                [innerHtml]="(contract.contractData?.jackpot - (contract.contractData?.jackpot*(contract.contractData?.ownerFee/100)))/1000000000000000000"></span>
-                            ETH
-                        </h1>
-                        <h1>Total: <span [innerHtml]="contract.contractData?.total/1000000000000000000"></span> / <span
-                                [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>ETH</h1>
-                        <h1>Fee: <span [innerHtml]="contract.contractData?.fee/1000000000000000000"></span> ETH</h1>
-                        <h1>Owner fee: <span [innerHtml]="contract.contractData?.ownerFee"></span> %</h1>
-                        <h1>Result: <span [innerHtml]="contract.contractData?.result"></span></h1>
-                        <h1>Open: <span [innerHtml]="contract.contractData?.open"></span></h1>
-                        <!--<span *ngFor="let event of contract?.contractEvents">-->
-                        <!--blockHash: {{event.blockHash}}<br>-->
-                        <!--blockNumber: {{event.blockNumber}}<br>-->
-                        <!--event: {{event.event}}<br>-->
-                        <!--transactionHash: {{event.transactionHash}}<br>-->
-                        <!--</span>-->
-                        <button (click)="play(contract.contractData?.address)">play</button>
-                        <ul>
-                            <li *ngFor="let bets of contract.contractBets">
-                                {{bets.address}}
-                            </li>
-                        </ul>
-                    </a>
-                </li>
-            </ul>
+            <div class="container--flex">
+                <section class="lottery-list" [ngClass]="{'is-play': isPlay}">
+
+                    <a (click)="refreshList()"
+                       class="lottery-list__refresh">refresh list</a>
+
+                    <ul [ngClass]="{'is-loaded': !isLoading}">
+                        <li *ngFor="let contract of contracts; let _index = index"
+                            id="{{contract.address}}">
+                            <a [ngClass]="{'is-closed': !contract.contractData?.open}"
+                               (click)="play(contract.contractData?.address, _index)">
+
+                                <h1>
+                                    <span [innerHtml]="(contract.contractData?.jackpot - (contract.contractData?.jackpot*(contract.contractData?.ownerFee/100)))/1000000000000000000"></span>
+                                    eth
+                                </h1>
+                                <img src="assets/images/icons/icon_{{_index}}.gif">
+                                <p><span [innerHtml]="contract.contractData?.total/1000000000000000000"></span>
+                                    /
+                                    <span [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>
+                                </p>
+                                <p>fee <span [innerHtml]="contract.contractData?.fee/1000000000000000000"></span>
+                                </p>
+                                <span [innerHtml]="contract.contractData?.result"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+
+                <aside class="sidebar">
+                    <h2 class="sidebar__title">My bets</h2>
+
+                    <ul class="bets">
+                        <h3 *ngIf="!bets?.length">
+                            No Bets yet, go make your first!
+                        </h3>
+
+                        <li *ngFor="let bet of bets">
+                            <img src="/assets/images/icons/icon_{{bet.index}}.gif">
+                            {{bet.bet}}<br>
+                            {{bet.timestamp | date: "HH:mm:s d/MMM/yy"}}<br>
+                            {{bet.isConfirmed}}
+                        </li>
+                    </ul>
+                    <!--<button (click)="withdraw()">withdraw</button>-->
+                </aside>
+
+                <div [ngClass]="{'is-play':isPlay}"
+                     class="play">
+                    <div [hidden]="!isPlay">
+                        <span class="play__close" (click)="closePlay()">x</span>
+                        <app-play [play]="playContractObject"></app-play>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 

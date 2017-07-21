@@ -1,36 +1,22 @@
 'use strict';
 import {Injectable} from '@angular/core';
 import web3 from 'web3';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
-import {Connected} from './connected';
 
 
 @Injectable()
 export class GethConnectService {
 
-    private connected: Connected;
-    private subject: Subject<Connected> = new Subject<Connected>();
-
     constructor() {
     }
 
-    setConnected(connected: Connected): void {
-        this.connected = connected;
-        this.subject.next(connected);
-    }
 
-    getConnected(): Observable<Connected> {
-        return this.subject.asObservable();
-    }
-
-    isWeb3Connected() {
+    public isWeb3Connected() {
         return window.web3.isConnected();
     }
 
     startConnection() {
         return new Promise((resolve) => {
-            if (typeof window.web3 !== 'undefined') {
+            if (typeof window.web3 !== 'undefined' && window.web3.currentProvider.host !== 'http://localhost:8545') {
                 window.web3 = new window.Web3(window.web3.currentProvider);
                 console.warn('You are connected to MetaMask');
                 resolve({server: 'MetaMask', isConnected: true});

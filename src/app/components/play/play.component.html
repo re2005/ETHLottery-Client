@@ -1,4 +1,30 @@
-<p>
-    Blablabla
-    <button (click)="playBet()">Bet!</button>
-</p>
+<div class="play">
+    <h3 class="play__label">
+        Place a BET!
+    </h3>
+
+    <div class="play-content">
+        <img src="assets/images/icons/icon_{{play?._index}}.gif">
+        0x
+        <select #bet1>
+            <option disabled>$</option>
+            <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
+        </select>
+        <select #bet2>
+            <option disabled>$</option>
+            <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
+        </select>
+
+        <div [hidden]="!isBetInvalid"
+             class="alerts">
+            <div>
+                Please choose your bet
+            </div>
+        </div>
+
+        {{playSuccesMessage}}
+
+        <button (click)="playBet(bet1.value, bet2.value)">Try your luck</button>
+    </div>
+
+</div>
