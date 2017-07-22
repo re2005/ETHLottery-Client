@@ -1,9 +1,8 @@
-import {Component, OnInit, ElementRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {GethConnectService} from './services/geth-connect/geth-connect.service';
 import {AccountService} from './services/account/account.service';
 import {GethContractService} from './services/geth-contract/geth-contract.service';
 import {PlayService} from './services/play/play.service';
-import _ from 'lodash';
 
 
 @Component({
@@ -19,20 +18,17 @@ export class AppComponent implements OnInit {
     public contracts: any;
     public isPlay: boolean;
     public playContractObject: any;
-    public lotteryMessage: any;
     private _account: any;
 
     /**
      *
      * @param {GethConnectService} connectService
      * @param {GethContractService} contractService
-     * @param {ElementRef} elementRef
      * @param {AccountService} accountService
      * @param {PlayService} _playService
      */
     constructor(private connectService: GethConnectService,
                 private contractService: GethContractService,
-                private elementRef: ElementRef,
                 private accountService: AccountService,
                 private _playService: PlayService) {
     }
@@ -79,14 +75,6 @@ export class AppComponent implements OnInit {
         this._loadApp();
     }
 
-    private setContractForAddress(address, newContract) {
-        this.contracts.forEach(contract => {
-            if (contract.address === address) {
-                contract = newContract;
-            }
-        });
-    }
-
     private getContractForAddress(address) {
         let playContract = {};
         this.contracts.forEach(contract => {
@@ -97,22 +85,18 @@ export class AppComponent implements OnInit {
         return playContract;
     }
 
-    private setElementUpdated(address, updateType) {
-        // setTimeout(() => {
-        //     // console.log(_element, updateType);
-        // }, 5000);
-    }
-
     private _parseBets(event) {
-        let localBets = _.clone(this.bets);
         return new Promise((resolve) => {
-            let isConfirmed;
-            localBets.forEach(bet => {
-                if (bet.isConfirmed) return;
-                isConfirmed = (bet.contractAddress.toLowerCase() === event.address.toLowerCase()) && (bet.txResult === event.transactionHash);
+            this.bets.forEach(bet => {
+                if (bet.isConfirmed) {
+                    return;
+                }
+                const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
+                const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
+                const isConfirmed = (isSameAddress && isSameTransactionHash);
                 bet.isConfirmed = isConfirmed;
             });
-            resolve(localBets);
+            resolve(this.bets);
         });
     }
 
@@ -136,7 +120,6 @@ export class AppComponent implements OnInit {
             if (event.address.toLowerCase() === contract.address.toLowerCase()) {
 
                 contract.contractEvents.push(event);
-                this.setElementUpdated(contract.address.toLowerCase(), event.event);
 
                 if (event.event === 'Total') {
                     contract.contractData.total = event.args.total;
@@ -183,12 +166,10 @@ export class AppComponent implements OnInit {
         });
     }
 
-    // private keepAlive() {
-    //     setInterval(() => {
-    //         this.isWeb3Connected = this.connectService.isWeb3Connected();
-    //         this.connectService.setConnected(this.isWeb3Connected);
-    //     }, 2000);
-    // }
+    private keepAlive() {
+        setInterval(() => {
+        }, 1000);
+    }
 
     private tryReconnect() {
         setTimeout(() => {
@@ -207,6 +188,9 @@ export class AppComponent implements OnInit {
                 this._loadApp();
                 this._account = account;
                 this._loadBets();
+
+                // TODO Magically without this nothing works
+                this.keepAlive();
             });
 
             // TODO this is just to show loading screen

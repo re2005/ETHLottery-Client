@@ -12,7 +12,7 @@ export class PlayComponent implements OnInit {
     @Input() play: any;
     public isBetInvalid: boolean;
     public bets = ['a', 'b', 'c', 'd', 'e', 'f', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    public playSuccesMessage: any;
+    public playSuccessMessage: any;
 
     /**
      * @param {PlayService} _playService
@@ -39,18 +39,20 @@ export class PlayComponent implements OnInit {
     }
 
     private isBetDuplicated(currentBet) {
-        let isDuplicated;
         return new Promise((resolve) => {
             this._playService.getBets(this.play.account).then(bets => {
                 if (!bets) {
                     resolve(false);
                     return;
                 }
+                let isDuplicated;
                 _.some(bets, bet => {
-                    isDuplicated = (currentBet.contractAddress === bet.contractAddress) && (currentBet.bet === bet.bet);
-                    resolve(isDuplicated);
-                    return isDuplicated = (currentBet.contractAddress === bet.contractAddress) && (currentBet.bet === bet.bet);
+                    const isSameAddress = currentBet.contractAddress.toLowerCase() === bet.contractAddress.toLowerCase();
+                    const isSameBet = currentBet.bet === bet.bet;
+                    isDuplicated = (isSameAddress && isSameBet);
+                    return isDuplicated;
                 });
+                resolve(isDuplicated);
             });
         });
     }
@@ -70,7 +72,7 @@ export class PlayComponent implements OnInit {
      */
     onPlaySuccess(bet) {
         this._playService.setBet(this.play.account, bet);
-        this.playSuccesMessage = 'Uhuuuu Bets made!';
+        this.playSuccessMessage = 'Uhuuuu Bets made!';
     }
 
     /**
@@ -100,16 +102,14 @@ export class PlayComponent implements OnInit {
             contractAddress: this.play.address,
             isConfirmed: false,
             isWithdrawAvailable: false,
-            txResult: null,
+            transactionHash: null,
             index: this.play._index
         };
 
         this.isBetDuplicated(_bet).then(isDuplicated => {
             if (isDuplicated) {
-
                 alert('You have this bet ;)');
             } else {
-                // this.onPlaySuccess(_bet);
                 this.play.play(_bet.bet, {
                     from: _bet.account,
                     value: this.play.contractData.fee,
@@ -118,15 +118,12 @@ export class PlayComponent implements OnInit {
                     if (error) {
                         this.onPlayError(error);
                     } else {
-                        _bet.txResult = result;
+                        _bet.transactionHash = result;
                         this.onPlaySuccess(_bet);
-                        debugger
                     }
                 });
             }
-        })
-
-
+        });
     }
 
 
