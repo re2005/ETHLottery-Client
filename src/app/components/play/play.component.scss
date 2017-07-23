@@ -24,11 +24,13 @@
         font-size: 30px;
     }
 
-    img {
-        max-width: 50px;
-        vertical-align: bottom;
+    app-lottery-icon {
+        width: 60px;
         margin-right: 10px;
+        display: inline-block;
+        vertical-align: bottom;
     }
+
     button {
         background: $color-blue;
         color: $color-white;

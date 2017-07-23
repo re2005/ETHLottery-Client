@@ -4,7 +4,8 @@
     </h3>
 
     <div class="play-content">
-        <img src="assets/images/icons/icon_{{play?._index}}.gif">
+        <app-lottery-icon contractAddress="{{play.address}}"
+                          *ngIf="play"></app-lottery-icon>
         0x
         <select #bet1>
             <option disabled>$</option>
