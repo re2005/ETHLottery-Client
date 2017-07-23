@@ -2,11 +2,6 @@
 import {Injectable} from '@angular/core';
 import abi from './abi';
 import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
-import {Contract} from './contract';
-import {StorageService} from '../storage/storage.service';
-import {AccountService} from '../../services/account/account.service';
 
 @Injectable()
 export class GethContractService {
@@ -98,7 +93,7 @@ export class GethContractService {
             this.getOwnerFee(),
             this.getTotal(),
             this.getResult(),
-            this.getJackpot()
+            this.getJackpot(),
         ]).then(values => {
             return this._contractData = {
                 open: values[0],
@@ -107,6 +102,7 @@ export class GethContractService {
                 total: values[3],
                 result: values[4],
                 jackpot: values[5],
+                icon: values[6],
                 address: contract.address
             };
         });

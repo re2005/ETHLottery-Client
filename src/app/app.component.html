@@ -39,7 +39,9 @@
                                     <span [innerHtml]="(contract.contractData?.jackpot - (contract.contractData?.jackpot*(contract.contractData?.ownerFee/100)))/1000000000000000000"></span>
                                     eth
                                 </h1>
-                                <img src="assets/images/icons/icon_{{_index}}.gif">
+
+                                <app-lottery-icon contractAddress="{{contract.address}}"></app-lottery-icon>
+
                                 <p><span [innerHtml]="contract.contractData?.total/1000000000000000000"></span>
                                     /
                                     <span [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>
@@ -67,7 +69,9 @@
 
                         <li *ngFor="let bet of bets"
                             [ngClass]="{'is-winner': bet?.isWinner}">
-                            <img src="/assets/images/icons/icon_{{bet.index}}.gif">
+
+                            <app-lottery-icon contractAddress="{{bet?.contractAddress}}"></app-lottery-icon>
+
                             <div class="bets--bet">
                                 <span [innerHtml]="bet?.bet" class="bets__bet"></span>
                                 <span [innerHtml]="bet?.timestamp | date: 'HH:mm d-MM'"
@@ -128,5 +132,12 @@
 
 </div>
 
+<div class="bubbles">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
 
 <!--<button (click)="getAccounts()">bet contracts</button>-->
