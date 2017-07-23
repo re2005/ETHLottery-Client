@@ -18,10 +18,6 @@ export class IconGeneratorService {
             const context = canvas.getContext('2d');
             context.scale(8, 8);
 
-            context.moveTo(0, 0);
-            context.lineTo(200, 100);
-            context.stroke();
-
             const hex_address = address.replace('x', '0').toLowerCase();
             if (hex_address.match(/[0-9a-f]{42}/g)) {
                 const hex_list = hex_address.match(/(.{1,6})/g);
