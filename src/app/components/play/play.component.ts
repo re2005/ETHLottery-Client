@@ -95,13 +95,16 @@ export class PlayComponent implements OnInit {
         this.isBetInvalid = false;
 
         const _bet = {
-            gas: 140000,
+            gas: 1400000,
             bet: '0x' + bet1 + bet2,
+            fee: this.play.contractData.fee,
             account: this.play.account,
             timestamp: Date.now(),
             contractAddress: this.play.address,
             isConfirmed: false,
-            isWithdrawAvailable: false,
+            isWinner: false,
+            isInvalid: false,
+            withdrawHash: false,
             transactionHash: null,
             index: this.play._index
         };

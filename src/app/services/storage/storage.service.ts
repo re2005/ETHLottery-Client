@@ -12,7 +12,7 @@ export class StorageService {
         });
     }
 
-        set(key: string, value: any): Promise<boolean> {
+    set(key: string, value: any): Promise<boolean> {
         return new Promise((resolve, reject) => {
             localStorage.setItem(key, JSON.stringify(value));
             resolve(true);

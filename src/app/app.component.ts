@@ -12,6 +12,7 @@ import {PlayService} from './services/play/play.service';
 })
 export class AppComponent implements OnInit {
 
+    public withdrawMessage: any;
     public bets: Array<any>;
     public isWeb3Connected: any;
     public retryConnect = 0;
@@ -33,18 +34,21 @@ export class AppComponent implements OnInit {
                 private _playService: PlayService) {
     }
 
-    public withdraw() {
-        const account = this.accountService.getAccount();
-        const gas = 14000000;
-        this.playContractObject.withdraw({from: account, gas: gas}, (error, withdraw) => {
+
+    public withdraw(bet) {
+        const gas = 1400000;
+        const _playContractObject = this.getContractForAddress(bet.contractAddress);
+
+        _playContractObject.withdraw({from: this._account, gas: gas}, (error, withdraw) => {
             if (!error) {
+                bet.withdrawHash = withdraw;
                 console.log(withdraw);
-                // this.withdrawMessage = withdraw;
+                this._playService.updateBets(this._account, this.bets);
             } else {
                 console.log(error);
-                // this.withdrawMessage = error;
+                this.withdrawMessage = error;
             }
-        })
+        });
     }
 
     // public lottery() {
@@ -75,8 +79,13 @@ export class AppComponent implements OnInit {
         this._loadApp();
     }
 
+    /**
+     *
+     * @param address
+     * @return {Object<any>}
+     */
     private getContractForAddress(address) {
-        let playContract = {};
+        let playContract;
         this.contracts.forEach(contract => {
             if (contract.address === address) {
                 playContract = contract;
@@ -88,20 +97,26 @@ export class AppComponent implements OnInit {
     private _parseBets(event) {
         return new Promise((resolve) => {
             this.bets.forEach(bet => {
-                if (bet.isConfirmed) {
-                    return;
+                if (bet.contractAddress && event.address && bet.transactionHash && event.transactionHash) {
+                    const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
+                    const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
+                    const isConfirmed = (isSameAddress && isSameTransactionHash);
+                    if (isConfirmed) {
+                        bet.isConfirmed = isConfirmed;
+                    }
+                    if (isSameAddress) {
+                        bet.isWinner = ((bet.bet === event.args.result) && bet.isConfirmed);
+                    }
                 }
-                const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
-                const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
-                const isConfirmed = (isSameAddress && isSameTransactionHash);
-                bet.isConfirmed = isConfirmed;
             });
             resolve(this.bets);
         });
     }
 
     private _updateBets(event) {
-        if (!this.bets) return;
+        if (!this.bets) {
+            return;
+        }
         this._parseBets(event).then((bets) => {
             this._playService.updateBets(this._account, bets);
         });
@@ -109,9 +124,7 @@ export class AppComponent implements OnInit {
 
     private updateContractAllEvents(event) {
 
-        if (event.event === 'Total') {
-            this._updateBets(event);
-        }
+        this._updateBets(event);
 
         this.contracts.forEach(contract => {
             if (!contract.contractEvents) {
