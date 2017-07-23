@@ -30,7 +30,7 @@
                     <a (click)="refreshList()"
                        class="lottery-list__refresh">refresh list</a>
 
-                    <ul [ngClass]="{'is-loaded': !isLoading}">
+                    <ul>
                         <li *ngFor="let contract of contracts; let _index = index"
                             id="{{contract.address}}">
                             <a [ngClass]="{'is-closed': !contract.contractData?.open}"
