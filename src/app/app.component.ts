@@ -204,7 +204,7 @@ export class AppComponent implements OnInit {
     private keepAlive() {
 
         setInterval(() => {
-            
+
             if (_.isUndefined(this.account.address)) {
                 this.setAccount();
             } else {
