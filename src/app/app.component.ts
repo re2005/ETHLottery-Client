@@ -3,7 +3,7 @@ import {GethConnectService} from './services/geth-connect/geth-connect.service';
 import {AccountService} from './services/account/account.service';
 import {GethContractService} from './services/geth-contract/geth-contract.service';
 import {PlayService} from './services/play/play.service';
-
+import _ from 'lodash';
 
 @Component({
     selector: 'app-root',
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     public contracts: any;
     public isPlay: boolean;
     public playContractObject: any;
-    private _account: any;
+    public account: any;
 
     /**
      *
@@ -39,11 +39,11 @@ export class AppComponent implements OnInit {
         const gas = 1400000;
         const _playContractObject = this.getContractForAddress(bet.contractAddress);
 
-        _playContractObject.withdraw({from: this._account, gas: gas}, (error, withdraw) => {
+        _playContractObject.withdraw({from: this.account.address, gas: gas}, (error, withdraw) => {
             if (!error) {
                 bet.withdrawHash = withdraw;
                 console.log(withdraw);
-                this._playService.updateBets(this._account, this.bets);
+                this._playService.updateBets(this.account.address, this.bets);
             } else {
                 console.log(error);
                 this.withdrawMessage = error;
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
     public play(address, index) {
         this.isPlay = true;
         this.playContractObject = this.getContractForAddress(address);
-        this.playContractObject.account = this._account;
+        this.playContractObject.account = this.account.address;
         this.playContractObject._index = index;
     }
 
@@ -118,7 +118,7 @@ export class AppComponent implements OnInit {
             return;
         }
         this._parseBets(event).then((bets) => {
-            this._playService.updateBets(this._account, bets);
+            this._playService.updateBets(this.account.address, bets);
         });
     }
 
@@ -179,9 +179,39 @@ export class AppComponent implements OnInit {
         });
     }
 
+    /**
+     *
+     * @param account
+     * @private
+     */
+    private _updateBalance(account) {
+        this.getAccountBalance(account).then(balance => {
+            this.account.balance = balance;
+        });
+    }
+
+    private setAccount() {
+        this.getAccount().then(account => {
+            this.account = {};
+            this.account.address = account;
+            this._onBetsWasChanged();
+            this.getAccountBalance(account).then(balance => {
+                this.account.balance = balance;
+            });
+        })
+    }
+
     private keepAlive() {
+
         setInterval(() => {
-        }, 1000);
+            
+            if (_.isUndefined(this.account.address)) {
+                this.setAccount();
+            } else {
+                this._updateBalance(this.account.address);
+            }
+
+        }, 2000);
     }
 
     private tryReconnect() {
@@ -191,33 +221,29 @@ export class AppComponent implements OnInit {
         }, 5000);
     }
 
-    private updateConnectionStatus(data) {
-        if (data.isConnected && this.connectService.isWeb3Connected()) {
+    private getAccountBalance(account) {
+        return this.accountService.getBalance(account);
+    }
 
-            this.accountService.getAccountPromise().then(account => {
-                if (!account) {
-                    alert('Please unlock your account on META MASK and refresh the page');
-                }
-                this._loadApp();
-                this._account = account;
-                this._loadBets();
+    private getAccount() {
+        return this.accountService.get();
+    }
 
-                // TODO Magically without this nothing works
-                this.keepAlive();
-            });
-
-            // TODO this is just to show loading screen
-            setTimeout(() => {
-                this.isWeb3Connected = this.connectService.isWeb3Connected();
-            }, 1200);
-
-        } else {
-            this.tryReconnect();
-        }
+    /**
+     *
+     * @param account
+     * @private
+     */
+    private _setAccount(account) {
+        this.account = {};
+        this.account.address = account;
+        this.getAccountBalance(account).then(balance => {
+            this.account.balance = balance;
+        });
     }
 
     private _loadBets() {
-        this._playService.getBets(this._account).then(bets => {
+        this._playService.getBets(this.account.address).then(bets => {
             this.bets = bets;
         });
     }
@@ -226,10 +252,32 @@ export class AppComponent implements OnInit {
         this._loadBets();
     }
 
-    onKey(data) {
-        if (data.key === 'Escape') {
-            this.isPlay = false;
-            delete this.playContractObject;
+    private _bootstrap() {
+        this.getAccount().then(account => {
+
+            this._setAccount(account);
+            this._loadApp();
+            this._loadBets();
+
+            // TODO Magically without this nothing works
+            this.keepAlive();
+        });
+
+        // TODO this is just to show loading screen
+        setTimeout(() => {
+            this.isWeb3Connected = this.connectService.isWeb3Connected();
+        }, 1200);
+    }
+
+    /**
+     *
+     * @param data
+     */
+    private updateConnectionStatus(data) {
+        if (data.isConnected && this.connectService.isWeb3Connected()) {
+            this._bootstrap();
+        } else {
+            this.tryReconnect();
         }
     }
 

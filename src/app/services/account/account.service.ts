@@ -4,17 +4,26 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class AccountService {
 
-    private account: string;
-
     constructor() {
     }
 
+    public getBalance(account) {
 
-    getAccount() {
-        return this.account;
+        return new Promise((resolve) => {
+            if (!account) {
+                resolve();
+            }
+            window.web3.eth.getBalance(account, (error, balance) => {
+                if (!error) {
+                    resolve(balance);
+                } else {
+                    console.error('Error getting balance for account: ' + account)
+                }
+            });
+        });
     }
 
-    public getAccountPromise() {
+    public get() {
         return new Promise((resolve) => {
             window.web3.eth.getAccounts((error, accounts) => {
                 if (!error) {

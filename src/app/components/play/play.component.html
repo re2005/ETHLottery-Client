@@ -23,6 +23,12 @@
             </div>
         </div>
 
+        <div>
+            Fee:
+            <i [innerHtml]="play?.contractData.fee/1000000000000000000"></i> eth
+        </div>
+
+
         <button (click)="playBet(bet1.value, bet2.value)">Try your luck</button>
     </div>
 

@@ -1,4 +1,4 @@
-<div class="app-body" (window:keydown)="onKey($event)">
+<div class="app-body">
 
     <app-loading [hidden]="isWeb3Connected"
                  [retryConnect]="retryConnect"></app-loading>
@@ -10,7 +10,11 @@
             <h1 class="logo-pic">
                 E-LOTHERY <i>alpha</i>
             </h1>
-            <div>
+            <div class="right">
+                <div *ngIf="!account?.address"
+                     class="meta-mask">
+                    Please <strong>unlock</strong> MetaMask <img src="../assets/images/metamask.png">
+                </div>
                 <button>how to play</button>
             </div>
         </header>
@@ -53,6 +57,17 @@
                 </section>
 
                 <aside class="sidebar">
+
+                    <div class="sidebar__account-info"
+                         [hidden]="!account?.address">
+                        <div class="balance">
+                            Balance
+                            <span>{{account?.balance/1000000000000000000}}</span>
+                        </div>
+                        <a href="//ropsten.etherscan.io/address/{{account?.address}}"
+                           target="_blank">{{account?.address}}</a>
+                    </div>
+
                     <h2 class="sidebar__title">My bets</h2>
 
                     <ul class="bets">
@@ -83,6 +98,13 @@
                                        target="_blank">
                                         Pending
                                     </a>
+                                    <a href="https://ropsten.etherscan.io/address/{{bet?.transactionHash}}"
+                                       target="_blank">
+                                        <span class="bets__status--withdraw">
+                                            {{bet?.transactionHash}}
+                                        </span>
+                                    </a>
+
                                 </div>
                                 <div class="bets__status--confirmed"
                                      *ngIf="bet?.isConfirmed && !bet?.isWinner">
@@ -127,6 +149,7 @@
             </div>
         </div>
     </div>
+
 
 </div>
 

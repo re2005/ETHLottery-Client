@@ -6,6 +6,7 @@
     margin-top: 70px;
     min-height: 600px;
     transition: all 0.4s ease;
+    z-index: 1;
 
     &.is-play {
         opacity: (.7);
@@ -15,29 +16,30 @@
 
     &__refresh {
         padding: 10px 0;
-        text-decoration: none;
         cursor: pointer;
+        text-decoration: none;
 
         &:hover {
-            text-decoration: underline;
             color: lightgreen;
+            text-decoration: underline;
         }
     }
 
     ul {
         margin-left: -50px;
+        z-index: 2;
 
         li {
             margin: 0 50px;
             display: inline-flex;
 
             a {
-                cursor: pointer;
-                max-width: 100px;
-                font-size: 16px;
-                color: $color-gray-03;
-                text-decoration: none;
                 margin: 25px 0;
+                cursor: pointer;
+                font-size: 16px;
+                max-width: 100px;
+                text-decoration: none;
+                color: $color-gray-03;
                 transition: all 0.2s cubic-bezier(0.1, 1, 0.1, 3);
 
                 &:hover {

@@ -40,12 +40,12 @@ export class PlayComponent implements OnInit {
 
     private isBetDuplicated(currentBet) {
         return new Promise((resolve) => {
+            let isDuplicated;
             this._playService.getBets(this.play.account).then(bets => {
                 if (!bets) {
                     resolve(false);
                     return;
                 }
-                let isDuplicated;
                 _.some(bets, bet => {
                     const isSameAddress = currentBet.contractAddress.toLowerCase() === bet.contractAddress.toLowerCase();
                     const isSameBet = currentBet.bet === bet.bet;
@@ -75,6 +75,27 @@ export class PlayComponent implements OnInit {
         this.playSuccessMessage = 'Uhuuuu Bets made!';
     }
 
+
+    /**
+     *
+     * @param bet
+     * @private
+     */
+    private _makeBet(bet) {
+        this.play.play(bet.bet, {
+            from: bet.account,
+            value: this.play.contractData.fee,
+            gas: bet.gas
+        }, (error, result) => {
+            if (error) {
+                this.onPlayError(error);
+            } else {
+                bet.transactionHash = result;
+                this.onPlaySuccess(bet);
+            }
+        });
+    }
+
     /**
      *
      * @param bet1
@@ -95,7 +116,7 @@ export class PlayComponent implements OnInit {
         this.isBetInvalid = false;
 
         const _bet = {
-            gas: 1400000,
+            gas: 2000000,
             bet: '0x' + bet1 + bet2,
             fee: this.play.contractData.fee,
             account: this.play.account,
@@ -113,18 +134,7 @@ export class PlayComponent implements OnInit {
             if (isDuplicated) {
                 alert('You have this bet ;)');
             } else {
-                this.play.play(_bet.bet, {
-                    from: _bet.account,
-                    value: this.play.contractData.fee,
-                    gas: _bet.gas
-                }, (error, result) => {
-                    if (error) {
-                        this.onPlayError(error);
-                    } else {
-                        _bet.transactionHash = result;
-                        this.onPlaySuccess(_bet);
-                    }
-                });
+                this._makeBet(_bet);
             }
         });
     }
