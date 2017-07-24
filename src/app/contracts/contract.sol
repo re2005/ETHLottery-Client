@@ -1,22 +1,36 @@
 pragma solidity ^0.4.11;
 
+
 contract ETHLottery {
     bytes32 public name = 'ETHLottery - Last 1 Byte Lottery';
+
     address public owner;
+
     bool public open;
+
     uint256 public jackpot;
+
     uint256 public total;
+
     uint256 public fee;
+
     uint256 public owner_fee;
+
     uint256 public result_block;
+
     bytes32 public result_hash;
+
     bytes1 public result;
 
+
     mapping (bytes1 => address[]) bettings;
+
     mapping (address => uint256) credits;
 
     event Total(uint256 total);
+
     event Result(bytes1 result);
+
     event Open(bool open);
 
     function ETHLottery(uint256 _fee, uint256 _jackpot, uint256 _owner_fee) {
@@ -88,7 +102,7 @@ contract ETHLottery {
     function manual_lottery(bytes32 _result_hash) isClosed isOwner {
         result_hash = _result_hash;
         result = result_hash[31];
-        address[] winners = bettings[result];
+        address[] memory winners = bettings[result];
         if (winners.length > 0) {
             uint256 credit = total / winners.length;
             for (uint256 i = 0; i < winners.length; i++) {
@@ -102,7 +116,7 @@ contract ETHLottery {
         result_hash = block.blockhash(result_block);
         // get last byte (31st) from block hash as result
         result = result_hash[31];
-        address[] winners = bettings[result];
+        address[] memory winners = bettings[result];
         if (winners.length > 0) {
             uint256 credit = total / winners.length;
             for (uint256 i = 0; i < winners.length; i++) {

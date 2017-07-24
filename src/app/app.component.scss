@@ -1,67 +1,241 @@
 @import "../assets/css/index";
 
 .app-body {
+    margin: auto;
+    max-width: 1000px;
     font-family: $primary-font;
+    position: relative;
+}
 
-    &--background {
+.container {
+    position: relative;
 
-        height: 100%;
-        position: relative;
-        color: aliceblue;
+    &--flex {
+        display: flex;
+    }
+
+    &__label {
         z-index: 0;
-
-        &:after, &:before {
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            z-index: -1;
-            content: '';
-            position: absolute;
-            opacity: 0.7;
-        }
+        margin-top: 50px;
+        line-height: 40px;
+        position: relative;
+        color: $color-white;
 
         &:before {
-            background: url('../assets/images/backgrounds/bg-top.jpg') top center no-repeat;
-            background-size: 110%;
+            content: '';
+            top: -40px;
+            z-index: -1;
+            left: -999px;
+            bottom: -20px;
+            right: -999px;
+            position: absolute;
+            background: $color-green;
+            transform: rotate(-1deg);
         }
 
-        &:after {
-            background: url('../assets/images/backgrounds/bg-bottom.jpg') bottom center no-repeat;
-            background-size: 150%;
+        h1 {
+            margin: 5px 0;
+            font-size: 28px;
+        }
+    }
+}
+
+.sidebar {
+    flex: 1;
+    z-index: 3;
+    padding: 20px;
+    margin-top: -90px;
+    background: $color-gray-02;
+    box-shadow: 0 10px 50px 0 rgba(0, 0, 0, 0.30);
+
+    &__title {
+        z-index: 1;
+        font-size: 20px;
+        margin-top: 30px;
+        font-weight: 100;
+        position: relative;
+        color: $color-white;
+
+        &:before {
+            top: -30px;
+            z-index: -1;
+            content: '';
+            left: -49px;
+            right: -20px;
+            bottom: -40px;
+            position: absolute;
+            background-size: 100%;
+            background: url("../assets/images/label-red.svg") no-repeat;
+
+        }
+    }
+
+    &__account-info {
+        .balance {
+            padding-left: 30px;
+            font-size: .7rem;
+            background: url(../assets/images/ether.svg) no-repeat left center;
+            color: $color-gray-01;
+
+            span {
+                padding: 4px 0;
+                font-size: 1.1rem;
+                display: block;
+                color: $color-gray-03;
+            }
         }
 
-        @include breakpoint_max(sm) {
-            &:after, &:before {
-                background-size: 800px;
+        a {
+            display: block;
+            padding: 14px 0;
+            font-size: .6rem;
+            text-decoration: none;
+            color: $color-blue;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+.bets {
+    margin-top: 40px;
+    max-height: 800px;
+    overflow: auto;
+
+    li {
+        display: flex;
+        margin: 14px 0;
+        color: $color-gray-01;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid $color-gray-04;
+        padding: 16px 10px 2px;
+
+        &.is-winner {
+        }
+
+        a {
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        app-lottery-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+    }
+
+    &--bet {
+        flex: 2;
+    }
+
+    &__bet {
+        flex: 2;
+        display: block;
+        position: relative;
+        font-size: 1.2rem;
+        color: $color-gray-03;
+    }
+
+    &__date {
+        font-size: 0.7rem;
+    }
+
+    &__status {
+        font-size: .8rem;
+        text-align: center;
+
+        &--confirmed a {
+            color: $color-blue;
+
+            span {
+                display: block;
+                margin-top: 4px;
+                color: $color-gray-01;
+            }
+        }
+
+        &--pending a {
+            color: $color-gray-01;
+        }
+
+        &--winner {
+            color: $color-green;
+
+            button {
+                display: block;
+                cursor: pointer;
+                margin-top: 4px;
+                padding: 6px 14px;
+                border-radius: 5px;
+                color: $color-gray-01;
+                background: $color-gray-04;
+                border: 1px solid $color-gray-02;
+
+                &:hover {
+                    background: $color-blue;
+                    color: $color-white;
+                }
+            }
+        }
+
+        &--withdraw {
+            width: 60px;
+            display: block;
+            padding: 6px;
+            overflow: hidden;
+            font-size: .6rem;
+            white-space: nowrap;
+            color: $color-gray-03;
+            text-overflow: ellipsis;
+            border-radius: 6px;
+
+            &:hover {
+                background: $color-gray-04;
             }
         }
     }
 
-    @include breakpoint(sm) {
-        margin: 50px 100px;
+    &__withdraw-error-message {
+        width: 200px;
+        height: 60px;
+        display: block;
+        margin-top: 6px;
+        overflow: auto;
+        font-size: .6rem;
+        color: $color-gray-03;
+        text-overflow: ellipsis;
     }
 }
 
+@include breakpoint(sm) {
+    margin: 50px 100px;
+}
+
 .app-loading {
-    position: absolute;
     right: 0;
     left: 0;
+    position: absolute;
     text-align: center;
 
     .logo {
         width: 200px;
-        display: block;
         height: 200px;
+        display: block;
         margin: 100px auto 0;
     }
 
     span {
-        line-height: 20px;
-        font-size: 12px;
+        margin: 20px;
         opacity: 0.6;
         display: none;
-        margin: 20px;
+        font-size: 12px;
+        line-height: 20px;
 
         .loading {
             @extend .color-loop;
@@ -75,25 +249,161 @@
 
 .app-content {
     opacity: 0;
-    transform: translate3d(0px, -50px, 0px);
     padding: 20px;
+    transform: translate3d(0px, -50px, 0px);
+    pointer-events: none;
 
     &.is-loaded {
-        transition: all .4s ease;
         opacity: 1;
         transform: none;
+        pointer-events: auto;
+        transition: all .4s ease;
     }
 }
 
 header {
     display: flex;
+    height: 80px;
     justify-content: space-between;
 
     h1 {
-        font-size: 18px;
-        padding: 10px 0 10px 40px;
+        font-size: 38px;
+        display: inline-table;
+        padding: 10px 0 10px 50px;
     }
     i {
         font-size: 10px;
+    }
+    button {
+        border: 0;
+        cursor: pointer;
+        font-size: 18px;
+        margin-top: 20px;
+        padding: 5px 20px;
+        border-radius: 10px;
+        color: $color-white;
+        background: $color-green;
+
+        &:hover {
+            filter: brightness(0.9);
+        }
+    }
+
+    .right {
+        text-align: right;
+    }
+}
+
+.play {
+    z-index: 2;
+    position: fixed;
+    top: calc(50% - 200px);
+    left: 15%;
+    right: 15%;
+    transform: translate3d(-100%, 0px, 0px);
+    transition: all .4s ease;
+
+    &.is-play {
+        transform: translate3d(25%, 0px, 0px);
+    }
+
+    &__close {
+        top: 30px;
+        z-index: 1;
+        width: 30px;
+        height: 30px;
+        left: 15px;
+        cursor: pointer;
+        line-height: 30px;
+        text-align: center;
+        position: absolute;
+        color: $color-white;
+        border-radius: 100%;
+        border: 1px solid $color-white;
+
+        &:hover {
+            background: $color-white;
+            color: $color-blue;
+        }
+    }
+}
+
+@import "./app.component-lottery-list";
+
+.bubbles {
+    z-index: 1;
+
+    div {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        border-radius: 100%;
+        background: $color-green;
+        transition: all 0.2s cubic-bezier(0.1, 1, 0.1, 3);
+
+        &:hover {
+            transform: scale(2.1) !important;
+        }
+
+        &:nth-child(1) {
+            transform: scale(0.6);
+            opacity: 0.2;
+            left: 25%;
+            animation: moveclouds 15s linear infinite, sideWays 4s ease-in-out infinite alternate;
+        }
+        &:nth-child(2) {
+            left: 15%;
+            transform: scale(1.6);
+            opacity: 0.2;
+            animation: moveclouds 25s linear infinite, sideWays 5s ease-in-out infinite alternate;
+        }
+        &:nth-child(3) {
+            left: 75%;
+            transform: scale(1.8);
+            opacity: 0.3;
+            animation: moveclouds 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
+        }
+        &:nth-child(4) {
+            left: 60%;
+            transform: scale(0.9);
+            opacity: 0.25;
+            animation: moveclouds 18s linear infinite, sideWays 2s ease-in-out infinite alternate;
+        }
+        &:nth-child(5) {
+            left: 40%;
+            transform: scale(1.3);
+            opacity: 0.3;
+            animation: moveclouds 7s linear infinite, sideWays 1s ease-in-out infinite alternate;
+        }
+    }
+}
+
+@-webkit-keyframes moveclouds {
+    0% {
+        top: 900px;
+    }
+    100% {
+        top: -100px;
+    }
+}
+
+@-webkit-keyframes sideWays {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: 50px;
+    }
+}
+
+.meta-mask {
+
+    img {
+        max-width: 30px;
+        vertical-align: middle;
+        margin-bottom: 10px;
+    }
+    + button {
+        margin: 0;
     }
 }

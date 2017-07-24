@@ -1,0 +1,48 @@
+@import "../../../assets/css/index";
+
+.play {
+    left: 0;
+    width: 60%;
+    height: 400px;
+    margin: 20px 0;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 5px 20px 50px 0 rgba(0, 0, 0, 0.20);
+
+    &__label {
+        padding: 20px 20px 20px 70px;
+        color: $color-white;
+        background: $color-blue;
+    }
+}
+
+.play-content {
+    padding: 20px;
+
+    select {
+        font-size: 30px;
+    }
+
+    app-lottery-icon {
+        width: 60px;
+        margin-right: 10px;
+        display: inline-block;
+        vertical-align: bottom;
+    }
+
+    button {
+        background: $color-blue;
+        color: $color-white;
+        font-size: 20px;
+        padding: 20px;
+        display: block;
+        border: 0;
+        border-radius: 10px;
+        margin-top: 15px;
+        cursor: pointer;
+
+        &:hover {
+
+        }
+    }
+}

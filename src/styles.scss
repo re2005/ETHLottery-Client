@@ -5,7 +5,8 @@
 body, html {
     height: 100%;
     width: 100%;
-    background-color: $color-background;
+    background-color: $color-white;
+    overflow-x: hidden;
 }
 
 .logo {
@@ -15,5 +16,5 @@ body, html {
 
 .logo-pic {
     background: url('./assets/images/logo-pic.svg') left center no-repeat;
-    background-size: 30px;
+    background-size: 40px;
 }

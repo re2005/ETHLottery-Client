@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {GethConnectService} from './services/geth-connect/geth-connect.service';
-import {Connected} from './services/geth-connect/connected';
-import {ApiStateService} from './services/api-state/api-state.service';
 import {AccountService} from './services/account/account.service';
 import {GethContractService} from './services/geth-contract/geth-contract.service';
+import {PlayService} from './services/play/play.service';
+import _ from 'lodash';
 
 @Component({
     selector: 'app-root',
@@ -12,26 +12,139 @@ import {GethContractService} from './services/geth-contract/geth-contract.servic
 })
 export class AppComponent implements OnInit {
 
-    public isWeb3Connected: Connected;
-    public isAppLoaded = false;
+    public withdrawMessage: any;
+    public bets: Array<any>;
+    public isWeb3Connected: any;
     public retryConnect = 0;
+    public contracts: any;
+    public isPlay: boolean;
+    public playContractObject: any;
+    public account: any;
 
     /**
      *
      * @param {GethConnectService} connectService
      * @param {GethContractService} contractService
-     * @param {ApiStateService} apiStateService
      * @param {AccountService} accountService
+     * @param {PlayService} _playService
      */
     constructor(private connectService: GethConnectService,
                 private contractService: GethContractService,
-                private apiStateService: ApiStateService,
-                private accountService: AccountService) {
+                private accountService: AccountService,
+                private _playService: PlayService) {
     }
 
 
+    public withdraw(bet) {
+        const gas = 1400000;
+        const _playContractObject = this.getContractForAddress(bet.contractAddress);
+
+        _playContractObject.withdraw({from: this.account.address, gas: gas}, (error, withdraw) => {
+            if (!error) {
+                bet.withdrawHash = withdraw;
+                console.log(withdraw);
+                this._playService.updateBets(this.account.address, this.bets);
+            } else {
+                console.log(error);
+                this.withdrawMessage = error;
+            }
+        });
+    }
+
+    // public lottery() {
+    //     this.playContractObject.lottery((error, lottery) => {
+    //         if (!error) {
+    //             this.lotteryMessage = lottery;
+    //         } else {
+    //             this.lotteryMessage = error;
+    //         }
+    //     });
+    // }
+
+
+    public closePlay() {
+        this.isPlay = false;
+        delete this.playContractObject;
+    }
+
+    public play(address, index) {
+        this.isPlay = true;
+        this.playContractObject = this.getContractForAddress(address);
+        this.playContractObject.account = this.account.address;
+        this.playContractObject._index = index;
+    }
+
+    public refreshList() {
+        delete this.contracts;
+        this._loadApp();
+    }
+
+    /**
+     *
+     * @param address
+     * @return {Object<any>}
+     */
+    private getContractForAddress(address) {
+        let playContract;
+        this.contracts.forEach(contract => {
+            if (contract.address === address) {
+                playContract = contract;
+            }
+        });
+        return playContract;
+    }
+
+    private _parseBets(event) {
+        return new Promise((resolve) => {
+            this.bets.forEach(bet => {
+                if (bet.contractAddress && event.address && bet.transactionHash && event.transactionHash) {
+                    const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
+                    const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
+                    const isConfirmed = (isSameAddress && isSameTransactionHash);
+                    if (isConfirmed) {
+                        bet.isConfirmed = isConfirmed;
+                    }
+                    if (isSameAddress) {
+                        bet.isWinner = ((bet.bet === event.args.result) && bet.isConfirmed);
+                    }
+                }
+            });
+            resolve(this.bets);
+        });
+    }
+
+    private _updateBets(event) {
+        if (!this.bets) {
+            return;
+        }
+        this._parseBets(event).then((bets) => {
+            this._playService.updateBets(this.account.address, bets);
+        });
+    }
+
     private updateContractAllEvents(event) {
-        this.contractService.setEvent(event);
+
+        this._updateBets(event);
+
+        this.contracts.forEach(contract => {
+            if (!contract.contractEvents) {
+                contract.contractEvents = [];
+            }
+            if (event.address.toLowerCase() === contract.address.toLowerCase()) {
+
+                contract.contractEvents.push(event);
+
+                if (event.event === 'Total') {
+                    contract.contractData.total = event.args.total;
+                }
+                if (event.event === 'Open') {
+                    contract.contractData.open = event.args.open;
+                }
+                if (event.event === 'Result') {
+                    contract.contractData.result = event.args.result;
+                }
+            }
+        });
     }
 
     private _triggerListeners(eventListeners) {
@@ -57,52 +170,129 @@ export class AppComponent implements OnInit {
         });
     }
 
-    loadApp(data) {
-        this.contractService.getContracts().then((contracts) => {
+    private _loadApp() {
+        this.contractService.get().then((contracts) => {
+            this.contracts = contracts;
             this._setListeners(contracts).then((listeners) => {
                 this._triggerListeners(listeners);
+            });
+        });
+    }
+
+    /**
+     *
+     * @param account
+     * @private
+     */
+    private _updateBalance(account) {
+        this.getAccountBalance(account).then(balance => {
+            this.account.balance = balance;
+        });
+    }
+
+    private setAccount() {
+        this.getAccount().then(account => {
+            this.account = {};
+            this.account.address = account;
+            this._onBetsWasChanged();
+            this.getAccountBalance(account).then(balance => {
+                this.account.balance = balance;
             });
         })
     }
 
-    keepAlive() {
+    private keepAlive() {
+
         setInterval(() => {
-            this.isWeb3Connected = this.connectService.isWeb3Connected();
-            this.connectService.setConnected(this.isWeb3Connected);
+
+            if (_.isUndefined(this.account.address)) {
+                this.setAccount();
+            } else {
+                this._updateBalance(this.account.address);
+            }
+
         }, 2000);
     }
 
-    tryReconnect() {
+    private tryReconnect() {
         setTimeout(() => {
             this.retryConnect++;
             this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
         }, 5000);
     }
 
-    updateConnectionStatus(data) {
-        if (data.isConnected) {
-            this.loadApp(data);
+    private getAccountBalance(account) {
+        return this.accountService.getBalance(account);
+    }
+
+    private getAccount() {
+        return this.accountService.get();
+    }
+
+    /**
+     *
+     * @param account
+     * @private
+     */
+    private _setAccount(account) {
+        this.account = {};
+        this.account.address = account;
+        this.getAccountBalance(account).then(balance => {
+            this.account.balance = balance;
+        });
+    }
+
+    private _loadBets() {
+        this._playService.getBets(this.account.address).then(bets => {
+            this.bets = bets;
+        });
+    }
+
+    private _onBetsWasChanged() {
+        this._loadBets();
+    }
+
+    private _bootstrap() {
+        this.getAccount().then(account => {
+
+            this._setAccount(account);
+            this._loadApp();
+            this._loadBets();
+
+            // TODO Magically without this nothing works
             this.keepAlive();
+        });
+
+        // TODO this is just to show loading screen
+        setTimeout(() => {
+            this.isWeb3Connected = this.connectService.isWeb3Connected();
+        }, 1200);
+    }
+
+    /**
+     *
+     * @param data
+     */
+    private updateConnectionStatus(data) {
+        if (data.isConnected && this.connectService.isWeb3Connected()) {
+            this._bootstrap();
         } else {
             this.tryReconnect();
         }
     }
 
-    onGetIsApiLoadedWasChanged(apiState) {
-        this.isAppLoaded = apiState.isLoaded;
-        if (apiState) {
-            this.retryConnect = 0;
-        }
-    }
-
     ngOnInit() {
         this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
-        this.apiStateService.setIsApiLoaded({isLoaded: false});
-        this.apiStateService.getIsApiLoaded().subscribe(apiState => {
-            this.onGetIsApiLoadedWasChanged(apiState);
+
+        this._playService.listenBetsWasChange().subscribe(() => {
+            this._onBetsWasChanged();
         });
+    }
+}
 
-        this.accountService.setDefaultAccount();
-
+declare global {
+    interface Window {
+        Web3: any,
+        web3: any
     }
 }

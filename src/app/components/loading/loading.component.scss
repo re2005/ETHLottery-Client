@@ -1,0 +1,26 @@
+.app-loading {
+    position: absolute;
+    right: 0;
+    left: 0;
+    text-align: center;
+
+    .logo {
+        width: 200px;
+        display: block;
+        height: 200px;
+        margin: 100px auto 0;
+    }
+
+    span {
+        line-height: 20px;
+        font-size: 12px;
+        opacity: 0.6;
+        display: none;
+        margin: 20px;
+
+
+        &.show {
+            display: block !important;
+        }
+    }
+}

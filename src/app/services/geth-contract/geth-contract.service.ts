@@ -3,18 +3,12 @@ import {Injectable} from '@angular/core';
 import abi from './abi';
 import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
 
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
-import {Contract} from './contract';
-
 @Injectable()
 export class GethContractService {
 
     private _contracts: any;
     private _contract: any;
     private _contractData: Object;
-    private contractEvents: Contract;
-    private subject: Subject<Contract> = new Subject<Contract>();
 
     /**
      *
@@ -22,16 +16,6 @@ export class GethContractService {
      */
     constructor(private _contractManagerService: GethContractManagerService) {
     }
-
-    setEvent(contract: Contract): void {
-        this.contractEvents = contract;
-        this.subject.next(contract);
-    }
-
-    getEvents(): Observable<Contract> {
-        return this.subject.asObservable();
-    }
-
 
     private getResult() {
         return new Promise((resolve, reject) => {
@@ -99,31 +83,17 @@ export class GethContractService {
         });
     }
 
-    private getName() {
-        return new Promise((resolve, reject) => {
-            // this._contract.name((error, name) => {
-            //     if (error) {
-            //         reject(error);
-            //     }
-            //     resolve(name);
-            // });
-            setTimeout(() => {
-                resolve('');
-            }, 100)
-        });
-    }
-
     public getContractData(contract) {
 
         this._contract = contract;
 
-        return Promise.all([this.getIsOpen(),
+        return Promise.all([
+            this.getIsOpen(),
             this.getFee(),
             this.getOwnerFee(),
             this.getTotal(),
             this.getResult(),
-            this.getName(),
-            this.getJackpot()
+            this.getJackpot(),
         ]).then(values => {
             return this._contractData = {
                 open: values[0],
@@ -131,8 +101,8 @@ export class GethContractService {
                 ownerFee: values[2],
                 total: values[3],
                 result: values[4],
-                name: values[5],
-                jackpot: values[6],
+                jackpot: values[5],
+                icon: values[6],
                 address: contract.address
             };
         });
@@ -153,13 +123,13 @@ export class GethContractService {
         });
     }
 
-    public getContracts() {
+    public get() {
         const that = this;
         this._contracts = [];
         const currentContracts = this._contractManagerService.getCurrentContract();
         return new Promise((resolve) => {
             currentContracts.forEach(contractAddress => {
-                const _contract = this.getContract(contractAddress);
+                const _contract = this._getContractForAddress(contractAddress);
                 _contract.address = contractAddress;
                 that._contracts.push(_contract);
             });
@@ -173,7 +143,7 @@ export class GethContractService {
      *
      * @param {String} contractAddress
      */
-    public getContract(contractAddress) {
+    private _getContractForAddress(contractAddress) {
         return window.web3.eth.contract(abi).at(contractAddress);
     }
 }
