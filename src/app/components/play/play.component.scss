@@ -1,26 +1,46 @@
 @import "../../../assets/css/index";
 
 .play {
-    left: 0;
-    width: 60%;
-    height: 400px;
+    top: 20px;
+    right: 300px;
+    width: 500px;
     margin: 20px 0;
     position: absolute;
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 5px 20px 50px 0 rgba(0, 0, 0, 0.20);
 
     &__label {
-        padding: 20px 20px 20px 70px;
+        padding: 20px;
         color: $color-white;
         background: $color-blue;
+    }
+
+    &__close {
+        z-index: 1;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        line-height: 30px;
+        margin-right: 10px;
+        text-align: center;
+        color: $color-white;
+        border-radius: 100%;
+        display: inline-block;
+        border: 1px solid $color-white;
+
+        &:hover {
+            color: $color-blue;
+            background: $color-white;
+        }
     }
 }
 
 .play-content {
-    padding: 20px;
+    padding: 30px;
 
     select {
-        font-size: 30px;
+        font-size: 1.4rem;
+        font-family: $primary-font;
     }
 
     app-lottery-icon {
@@ -31,18 +51,37 @@
     }
 
     button {
-        background: $color-blue;
-        color: $color-white;
-        font-size: 20px;
-        padding: 20px;
-        display: block;
         border: 0;
-        border-radius: 10px;
-        margin-top: 15px;
+        display: block;
         cursor: pointer;
+        font-size: 20px;
+        margin-top: 15px;
+        padding: 10px 60px;
+        color: $color-white;
+        border-radius: 10px;
+        background: $color-blue;
+        font-family: $primary-font;
+        line-height: 1.6rem;
+
+        span {
+            display: block;
+            font-size: .9rem;
+        }
 
         &:hover {
-
+            filter: brightness(0.9);
         }
+    }
+
+    &__bet {
+        font-size: 3rem;
+        color: $color-gray-03;
+        display: inline-block;
+    }
+
+    &__fee {
+        padding: 6px 0;
+        font-size: .9rem;
+        color: $color-green;
     }
 }

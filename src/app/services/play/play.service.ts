@@ -6,6 +6,7 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class PlayService {
 
+    private _play: Subject<any> = new Subject<any>();
     private _bets: Subject<any> = new Subject<any>();
     private _betsData: any;
 
@@ -15,6 +16,14 @@ export class PlayService {
     constructor(private storageService: StorageService) {
     }
 
+
+    broadcastClosePlayWindow(isSuccess): void {
+        this._play.next(isSuccess);
+    }
+
+    listenClosePlayWindow(): Observable<any> {
+        return this._play.asObservable();
+    }
 
     broadcastBetsWasChange(): void {
         this._bets.next();

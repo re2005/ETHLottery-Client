@@ -20,6 +20,7 @@ export class AppComponent implements OnInit {
     public isPlay: boolean;
     public playContractObject: any;
     public account: any;
+    private etherScanUrl = '//ropsten.etherscan.io/address/';
 
     /**
      *
@@ -68,10 +69,13 @@ export class AppComponent implements OnInit {
     }
 
     public play(address, index) {
-        this.isPlay = true;
         this.playContractObject = this.getContractForAddress(address);
-        this.playContractObject.account = this.account.address;
-        this.playContractObject._index = index;
+        if (this.playContractObject.contractData.open) {
+            this.isPlay = true;
+            this.playContractObject.account = this.account.address;
+            return
+        }
+        window.open(this.etherScanUrl + this.playContractObject.address, '_blank')
     }
 
     public refreshList() {
@@ -286,6 +290,14 @@ export class AppComponent implements OnInit {
 
         this._playService.listenBetsWasChange().subscribe(() => {
             this._onBetsWasChanged();
+        });
+
+        this._playService.listenClosePlayWindow().subscribe((isSuccess) => {
+            this.closePlay();
+            if (isSuccess) {
+                const audio = new Audio('../assets/audio/play-success.mp3');
+                audio.play();
+            }
         });
     }
 }

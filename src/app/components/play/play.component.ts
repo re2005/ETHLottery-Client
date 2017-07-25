@@ -12,7 +12,6 @@ export class PlayComponent implements OnInit {
     @Input() play: any;
     public isBetInvalid: boolean;
     public bets = ['a', 'b', 'c', 'd', 'e', 'f', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    public playSuccessMessage: any;
 
     /**
      * @param {PlayService} _playService
@@ -72,9 +71,7 @@ export class PlayComponent implements OnInit {
      */
     onPlaySuccess(bet) {
         this._playService.setBet(this.play.account, bet);
-        this.playSuccessMessage = 'Uhuuuu Bets made!';
     }
-
 
     /**
      *
@@ -87,13 +84,19 @@ export class PlayComponent implements OnInit {
             value: this.play.contractData.fee,
             gas: bet.gas
         }, (error, result) => {
-            if (error) {
-                this.onPlayError(error);
-            } else {
+            if (!error) {
                 bet.transactionHash = result;
                 this.onPlaySuccess(bet);
+                this._playService.broadcastClosePlayWindow(true);
+            } else {
+                this.onPlayError(error);
             }
         });
+    }
+
+
+    public close() {
+        this._playService.broadcastClosePlayWindow(false);
     }
 
     /**
@@ -126,8 +129,7 @@ export class PlayComponent implements OnInit {
             isWinner: false,
             isInvalid: false,
             withdrawHash: false,
-            transactionHash: null,
-            index: this.play._index
+            transactionHash: null
         };
 
         this.isBetDuplicated(_bet).then(isDuplicated => {

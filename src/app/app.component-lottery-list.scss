@@ -48,11 +48,17 @@
 
                 &.is-closed {
                     opacity: (.4);
-                    pointer-events: none;
                 }
 
-                img {
-                    max-width: 100%;
+                h1 {
+                    padding: 2px 0 2px 22px;
+                    background: url(../assets/images/ether.svg) no-repeat left center;
+                    background-size: 16px;
+                }
+
+                app-lottery-icon {
+                    margin: 6px 0;
+                    display: block;
                 }
             }
         }

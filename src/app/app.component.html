@@ -31,8 +31,8 @@
             <div class="container--flex">
                 <section class="lottery-list" [ngClass]="{'is-play': isPlay}">
 
-                    <a (click)="refreshList()"
-                       class="lottery-list__refresh">refresh list</a>
+                    <!--<a (click)="refreshList()"-->
+                    <!--class="lottery-list__refresh">refresh list</a>-->
 
                     <ul>
                         <li *ngFor="let contract of contracts; let _index = index"
@@ -46,11 +46,17 @@
 
                                 <app-lottery-icon contractAddress="{{contract.address}}"></app-lottery-icon>
 
-                                <p><span [innerHtml]="contract.contractData?.total/1000000000000000000"></span>
-                                    /
-                                    <span [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>
-                                </p>
-                                <span [innerHtml]="contract.contractData?.result"></span>
+                                <div *ngIf="contract.contractData?.open">
+                                    <p>bets <span [innerHtml]="contract.contractData?.total/1000000000000000000"></span>
+                                        /
+                                        <span [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>
+                                    </p>
+                                </div>
+
+                                <div *ngIf="!contract.contractData?.open">
+                                    result <span [innerHtml]="contract.contractData?.result"></span>
+                                </div>
+
                             </a>
                         </li>
                     </ul>
@@ -135,15 +141,12 @@
                             </div>
                         </li>
                     </ul>
-                    <!--<button (click)="withdraw()">withdraw</button>-->
                 </aside>
 
                 <div [ngClass]="{'is-play':isPlay}"
-                     class="play">
-                    <div [hidden]="!isPlay">
-                        <span class="play__close" (click)="closePlay()">x</span>
-                        <app-play [play]="playContractObject"></app-play>
-                    </div>
+                     class="play-wrap">
+                    <app-play [play]="playContractObject"
+                              class="play"></app-play>
                 </div>
 
             </div>

@@ -1,35 +1,41 @@
 <div class="play">
     <h3 class="play__label">
+        <span (click)="close()"
+              class="play__close">x</span>
         Place a BET!
     </h3>
 
     <div class="play-content">
         <app-lottery-icon contractAddress="{{play.address}}"
                           *ngIf="play"></app-lottery-icon>
-        0x
-        <select #bet1>
-            <option disabled>$</option>
-            <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
-        </select>
-        <select #bet2>
-            <option disabled>$</option>
-            <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
-        </select>
+        <div class="play-content__bet">
+            <span>0x</span>
+            <select #bet1>
+                <option disabled>$</option>
+                <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
+            </select>
+            <select #bet2>
+                <option disabled>$</option>
+                <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
+            </select>
+        </div>
 
         <div [hidden]="!isBetInvalid"
-             class="alerts">
+             class="alerts error">
             <div>
                 Please choose your bet
             </div>
         </div>
 
-        <div>
-            Fee:
-            <i [innerHtml]="play?.contractData.fee/1000000000000000000"></i> eth
+        <div class="play-content__fee">
+            commission <i [innerHtml]="play?.contractData.ownerFee"></i> %
         </div>
 
 
-        <button (click)="playBet(bet1.value, bet2.value)">Try your luck</button>
+        <button (click)="playBet(bet1.value, bet2.value)">
+            Try your luck
+            <span>for <i [innerHtml]="play?.contractData.fee/1000000000000000000"></i> eth</span>
+        </button>
     </div>
 
 </div>
