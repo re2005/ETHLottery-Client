@@ -13,7 +13,9 @@
     }
 
     .error {
-        border: 1px solid red;
+        border: 1px solid $color-red;
+        background: $color-red;
+        color: $color-white;
     }
 }
 

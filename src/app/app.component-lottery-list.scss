@@ -30,13 +30,13 @@
         z-index: 2;
 
         li {
-            margin: 0 50px;
+            margin: 0 45px;
             display: inline-flex;
 
             a {
                 margin: 25px 0;
                 cursor: pointer;
-                font-size: 16px;
+                font-size: 1rem;
                 max-width: 100px;
                 text-decoration: none;
                 color: $color-gray-03;
@@ -54,6 +54,10 @@
                     padding: 2px 0 2px 22px;
                     background: url(../assets/images/ether.svg) no-repeat left center;
                     background-size: 16px;
+
+                    i {
+                        font-size: .6rem;
+                    }
                 }
 
                 app-lottery-icon {

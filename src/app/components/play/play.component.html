@@ -20,17 +20,23 @@
             </select>
         </div>
 
-        <div [hidden]="!isBetInvalid"
-             class="alerts error">
-            <div>
-                Please choose your bet
-            </div>
-        </div>
-
         <div class="play-content__fee">
             commission <i [innerHtml]="play?.contractData.ownerFee"></i> %
         </div>
 
+        <div [hidden]="!isBetInvalid"
+             class="alerts">
+            <div class="error">
+                Please choose your bet
+            </div>
+        </div>
+
+        <div [hidden]="!playErrorMessage"
+             class="alerts">
+            <div class="error">
+                {{playErrorMessage}}
+            </div>
+        </div>
 
         <button (click)="playBet(bet1.value, bet2.value)">
             Try your luck

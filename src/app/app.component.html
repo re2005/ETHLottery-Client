@@ -35,26 +35,27 @@
                     <!--class="lottery-list__refresh">refresh list</a>-->
 
                     <ul>
-                        <li *ngFor="let contract of contracts; let _index = index"
+                        <li *ngFor="let contract of contracts"
                             id="{{contract.address}}">
-                            <a [ngClass]="{'is-closed': !contract.contractData?.open}"
-                               (click)="play(contract.contractData?.address, _index)">
+
+                            <a [ngClass]="{'is-closed': !contract.contractData.open}"
+                               (click)="play(contract.contractData.address)">
                                 <h1>
-                                    <span [innerHtml]="(contract.contractData?.jackpot - (contract.contractData?.jackpot*(contract.contractData?.ownerFee/100)))/1000000000000000000"></span>
-                                    eth
+                                    <span [innerHtml]="(contract.contractData.jackpot - (contract.contractData.jackpot*(contract.contractData.ownerFee/100)))/1000000000000000000"></span>
+                                    <i>eth</i>
                                 </h1>
 
                                 <app-lottery-icon contractAddress="{{contract.address}}"></app-lottery-icon>
 
-                                <div *ngIf="contract.contractData?.open">
-                                    <p>bets <span [innerHtml]="contract.contractData?.total/1000000000000000000"></span>
+                                <div *ngIf="contract.contractData.open">
+                                    <p>bets <span [innerHtml]="contract.contractData.total/1000000000000000000"></span>
                                         /
-                                        <span [innerHtml]="contract.contractData?.jackpot/1000000000000000000"></span>
+                                        <span [innerHtml]="contract.contractData.jackpot/1000000000000000000"></span>
                                     </p>
                                 </div>
 
-                                <div *ngIf="!contract.contractData?.open">
-                                    result <span [innerHtml]="contract.contractData?.result"></span>
+                                <div *ngIf="!contract.contractData.open">
+                                    result <span [innerHtml]="contract.contractData.result"></span>
                                 </div>
 
                             </a>

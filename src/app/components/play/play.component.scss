@@ -20,7 +20,7 @@
         width: 30px;
         height: 30px;
         cursor: pointer;
-        line-height: 30px;
+        line-height: 28px;
         margin-right: 10px;
         text-align: center;
         color: $color-white;
@@ -37,6 +37,10 @@
 
 .play-content {
     padding: 30px;
+
+    .alerts {
+        margin-top: 10px;
+    }
 
     select {
         font-size: 1.4rem;
