@@ -5,5 +5,5 @@
 
 export const environment = {
     production: false,
-    apiUrl: 'http://www.mocky.io/v2/5963e85d260000bd013d727b'
+    ethernetUrl: '//ropsten.etherscan.io/'
 };

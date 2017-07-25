@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {PlayService} from '../../services/play/play.service';
+import {AccountService} from '../../services/account/account.service';
 import _ from 'lodash';
 
 @Component({
@@ -16,8 +17,10 @@ export class PlayComponent implements OnInit {
 
     /**
      * @param {PlayService} _playService
+     * @param {AccountService} _accountService
      */
-    constructor(private _playService: PlayService) {
+    constructor(private _playService: PlayService,
+                private _accountService: AccountService) {
     }
 
     /**
@@ -97,6 +100,7 @@ export class PlayComponent implements OnInit {
 
     public close() {
         this.isBetInvalid = false;
+        this.playErrorMessage = null;
         this._playService.broadcastClosePlayWindow(false);
     }
 
@@ -111,9 +115,10 @@ export class PlayComponent implements OnInit {
             this.isBetInvalid = true;
             return;
         }
+        this.isBetInvalid = false;
 
         if (!this.play.account) {
-            alert('You are not able to play until you unlock your account on META MASK and refresh the page');
+            this.playErrorMessage = 'Please unlock META MASK';
             return;
         }
 
@@ -135,7 +140,7 @@ export class PlayComponent implements OnInit {
 
         this.isBetDuplicated(_bet).then(isDuplicated => {
             if (isDuplicated) {
-                alert('You have this bet ;)');
+                this.playErrorMessage = 'You have this bet ;)';
             } else {
                 this._makeBet(_bet);
             }
@@ -144,6 +149,12 @@ export class PlayComponent implements OnInit {
 
 
     ngOnInit() {
+        this._accountService.getAccount().subscribe((account) => {
+            if (account) {
+                this.play.account = account;
+                this.playErrorMessage = null;
+            }
+        });
     }
 
 }

@@ -7,7 +7,7 @@ import {contracts} from './contracts';
 @Injectable()
 export class GethContractManagerService {
 
-    contractsUrl = environment.apiUrl;
+    // contractsUrl = environment.apiUrl;
 
     // private url = 'http://localhost:8000/icon.html?address=0xd1498f1c4aaafcd1eaa1b6e3594a37c7fd7d0909';
 

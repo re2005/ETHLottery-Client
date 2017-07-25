@@ -1,19 +1,18 @@
 <div class="app-loading">
-    <div class="logo"></div>
-    <h1 class="color-loop">loading</h1>
+    <div class="logo-pic"></div>
 
-    <span [ngClass]="{'show': retryConnect > 0}">
+    <div [ngClass]="{'hidden': retryConnect > 4}">
+        <h1 class="loading color-loop">loading</h1>
+    </div>
+    <span [ngClass]="{'show': (retryConnect >= 2 && retryConnect <= 4)}">
             {{retryConnect}}<br>
             attempts to connect
         </span>
-    <span [ngClass]="{'show': retryConnect > 5}">
+    <span [ngClass]="{'show': retryConnect > 4}">
+        <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">
+            <img src="../../../assets/images/metamask.png">
+        </a>
             Please check if META MASK is working or your GETH node was started with these options:<br>
             <i>./geth --testnet --fast --rpc --rpcapi db,eth,net,web3,personal --rpccorsdomain="*"</i>
-        </span>
-    <span [ngClass]="{'show': retryConnect > 10}">
-            You may refresh this page and check again GETH and METAMASK
-        </span>
-    <span [ngClass]="{'show': retryConnect > 15}">
-            Don't dive up.. this will connect :D
         </span>
 </div>

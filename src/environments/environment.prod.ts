@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: './contracts.json'
+    ethernetUrl: '//etherscan.io/'
 };

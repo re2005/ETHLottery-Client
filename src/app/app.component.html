@@ -31,9 +31,6 @@
             <div class="container--flex">
                 <section class="lottery-list" [ngClass]="{'is-play': isPlay}">
 
-                    <!--<a (click)="refreshList()"-->
-                    <!--class="lottery-list__refresh">refresh list</a>-->
-
                     <ul>
                         <li *ngFor="let contract of contracts"
                             id="{{contract.address}}">
@@ -164,5 +161,3 @@
     <div></div>
     <div></div>
 </div>
-
-<!--<button (click)="getAccounts()">bet contracts</button>-->

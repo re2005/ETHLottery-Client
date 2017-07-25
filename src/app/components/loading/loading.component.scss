@@ -4,23 +4,55 @@
     left: 0;
     text-align: center;
 
-    .logo {
-        width: 200px;
+    .logo-pic {
+        width: 100px;
         display: block;
-        height: 200px;
-        margin: 100px auto 0;
+        height: 100px;
+        margin: 160px auto 100px;
+        background-size: 100%;
+        animation: pulse .11s ease-in-out infinite alternate, rotate 2s infinite;
     }
 
     span {
-        line-height: 20px;
-        font-size: 12px;
-        opacity: 0.6;
         display: none;
-        margin: 20px;
+        font-size: 16px;
+        margin: 140px 20px;
+        line-height: 20px;
 
+        img {
+            margin: 20px auto;
+            width: 100px;
+            display: block;
+        }
 
         &.show {
             display: block !important;
         }
+    }
+
+    .hidden {
+        display: none;
+    }
+}
+
+.loading {
+    animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        font-size: .2rem;
+    }
+    100% {
+        font-size: 14rem;
+    }
+}
+
+@-webkit-keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
