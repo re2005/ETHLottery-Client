@@ -110,15 +110,18 @@
                                     </a>
 
                                 </div>
+
                                 <div class="bets__status--confirmed"
                                      *ngIf="bet?.isConfirmed && !bet?.isWinner">
                                     <a href="https://ropsten.etherscan.io/tx/{{bet?.transactionHash}}"
-                                       target="_blank">Confirmed
+                                       target="_blank">
+                                        <p>Confirmed</p>
                                         <span>
                                             <i [innerHtml]="bet?.fee/1000000000000000000"></i> eth
                                         </span>
                                     </a>
                                 </div>
+
                                 <div class="bets__status--winner"
                                      *ngIf="bet?.isWinner">WINNER!
                                     <div *ngIf="!bet?.withdrawHash">

@@ -42,7 +42,6 @@ export class AppComponent implements OnInit {
         _playContractObject.withdraw({from: this.account.address, gas: gas}, (error, withdraw) => {
             if (!error) {
                 bet.withdrawHash = withdraw;
-                console.log(withdraw);
                 this._playService.updateBets(this.account.address, this.bets);
             } else {
                 console.log(error);
@@ -82,21 +81,31 @@ export class AppComponent implements OnInit {
     }
 
     private _parseBets(event) {
+        let shouldUpdate = false;
         return new Promise((resolve) => {
             this.bets.forEach(bet => {
                 if (bet.contractAddress && event.address && bet.transactionHash && event.transactionHash) {
                     const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
                     const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
                     const isConfirmed = (isSameAddress && isSameTransactionHash);
-                    if (isConfirmed) {
+                    if (isConfirmed && !bet.isConfirmed) {
                         bet.isConfirmed = isConfirmed;
+                        const audio = new Audio('../assets/audio/bet-success.mp3');
+                        audio.play();
+                        shouldUpdate = true;
                     }
-                    if (isSameAddress) {
-                        bet.isWinner = ((bet.bet === event.args.result) && bet.isConfirmed);
+                    if (isSameAddress && event.event === 'Result') {
+                        bet.isWinner = ((bet.bet === event.args.result) === bet.isConfirmed);
+                        shouldUpdate = true;
                     }
                 }
             });
-            resolve(this.bets);
+            if (shouldUpdate) {
+                resolve(this.bets);
+            } else {
+                resolve(false);
+            }
+
         });
     }
 
@@ -105,7 +114,9 @@ export class AppComponent implements OnInit {
             return;
         }
         this._parseBets(event).then((bets) => {
-            this._playService.updateBets(this.account.address, bets);
+            if (bets) {
+                this._playService.updateBets(this.account.address, bets);
+            }
         });
     }
 

@@ -39,7 +39,7 @@
     animation: pulse 1s ease-in-out infinite alternate;
 }
 
-@-webkit-keyframes pulse {
+@keyframes pulse {
     0% {
         font-size: .2rem;
     }
@@ -48,7 +48,7 @@
     }
 }
 
-@-webkit-keyframes rotate {
+@keyframes rotate {
     0% {
         transform: rotate(0deg);
     }

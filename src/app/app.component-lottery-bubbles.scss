@@ -1,0 +1,67 @@
+@import "../assets/css/index";
+
+.bubbles {
+    z-index: 1;
+
+    div {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        border-radius: 100%;
+        background: $color-green;
+        transition: all 0.2s cubic-bezier(0.1, 1, 0.1, 3);
+
+        &:hover {
+            transform: scale(2.1) !important;
+        }
+
+        &:nth-child(1) {
+            transform: scale(0.6);
+            opacity: 0.2;
+            left: 25%;
+            animation: moveclouds 15s linear infinite, sideWays 4s ease-in-out infinite alternate;
+        }
+        &:nth-child(2) {
+            left: 15%;
+            transform: scale(1.6);
+            opacity: 0.2;
+            animation: moveclouds 25s linear infinite, sideWays 5s ease-in-out infinite alternate;
+        }
+        &:nth-child(3) {
+            left: 75%;
+            transform: scale(1.8);
+            opacity: 0.3;
+            animation: moveclouds 20s linear infinite, sideWays 4s ease-in-out infinite alternate;
+        }
+        &:nth-child(4) {
+            left: 60%;
+            transform: scale(0.9);
+            opacity: 0.25;
+            animation: moveclouds 18s linear infinite, sideWays 2s ease-in-out infinite alternate;
+        }
+        &:nth-child(5) {
+            left: 40%;
+            transform: scale(1.3);
+            opacity: 0.3;
+            animation: moveclouds 7s linear infinite, sideWays 1s ease-in-out infinite alternate;
+        }
+    }
+}
+
+@-webkit-keyframes moveclouds {
+    0% {
+        top: 900px;
+    }
+    100% {
+        top: -100px;
+    }
+}
+
+@-webkit-keyframes sideWays {
+    0% {
+        margin-left: 0px;
+    }
+    100% {
+        margin-left: 50px;
+    }
+}
