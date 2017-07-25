@@ -96,6 +96,7 @@ export class PlayComponent implements OnInit {
 
 
     public close() {
+        this.isBetInvalid = false;
         this._playService.broadcastClosePlayWindow(false);
     }
 
