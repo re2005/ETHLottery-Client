@@ -1,5 +1,3 @@
-@import "../assets/css/index";
-
 .lottery-list {
 
     flex: 3;
@@ -26,11 +24,11 @@
     }
 
     ul {
-        margin-left: -50px;
         z-index: 2;
+        margin-left:-40px;
 
         li {
-            margin: 0 45px;
+            margin: 20px 60px;
             display: inline-flex;
 
             a {
@@ -43,16 +41,16 @@
                 transition: all 0.2s cubic-bezier(0.1, 1, 0.1, 3);
 
                 &:hover {
-                    transform: scale(1.1);
+                    transform: scale(1.2);
                 }
 
                 &.is-closed {
-                    opacity: (.4);
+                    opacity: (.6);
                 }
 
                 h1 {
                     padding: 2px 0 2px 22px;
-                    background: url(../assets/images/ether.svg) no-repeat left center;
+                    background: url(/assets/images/ether.svg) no-repeat left center;
                     background-size: 16px;
 
                     i {
