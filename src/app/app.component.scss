@@ -122,6 +122,7 @@ header {
     position: fixed;
     left: 0;
     right: 0;
+    pointer-events: none;
 
     .play {
         opacity: 0;
@@ -133,7 +134,7 @@ header {
     }
 
     &.is-play {
-
+        pointer-events: auto;
         .play {
             opacity: 1;
             width: auto;
@@ -154,7 +155,3 @@ header {
         margin: 0;
     }
 }
-
-@import "./app.component-lottery-list";
-@import "./app.component-lottery-sidebar";
-@import "./app.component-lottery-bubbles";
