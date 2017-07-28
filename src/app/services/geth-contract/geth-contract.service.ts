@@ -108,6 +108,13 @@ export class GethContractService {
         });
     }
 
+    private calculateScale(total, jackpot) {
+        const size = total ? 1 / jackpot / total : 0;
+        let sizeString = size.toString();
+        sizeString = sizeString.replace('0.', '1.').replace('0', '');
+        return 'scale(' + sizeString + ')';
+    }
+
     public getContractsData() {
         const contractsPromise = [];
         this._contracts.forEach(contract => {
@@ -117,6 +124,7 @@ export class GethContractService {
             Promise.all(contractsPromise).then(data => {
                 for (let _i = 0; _i < data.length; _i++) {
                     this._contracts[_i]['contractData'] = data[_i];
+                    this._contracts[_i].contractData.scale = this.calculateScale(this._contracts[_i]['contractData'].total / 1000000000000000000, this._contracts[_i]['contractData'].jackpot / 1000000000000000000);
                 }
                 resolve(this._contracts);
             });

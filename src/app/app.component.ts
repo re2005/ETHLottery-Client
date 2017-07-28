@@ -8,7 +8,7 @@ import _ from 'lodash';
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
-    styleUrls: ['app.component.scss'],
+    styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit {
 
@@ -44,7 +44,6 @@ export class AppComponent implements OnInit {
                 bet.withdrawHash = withdraw;
                 this._playService.updateBets(this.account.address, this.bets);
             } else {
-                console.log(error);
                 this.withdrawMessage = error;
             }
         });
@@ -120,6 +119,14 @@ export class AppComponent implements OnInit {
         });
     }
 
+    private calculateScale(total, jackpot) {
+        const size = total ? 1 / jackpot / total : 0;
+        let sizeString = size.toString();
+        sizeString = sizeString.replace('0.', '1.').replace('0', '');
+        return 'scale(' + sizeString + ')';
+    }
+
+
     private updateContractAllEvents(event) {
 
         this._updateBets(event);
@@ -134,6 +141,7 @@ export class AppComponent implements OnInit {
 
                 if (event.event === 'Total') {
                     contract.contractData.total = event.args.total;
+                    contract.contractData.scale = this.calculateScale(event.args.total / 1000000000000000000, contract.contractData.jackpot / 1000000000000000000);
                 }
                 if (event.event === 'Open') {
                     contract.contractData.open = event.args.open;
@@ -200,28 +208,6 @@ export class AppComponent implements OnInit {
         })
     }
 
-    private keepAlive() {
-        setInterval(() => {
-
-            if (_.isUndefined(this.account.address)) {
-                this.setAccount();
-            } else {
-                this._updateBalance(this.account.address);
-            }
-
-        }, 1000);
-    }
-
-    private tryReconnect() {
-        if (this.retryConnect > 5) {
-            return;
-        }
-        setTimeout(() => {
-            this.retryConnect++;
-            this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
-        }, 5000);
-    }
-
     private getAccountBalance(account) {
         return this._accountService.getBalance(account);
     }
@@ -244,6 +230,7 @@ export class AppComponent implements OnInit {
     }
 
     private _loadBets() {
+        delete this.bets;
         this._playService.getBets(this.account.address).then(bets => {
             this.bets = bets;
         });
@@ -251,6 +238,28 @@ export class AppComponent implements OnInit {
 
     private _onBetsWasChanged() {
         this._loadBets();
+    }
+
+    private keepAlive() {
+        setInterval(() => {
+
+            if (_.isUndefined(this.account.address)) {
+                this.setAccount();
+            } else {
+                this._updateBalance(this.account.address);
+            }
+
+        }, 1000);
+    }
+
+    private tryReconnect() {
+        if (this.retryConnect > 5) {
+            return;
+        }
+        setTimeout(() => {
+            this.retryConnect++;
+            this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
+        }, 1200);
     }
 
     private _bootstrap() {

@@ -173,6 +173,15 @@
         font-size: .6rem;
         color: $color-gray-03;
         text-overflow: ellipsis;
+
+        span {
+            display: block;
+            padding: 5px 0;
+            cursor: pointer;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 
