@@ -147,10 +147,9 @@ export class PlayComponent implements OnInit {
         });
     }
 
-
     ngOnInit() {
         this._accountService.getAccount().subscribe((account) => {
-            if (account) {
+            if (account && this.play) {
                 this.play.account = account;
                 this.playErrorMessage = null;
             }
