@@ -8,7 +8,7 @@
 
         <header>
             <h1 class="logo-pic">
-                E-LOTHERY <i>alpha</i>
+                life lottery <i>alpha</i>
             </h1>
             <div class="right">
                 <div *ngIf="!account?.address"
@@ -33,7 +33,8 @@
 
                     <ul>
                         <li *ngFor="let contract of contracts"
-                            id="{{contract.address}}">
+                            id="{{contract.address}}"
+                            [ngStyle]="{'transform': contract.contractData.scale}">
 
                             <a [ngClass]="{'is-closed': !contract.contractData.open}"
                                (click)="play(contract.contractData.address)">
@@ -79,10 +80,11 @@
                             No Bets yet, go make your first!
                         </h3>
 
-                        <h3 *ngIf="withdrawMessage"
-                            class="bets__withdraw-error-message">
-                            {{withdrawMessage}}
-                        </h3>
+                        <div *ngIf="withdrawMessage"
+                             class="bets__withdraw-error-message">
+                            <h3 [innerHtml]="withdrawMessage"></h3>
+                            <span (click)="withdrawMessage = null">dismiss</span>
+                        </div>
 
                         <li *ngFor="let bet of bets"
                             [ngClass]="{'is-winner': bet?.isWinner}">
@@ -102,7 +104,7 @@
                                        target="_blank">
                                         Pending
                                     </a>
-                                    <a href="https://ropsten.etherscan.io/address/{{bet?.transactionHash}}"
+                                    <a href="https://ropsten.etherscan.io/tx/{{bet?.transactionHash}}"
                                        target="_blank">
                                         <span class="bets__status--withdraw">
                                             {{bet?.transactionHash}}
