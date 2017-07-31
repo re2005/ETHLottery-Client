@@ -1,0 +1,90 @@
+@import "../../../assets/css/index";
+
+.tutorial {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: $color-white-90;
+    z-index: 10;
+}
+
+.tutorial-content {
+    text-align: center;
+    height: 500px;
+    width: 800px;
+    margin: auto;
+
+}
+
+.tutorial-content-steps {
+    position: relative;
+    height: 550px;
+
+    &__label {
+        line-height: 40px;
+        position: relative;
+        color: $color-white;
+
+        &:before {
+            content: '';
+            top: -40px;
+            z-index: -1;
+            left: -999px;
+            bottom: -20px;
+            right: -999px;
+            position: absolute;
+            transform: rotate(-1deg);
+        }
+
+        &--red:before {
+            background: $color-red;
+        }
+
+        &--blue:before {
+            background: $color-blue;
+        }
+
+        &--green:before {
+            background: $color-green;
+        }
+    }
+
+    &__image {
+        width: 100%;
+        height: 500px;
+    }
+
+    &__step {
+        height: 500px;
+        top: 100px;
+        opacity: 0;
+        position: absolute;
+        visibility: hidden;
+        transition: all 1s ease;
+
+        &.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        img {
+            width: 100%;
+        }
+    }
+}
+
+nav {
+
+    a {
+        background: $color-gray-02;
+        padding: 16px 38px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all .4s ease;
+
+        &:hover {
+            filter: brightness(0.8);
+        }
+    }
+}

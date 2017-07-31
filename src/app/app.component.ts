@@ -79,12 +79,22 @@ export class AppComponent implements OnInit {
         return playContract;
     }
 
+    private isContractOpen(contractAddress) {
+        let isOpen: boolean;
+        this.contracts.forEach(contract => {
+            if (contract.address === contractAddress) {
+                isOpen = contract.contractData.open;
+            }
+        });
+        return isOpen;
+    }
+
     private _parseBets(event) {
         let shouldUpdate = false;
         return new Promise((resolve) => {
             this.bets.forEach(bet => {
-                if (bet.contractAddress && event.address && bet.transactionHash && event.transactionHash) {
-                    const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
+                const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
+                if (isSameAddress) {
                     const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
                     const isConfirmed = (isSameAddress && isSameTransactionHash);
                     if (isConfirmed && !bet.isConfirmed) {
@@ -92,10 +102,17 @@ export class AppComponent implements OnInit {
                         const audio = new Audio('../assets/audio/bet-success.mp3');
                         audio.play();
                         shouldUpdate = true;
+                        console.log('confirmed');
                     }
-                    if (isSameAddress && event.event === 'Result') {
+                    if (event.event === 'Result' && isConfirmed) {
                         bet.isWinner = ((bet.bet === event.args.result) === bet.isConfirmed);
                         shouldUpdate = true;
+                        console.log('winner');
+                    }
+                    if (!this.isContractOpen(bet.contractAddress) && !isConfirmed) {
+                        bet.isInvalid = true;
+                        shouldUpdate = true;
+                        console.log('invalid');
                     }
                 }
             });
@@ -129,7 +146,9 @@ export class AppComponent implements OnInit {
 
     private updateContractAllEvents(event) {
 
-        this._updateBets(event);
+        if (event.event !== 'Open') {
+            this._updateBets(event);
+        }
 
         this.contracts.forEach(contract => {
             if (!contract.contractEvents) {

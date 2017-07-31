@@ -1,0 +1,52 @@
+<div class="tutorial" *ngIf="isTutorialOpen">
+
+    <div class="tutorial-content">
+
+        <div class="tutorial-content-steps">
+
+            <div [ngClass]="{'active': currentStep === 0}"
+                 class="tutorial-content-steps__step">
+                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--red">
+                    Welcome to the Life Lottery!
+                </h1>
+                <div class="tutorial-content-steps__image">
+                    <img src="../../../assets/images/tutotial_01.png"/>
+                </div>
+
+                <nav>
+                    <a (click)="nextStep()">next</a>
+                </nav>
+            </div>
+
+            <div [ngClass]="{'active': currentStep === 1}"
+                 class="tutorial-content-steps__step">
+                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--blue">
+                    The blocks
+                </h1>
+                <div class="tutorial-content-steps__image">
+                    <img src="../../../assets/images/tutotial_02.png"/>
+                </div>
+
+                <nav>
+                    <a (click)="skip()">skip</a>
+                    <a (click)="previousStep()">previous</a>
+                    <a (click)="nextStep()">next</a>
+                </nav>
+            </div>
+
+            <div [ngClass]="{'active': currentStep === 2}"
+                 class="tutorial-content-steps__step">
+                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--green">
+                    Real chance ? YES!
+                </h1>
+                <div class="tutorial-content-steps__image">
+                    <img src="../../../assets/images/tutotial_03.png"/>
+                </div>
+                <nav>
+                    <a (click)="previousStep()">previous</a>
+                    <a (click)="nextStep()">close</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

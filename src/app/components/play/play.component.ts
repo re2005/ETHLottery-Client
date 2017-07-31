@@ -142,6 +142,7 @@ export class PlayComponent implements OnInit {
             if (isDuplicated) {
                 this.playErrorMessage = 'You have this bet ;)';
             } else {
+                this.playErrorMessage = null;
                 this._makeBet(_bet);
             }
         });

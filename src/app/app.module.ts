@@ -13,13 +13,19 @@ import {LoadingComponent} from './components/loading/loading.component';
 import {PlayService} from './services/play/play.service';
 import {IconGeneratorService} from './services/icon-generator/icon-generator.service';
 import {LotteryIconComponent} from './components/lottery-icon/lottery-icon.component';
+import {ScaleDirective} from './directives/scale.directive';
+import {ServerSocketService} from './services/server-socket/server-socket.service';
+import {TutorialComponent} from './components/tutorial/tutorial.component';
+
 
 @NgModule({
     declarations: [
         AppComponent,
         PlayComponent,
         LoadingComponent,
-        LotteryIconComponent
+        LotteryIconComponent,
+        ScaleDirective,
+        TutorialComponent
     ],
     imports: [
         BrowserModule,
@@ -33,7 +39,8 @@ import {LotteryIconComponent} from './components/lottery-icon/lottery-icon.compo
         ApiStateService,
         AccountService,
         PlayService,
-        IconGeneratorService
+        IconGeneratorService,
+        ServerSocketService
     ],
     bootstrap: [AppComponent]
 })
