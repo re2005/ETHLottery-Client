@@ -74,6 +74,12 @@ export class PlayComponent implements OnInit {
      */
     onPlaySuccess(bet) {
         this._playService.setBet(this.play.account, bet);
+        window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'bet',
+            eventAction: bet.contractAddress,
+            eventLabel: bet.bet
+        });
     }
 
     /**

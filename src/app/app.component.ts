@@ -63,6 +63,13 @@ export class AppComponent implements OnInit {
     }
 
     public play(address) {
+        window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Open play',
+            eventAction: address,
+            eventLabel: 'open-play'
+        });
+
         this.playContractObject = this.getContractForAddress(address);
         if (this.playContractObject.contractData.open) {
             this.isPlay = true;
@@ -340,6 +347,7 @@ export class AppComponent implements OnInit {
 declare global {
     interface Window {
         Web3: any,
-        web3: any
+        web3: any,
+        ga: any
     }
 }
