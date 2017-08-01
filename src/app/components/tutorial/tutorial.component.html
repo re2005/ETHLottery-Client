@@ -7,44 +7,62 @@
             <div [ngClass]="{'active': currentStep === 0}"
                  class="tutorial-content-steps__step">
                 <h1 class="tutorial-content-steps__label tutorial-content-steps__label--red">
-                    Welcome to the Life Lottery!
+                    100% Fair
                 </h1>
                 <div class="tutorial-content-steps__image">
-                    <img src="../../../assets/images/tutotial_01.png"/>
+                    <img src="../../../assets/images/tutorial_01.png"/>
                 </div>
 
                 <nav>
+                    <a class="gray">prev</a>
                     <a (click)="nextStep()">next</a>
+                    <a (click)="skip()" class="skip">skip</a>
                 </nav>
             </div>
 
             <div [ngClass]="{'active': currentStep === 1}"
                  class="tutorial-content-steps__step">
-                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--blue">
-                    The blocks
+                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--green">
+                    Pick a lottery
                 </h1>
                 <div class="tutorial-content-steps__image">
-                    <img src="../../../assets/images/tutotial_02.png"/>
+                    <img src="../../../assets/images/tutorial_02.png"/>
                 </div>
 
                 <nav>
-                    <a (click)="skip()">skip</a>
-                    <a (click)="previousStep()">previous</a>
+                    <a (click)="previousStep()">prev</a>
                     <a (click)="nextStep()">next</a>
+                    <a (click)="skip()" class="skip">skip</a>
                 </nav>
             </div>
 
             <div [ngClass]="{'active': currentStep === 2}"
                  class="tutorial-content-steps__step">
-                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--green">
-                    Real chance ? YES!
+                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--blue">
+                    Make a bet
                 </h1>
                 <div class="tutorial-content-steps__image">
-                    <img src="../../../assets/images/tutotial_03.png"/>
+                    <img src="../../../assets/images/tutorial_03.png"/>
                 </div>
                 <nav>
-                    <a (click)="previousStep()">previous</a>
-                    <a (click)="nextStep()">close</a>
+                    <a (click)="previousStep()">prev</a>
+                    <a (click)="nextStep()">next</a>
+                    <a (click)="skip()" class="skip">skip</a>
+                </nav>
+            </div>
+
+            <div [ngClass]="{'active': currentStep === 3}"
+                 class="tutorial-content-steps__step">
+                <h1 class="tutorial-content-steps__label tutorial-content-steps__label--green">
+                    The "roulette"
+                </h1>
+                <div class="tutorial-content-steps__image">
+                    <img src="../../../assets/images/tutorial_04.png"/>
+                </div>
+                <nav>
+                    <a (click)="previousStep()">prev</a>
+                    <a (click)="nextStep()">next</a>
+                    <a (click)="skip()" class="skip">skip</a>
                 </nav>
             </div>
         </div>

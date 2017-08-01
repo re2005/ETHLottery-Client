@@ -17,7 +17,7 @@
                      class="meta-mask">
                     Please <strong>unlock</strong> MetaMask <img src="../assets/images/metamask.png">
                 </div>
-                <button>how to play</button>
+                <button (click)="howToPlay()">See tutorial</button>
             </div>
         </header>
 
@@ -78,6 +78,7 @@
                     <h2 class="sidebar__title">My bets</h2>
 
                     <ul class="bets">
+
                         <h3 *ngIf="!bets?.length">
                             No Bets yet, go make your first!
                         </h3>
@@ -160,8 +161,6 @@
             </div>
         </div>
     </div>
-
-
 </div>
 
 <div class="bubbles">

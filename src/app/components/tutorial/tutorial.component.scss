@@ -6,8 +6,18 @@
     right: 0;
     bottom: 0;
     left: 0;
-    background: $color-white-90;
+    background: $color-white;
     z-index: 10;
+    animation: tutorial .5s ease;
+}
+
+@keyframes tutorial {
+    0% {
+        top: -100%
+    }
+    100% {
+        top: 0
+    }
 }
 
 .tutorial-content {
@@ -54,6 +64,7 @@
     &__image {
         width: 100%;
         height: 500px;
+        margin-top: 30px;
     }
 
     &__step {
@@ -76,15 +87,32 @@
 
 nav {
 
+    display: inline-flex;
+    justify-content: space-between;
+    vertical-align: center;
+    background: $color-gray-02;
+    margin: auto;
+
     a {
-        background: $color-gray-02;
-        padding: 16px 38px;
-        border-radius: 6px;
+        padding: 16px 30px;
         cursor: pointer;
-        transition: all .4s ease;
+        color: $color-gray-03;
+
+        &:nth-child(2) {
+            border-left: solid 3px $color-white;
+            border-right: solid 3px $color-white;
+        }
 
         &:hover {
-            filter: brightness(0.8);
+            text-decoration: underline;
         }
+    }
+
+    .gray {
+        opacity: 0.3;
+        pointer-events: none;
+    }
+    .skip {
+        color: $color-gray-01;
     }
 }

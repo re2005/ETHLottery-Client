@@ -4,6 +4,7 @@ import {AccountService} from './services/account/account.service';
 import {GethContractService} from './services/geth-contract/geth-contract.service';
 import {PlayService} from './services/play/play.service';
 import _ from 'lodash';
+import {StorageService} from './services/storage/storage.service';
 
 @Component({
     selector: 'app-root',
@@ -28,11 +29,18 @@ export class AppComponent implements OnInit {
      * @param {GethContractService} contractService
      * @param {AccountService} _accountService
      * @param {PlayService} _playService
+     * @param {StorageService} _storageService
      */
     constructor(private connectService: GethConnectService,
                 private contractService: GethContractService,
                 private _accountService: AccountService,
-                private _playService: PlayService) {
+                private _playService: PlayService,
+                private _storageService: StorageService) {
+    }
+
+    public howToPlay() {
+        this._storageService.remove('tutorial');
+        window.location.reload();
     }
 
     public withdraw(bet) {
@@ -102,17 +110,14 @@ export class AppComponent implements OnInit {
                         const audio = new Audio('../assets/audio/bet-success.mp3');
                         audio.play();
                         shouldUpdate = true;
-                        console.log('confirmed');
                     }
                     if (event.event === 'Result' && isConfirmed) {
                         bet.isWinner = ((bet.bet === event.args.result) === bet.isConfirmed);
                         shouldUpdate = true;
-                        console.log('winner');
                     }
                     if (!this.isContractOpen(bet.contractAddress) && !isConfirmed) {
                         bet.isInvalid = true;
                         shouldUpdate = true;
-                        console.log('invalid');
                     }
                 }
             });
@@ -121,7 +126,6 @@ export class AppComponent implements OnInit {
             } else {
                 resolve(false);
             }
-
         });
     }
 

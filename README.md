@@ -20,3 +20,9 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 Before running the tests make sure you are serving the app via `ng serve`.
+
+
+The project was made by two friends who belives the world should not be in control by the ambicious people who takes advantages by power.
+We all share the same planet and we all want to live!
+
+Live Lottery!
