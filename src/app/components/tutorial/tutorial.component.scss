@@ -8,12 +8,13 @@
     left: 0;
     background: $color-white;
     z-index: 10;
-    animation: tutorial .5s ease;
+    animation: tutorial 4s ease;
+    min-height: 600px;
 }
 
 @keyframes tutorial {
     0% {
-        top: -100%
+        top: 100%
     }
     100% {
         top: 0

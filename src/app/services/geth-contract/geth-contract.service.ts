@@ -109,7 +109,7 @@ export class GethContractService {
     }
 
     private calculateScale(total, jackpot) {
-        const size = total ? 1 / jackpot / total : 0;
+        const size = total ? 1 * total / jackpot : 0;
         let sizeString = size.toString();
         sizeString = sizeString.replace('0.', '1.').replace('0', '');
         return 'scale(' + sizeString + ')';
