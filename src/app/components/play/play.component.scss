@@ -10,7 +10,7 @@
     box-shadow: 5px 20px 50px 0 rgba(0, 0, 0, 0.20);
 
     &__label {
-        padding: 20px;
+        padding: 16px 0 10px;
         color: $color-white;
         background: $color-blue;
     }
@@ -21,11 +21,11 @@
         height: 30px;
         cursor: pointer;
         line-height: 28px;
-        margin-right: 10px;
+        margin: 0 10px 0;
         text-align: center;
         color: $color-white;
         border-radius: 100%;
-        display: inline-block;
+        display: inline-table;
         border: 1px solid $color-white;
 
         &:hover {
