@@ -55,7 +55,7 @@
                                     </p>
                                 </div>
 
-                                <div *ngIf="!contract.contractData.open">
+                                <div *ngIf="!contract.contractData.open && (contract.contractData.resultHash !== '0x0000000000000000000000000000000000000000000000000000000000000000')">
                                     result <span [innerHtml]="contract.contractData.result"></span>
                                 </div>
 
@@ -106,7 +106,7 @@
                                      *ngIf="bet?.isInvalid && !bet?.isConfirmed">
                                     <a href="https://ropsten.etherscan.io/tx/{{bet?.transactionHash}}"
                                        target="_blank">
-                                        error
+                                        Cancelled
                                     </a>
                                 </div>
 

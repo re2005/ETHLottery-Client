@@ -163,6 +163,12 @@
                 background: $color-gray-04;
             }
         }
+
+        &--error {
+            a {
+                color: $color-red;
+            }
+        }
     }
 
     &__withdraw-error-message {
