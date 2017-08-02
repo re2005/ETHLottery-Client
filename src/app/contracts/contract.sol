@@ -1,43 +1,29 @@
 pragma solidity ^0.4.11;
 
-
 contract ETHLottery {
     bytes32 public name = 'ETHLottery - Last 1 Byte Lottery';
-
     address public owner;
-
     bool public open;
-
     uint256 public jackpot;
-
     uint256 public total;
-
     uint256 public fee;
-
     uint256 public owner_fee;
-
     uint256 public result_block;
-
     bytes32 public result_hash;
-
     bytes1 public result;
 
-
     mapping (bytes1 => address[]) bettings;
-
     mapping (address => uint256) credits;
 
-    event Total(uint256 total);
-
-    event Result(bytes1 result);
-
-    event Open(bool open);
+    event Total(uint256 _total);
+    event Result(bytes1 _result);
+    event Open(bool _open);
 
     function ETHLottery(uint256 _fee, uint256 _jackpot, uint256 _owner_fee) {
         owner = msg.sender;
         open = true;
-        fee = _fee * 1000000000000000000;
-        jackpot = _jackpot * 1000000000000000000;
+        fee = _fee;
+        jackpot = _jackpot;
         owner_fee = _owner_fee;
         Open(open);
     }
@@ -99,10 +85,13 @@ contract ETHLottery {
         Total(total);
     }
 
+    // This method is only used for testing purposes
+    // When on production network, the lottery() method
+    // will be used instead and this one removed.
     function manual_lottery(bytes32 _result_hash) isClosed isOwner {
         result_hash = _result_hash;
         result = result_hash[31];
-        address[] memory winners = bettings[result];
+        address[] storage winners = bettings[result];
         if (winners.length > 0) {
             uint256 credit = total / winners.length;
             for (uint256 i = 0; i < winners.length; i++) {
@@ -116,7 +105,7 @@ contract ETHLottery {
         result_hash = block.blockhash(result_block);
         // get last byte (31st) from block hash as result
         result = result_hash[31];
-        address[] memory winners = bettings[result];
+        address[] storage winners = bettings[result];
         if (winners.length > 0) {
             uint256 credit = total / winners.length;
             for (uint256 i = 0; i < winners.length; i++) {
@@ -134,6 +123,11 @@ contract ETHLottery {
             // transfer failed, return credit for withdraw
             credits[msg.sender] = credit;
         }
+    }
+
+
+    function accumulate(address _lottery) isClosed isOwner {
+        selfdestruct(_lottery);
     }
 
     function destruct() isClosed isOwner {

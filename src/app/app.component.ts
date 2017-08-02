@@ -119,7 +119,7 @@ export class AppComponent implements OnInit {
                         shouldUpdate = true;
                     }
                     if (event.event === 'Result' && isConfirmed) {
-                        bet.isWinner = ((bet.bet === event.args.result) === bet.isConfirmed);
+                        bet.isWinner = ((bet.bet === event.args._result) === bet.isConfirmed);
                         shouldUpdate = true;
                     }
                     if (!this.isContractOpen(bet.contractAddress) && !isConfirmed) {
@@ -149,9 +149,8 @@ export class AppComponent implements OnInit {
 
     private calculateScale(total, jackpot) {
         const size = total ? 1 * total / jackpot : 0;
-        let sizeString = size.toString();
-        sizeString = sizeString.replace('0.', '1.').replace('0', '');
-        return 'scale(' + sizeString + ')';
+        const scale = 1 + size;
+        return 'scale(' + scale + ')';
     }
 
 
@@ -170,14 +169,14 @@ export class AppComponent implements OnInit {
                 contract.contractEvents.push(event);
 
                 if (event.event === 'Total') {
-                    contract.contractData.total = event.args.total;
-                    contract.contractData.scale = this.calculateScale(event.args.total / 1000000000000000000, contract.contractData.jackpot / 1000000000000000000);
+                    contract.contractData.total = event.args._total;
+                    contract.contractData.scale = this.calculateScale(event.args._total, contract.contractData.jackpot);
                 }
                 if (event.event === 'Open') {
-                    contract.contractData.open = event.args.open;
+                    contract.contractData.open = event.args._open;
                 }
                 if (event.event === 'Result') {
-                    contract.contractData.result = event.args.result;
+                    contract.contractData.result = event.args._result;
                 }
             }
         });
@@ -192,14 +191,22 @@ export class AppComponent implements OnInit {
         });
     }
 
+    private getContractListenToEvents(contract) {
+        const result = '0x0000000000000000000000000000000000000000000000000000000000000000';
+        const hasNoResult = contract.resultHash === result;
+        return contract.open && hasNoResult;
+    }
+
     private _setListeners(contracts) {
         const eventListeners = [];
         return new Promise((resolve) => {
-            window.web3.eth.getBlockNumber(function (e, result) {
+            window.web3.eth.getBlockNumber((e, result) => {
                 const block = result - 100000;
                 contracts.forEach(contract => {
-                    const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
-                    eventListeners.push(allEvents);
+                    if (this.getContractListenToEvents(contract.contractData)) {
+                        const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
+                        eventListeners.push(allEvents);
+                    }
                 });
                 resolve(eventListeners);
             });
@@ -268,6 +275,10 @@ export class AppComponent implements OnInit {
 
     private _onBetsWasChanged() {
         this._loadBets();
+    }
+
+    private shouldBlocksBeenCounted() {
+
     }
 
     private keepAlive() {

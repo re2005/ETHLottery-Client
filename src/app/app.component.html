@@ -41,16 +41,17 @@
                             <a [ngClass]="{'is-closed': !contract.contractData.open}"
                                (click)="play(contract.contractData.address)">
                                 <h1>
-                                    <span [innerHtml]="(contract.contractData.jackpot - (contract.contractData.jackpot*(contract.contractData.ownerFee/100)))/1000000000000000000"></span>
+                                    <span [innerHtml]="contract.contractData.jackpotCalculated"></span>
                                     <i>eth</i>
                                 </h1>
 
                                 <app-lottery-icon contractAddress="{{contract.address}}"></app-lottery-icon>
 
                                 <div *ngIf="contract.contractData.open">
-                                    <p>bets <span [innerHtml]="contract.contractData.total/1000000000000000000"></span>
+                                    <p>bets <span
+                                            [innerHtml]="contract.contractData.total/contract.contractData.fee"></span>
                                         /
-                                        <span [innerHtml]="contract.contractData.jackpot/1000000000000000000"></span>
+                                        <span [innerHtml]="contract.contractData.jackpot/contract.contractData.fee"></span>
                                     </p>
                                 </div>
 

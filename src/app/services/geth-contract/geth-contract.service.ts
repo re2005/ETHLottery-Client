@@ -72,6 +72,14 @@ export class GethContractService {
         });
     }
 
+    private convertWeiToEther(value) {
+        return window.web3.fromWei(value, 'ether')
+    }
+
+    private calculateJackpot(jackpot, ownerFee) {
+        return this.convertWeiToEther(jackpot) - (this.convertWeiToEther(jackpot) * ownerFee / 100);
+    }
+
     private getJackpot() {
         return new Promise((resolve, reject) => {
             this._contract.jackpot((error, jackpot) => {
@@ -79,6 +87,40 @@ export class GethContractService {
                     reject(error);
                 }
                 resolve(jackpot);
+            });
+        });
+    }
+
+
+    private getName() {
+        return new Promise((resolve, reject) => {
+            this._contract.name((error, name) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(name);
+            });
+        });
+    }
+
+    private getResultHash() {
+        return new Promise((resolve, reject) => {
+            this._contract.result_hash((error, resultHash) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(resultHash);
+            });
+        });
+    }
+
+    private getResultBlock() {
+        return new Promise((resolve, reject) => {
+            this._contract.result_block((error, resultBlock) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(resultBlock);
             });
         });
     }
@@ -94,6 +136,10 @@ export class GethContractService {
             this.getTotal(),
             this.getResult(),
             this.getJackpot(),
+            this.getName(),
+            this.getResultHash(),
+            this.getResultBlock(),
+
         ]).then(values => {
             return this._contractData = {
                 open: values[0],
@@ -102,7 +148,9 @@ export class GethContractService {
                 total: values[3],
                 result: values[4],
                 jackpot: values[5],
-                icon: values[6],
+                name: values[6],
+                resultHash: values[7],
+                resultBlock: values[8],
                 address: contract.address
             };
         });
@@ -110,9 +158,8 @@ export class GethContractService {
 
     private calculateScale(total, jackpot) {
         const size = total ? 1 * total / jackpot : 0;
-        let sizeString = size.toString();
-        sizeString = sizeString.replace('0.', '1.').replace('0', '');
-        return 'scale(' + sizeString + ')';
+        const scale = 1 + size;
+        return 'scale(' + scale + ')';
     }
 
     public getContractsData() {
@@ -124,7 +171,8 @@ export class GethContractService {
             Promise.all(contractsPromise).then(data => {
                 for (let _i = 0; _i < data.length; _i++) {
                     this._contracts[_i]['contractData'] = data[_i];
-                    this._contracts[_i].contractData.scale = this.calculateScale(this._contracts[_i]['contractData'].total / 1000000000000000000, this._contracts[_i]['contractData'].jackpot / 1000000000000000000);
+                    this._contracts[_i].contractData.scale = this.calculateScale(this._contracts[_i]['contractData'].total, this._contracts[_i]['contractData'].jackpot);
+                    this._contracts[_i].contractData.jackpotCalculated = this.calculateJackpot(this._contracts[_i].contractData.jackpot, this._contracts[_i].contractData.ownerFee);
                 }
                 resolve(this._contracts);
             });

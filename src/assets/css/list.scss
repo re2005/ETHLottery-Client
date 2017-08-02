@@ -25,10 +25,11 @@
 
     ul {
         z-index: 2;
-        margin-left:-40px;
+        margin-left: -40px;
 
         li {
-            margin: 70px;
+            transform: scale(1);
+            margin: 10px 60px;
             display: inline-flex;
 
             a {
