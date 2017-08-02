@@ -1,5 +1,6 @@
 export const contracts = {
     apiData: [
+        '0xb211e5b63a5467648d50df2abae595c0b501fe48',
         '0x76bf23ac9ead70f11644bc7705e6e62e408483c5',
         '0x61d02018b889482139e0937ef63d962ffbed948a',
         '0xe45a2e0b6da0843db4b675347f59fa107bfe830b',

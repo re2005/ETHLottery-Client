@@ -154,6 +154,17 @@ export class AppComponent implements OnInit {
     }
 
 
+    private getResultHash(contract) {
+        return new Promise((resolve, reject) => {
+            contract.result_hash((error, resultHash) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(resultHash);
+            });
+        });
+    }
+
     private updateContractAllEvents(event) {
 
         if (event.event !== 'Open') {
@@ -161,12 +172,8 @@ export class AppComponent implements OnInit {
         }
 
         this.contracts.forEach(contract => {
-            if (!contract.contractEvents) {
-                contract.contractEvents = [];
-            }
-            if (event.address.toLowerCase() === contract.address.toLowerCase()) {
 
-                contract.contractEvents.push(event);
+            if (event.address.toLowerCase() === contract.address.toLowerCase()) {
 
                 if (event.event === 'Total') {
                     contract.contractData.total = event.args._total;
@@ -177,16 +184,18 @@ export class AppComponent implements OnInit {
                 }
                 if (event.event === 'Result') {
                     contract.contractData.result = event.args._result;
+                    this.getResultHash(contract).then(resultHash => {
+                        contract.contractData.resultHash = resultHash;
+                    })
                 }
             }
         });
     }
 
     private _triggerListeners(eventListeners) {
-        const that = this;
         eventListeners.forEach(allEvents => {
-            allEvents.watch(function (error, event) {
-                that.updateContractAllEvents(event);
+            allEvents.watch((error, event) => {
+                this.updateContractAllEvents(event);
             });
         });
     }
