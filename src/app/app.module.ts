@@ -2,8 +2,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
 import {GethConnectService} from './services/geth-connect/geth-connect.service';
-import {GethContractService} from './services/geth-contract/geth-contract.service';
-import {GethContractManagerService} from './services/geth-contract-manager/geth-contract-manager.service';
+import {ContractService} from './services/contract/contract.service';
+import {ContractManagerService} from './services/contract-manager/contract-manager.service';
 import {StorageService} from './services/storage/storage.service'
 import {HttpModule, JsonpModule} from '@angular/http';
 import {AccountService} from './services/account/account.service';
@@ -30,8 +30,8 @@ import {TutorialComponent} from './components/tutorial/tutorial.component';
         JsonpModule,
     ],
     providers: [GethConnectService,
-        GethContractService,
-        GethContractManagerService,
+        ContractService,
+        ContractManagerService,
         StorageService,
         AccountService,
         PlayService,

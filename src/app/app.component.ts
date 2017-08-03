@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GethConnectService} from './services/geth-connect/geth-connect.service';
 import {AccountService} from './services/account/account.service';
-import {GethContractService} from './services/geth-contract/geth-contract.service';
+import {ContractService} from './services/contract/contract.service';
 import {PlayService} from './services/play/play.service';
 import _ from 'lodash';
 import {StorageService} from './services/storage/storage.service';
@@ -13,7 +13,7 @@ import {StorageService} from './services/storage/storage.service';
 })
 export class AppComponent implements OnInit {
 
-    public withdrawMessage: any;
+    public withdrawMessage: string;
     public bets: Array<any>;
     public isWeb3Connected: any;
     public retryConnect = 0;
@@ -26,13 +26,13 @@ export class AppComponent implements OnInit {
     /**
      *
      * @param {GethConnectService} connectService
-     * @param {GethContractService} contractService
+     * @param {ContractService} contractService
      * @param {AccountService} _accountService
      * @param {PlayService} _playService
      * @param {StorageService} _storageService
      */
     constructor(private connectService: GethConnectService,
-                private contractService: GethContractService,
+                private contractService: ContractService,
                 private _accountService: AccountService,
                 private _playService: PlayService,
                 private _storageService: StorageService) {

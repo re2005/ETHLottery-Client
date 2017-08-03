@@ -1,10 +1,10 @@
 'use strict';
 import {Injectable} from '@angular/core';
 import abi from './abi';
-import {GethContractManagerService} from '../../services/geth-contract-manager/geth-contract-manager.service';
+import {ContractManagerService} from '../../services/contract-manager/contract-manager.service';
 
 @Injectable()
-export class GethContractService {
+export class ContractService {
 
     private _contracts: any;
     private _contract: any;
@@ -12,9 +12,9 @@ export class GethContractService {
 
     /**
      *
-     * @param {GethContractManagerService} _contractManagerService
+     * @param {ContractManagerService} _contractManagerService
      */
-    constructor(private _contractManagerService: GethContractManagerService) {
+    constructor(private _contractManagerService: ContractManagerService) {
     }
 
     private getResult() {

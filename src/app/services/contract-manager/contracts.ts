@@ -10,4 +10,4 @@ export const contracts = {
         '0x8e85aedd658f9a3a73a7268b71b87603fc6ee994',
         '0x698bee2d2c506297ad33cb31305e2e7f56f8611c'
     ]
-};
+}
