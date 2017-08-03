@@ -8,10 +8,10 @@ You have 2 ways of running it
 
 
 #### Option 1
-##### Using Chrome, install <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">MetaMask</a> create a account, unlock MetaMask and you're ready to go. 
+##### Using Chrome, install <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">MetaMask</a> create a account, unlock MetaMask and you're ready to go.
 
-####Option 2
-#####Starting your Geth node:
+#### Option 2
+##### Starting your Geth node:
 `geth --testnet --fast --rpc --rpcapi --tls --unlock 0 --password "myp" db,eth,net,web3,personal --rpccorsdomain="*"`
 
 

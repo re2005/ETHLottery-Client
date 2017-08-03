@@ -17,6 +17,26 @@ export class ContractService {
     constructor(private _contractManagerService: ContractManagerService) {
     }
 
+
+    /**
+     *
+     * @param value
+     * @return {number}
+     */
+    private convertWeiToEther(value) {
+        return window.web3.fromWei(value, 'ether')
+    }
+
+    /**
+     *
+     * @param jackpot
+     * @param ownerFee
+     * @return {number}
+     */
+    private calculateJackpot(jackpot, ownerFee) {
+        return this.convertWeiToEther(jackpot) - (this.convertWeiToEther(jackpot) * ownerFee / 100);
+    }
+
     private getResult() {
         return new Promise((resolve, reject) => {
             this._contract.result((error, result) => {
@@ -72,13 +92,20 @@ export class ContractService {
         });
     }
 
-    private convertWeiToEther(value) {
-        return window.web3.fromWei(value, 'ether')
+    public getBalance() {
+
+        return new Promise((resolve) => {
+
+            window.web3.eth.getBalance(this._contract.address, (error, balance) => {
+                if (!error) {
+                    resolve(balance);
+                } else {
+                    console.error('Error getting balance for account: ' + this._contract.address)
+                }
+            });
+        });
     }
 
-    private calculateJackpot(jackpot, ownerFee) {
-        return this.convertWeiToEther(jackpot) - (this.convertWeiToEther(jackpot) * ownerFee / 100);
-    }
 
     private getJackpot() {
         return new Promise((resolve, reject) => {
@@ -127,6 +154,7 @@ export class ContractService {
 
     public getContractData(contract) {
 
+        // TODO This here sounds ODD or we have to pass the contrat into every method bellow
         this._contract = contract;
 
         return Promise.all([
@@ -139,7 +167,7 @@ export class ContractService {
             this.getName(),
             this.getResultHash(),
             this.getResultBlock(),
-
+            this.getBalance()
         ]).then(values => {
             return this._contractData = {
                 open: values[0],
@@ -151,6 +179,7 @@ export class ContractService {
                 name: values[6],
                 resultHash: values[7],
                 resultBlock: values[8],
+                balance: values[9],
                 address: contract.address
             };
         });

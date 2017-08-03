@@ -112,6 +112,7 @@
 
         &--confirmed a {
             color: $color-blue;
+            cursor: pointer;
 
             p {
                 animation: pulseMini .2s ease-in-out;
@@ -126,10 +127,15 @@
 
         &--pending a {
             color: $color-gray-01;
+            cursor: pointer;
         }
 
         &--winner {
             color: $color-green;
+
+            a {
+                cursor: pointer;
+            }
 
             button {
                 display: block;
@@ -197,6 +203,6 @@
         transform: scale(1);
     }
     100% {
-        transform: scale(1.3);
+        transform: scale(2.3);
     }
 }

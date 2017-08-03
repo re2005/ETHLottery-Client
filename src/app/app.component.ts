@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
     public isPlay: boolean;
     public playContractObject: any;
     public account: any;
-    private etherScanUrl = '//ropsten.etherscan.io/address/';
 
     /**
      *
@@ -76,7 +75,7 @@ export class AppComponent implements OnInit {
             this.playContractObject.account = this.account.address;
             return
         }
-        window.open(this.etherScanUrl + this.playContractObject.address, '_blank')
+        this.openAddress(address);
     }
 
     /**
@@ -222,14 +221,6 @@ export class AppComponent implements OnInit {
         });
     }
 
-    private _loadApp() {
-        this.contractService.get().then((contracts) => {
-            this.contracts = contracts;
-            this._setListeners(contracts).then((listeners) => {
-                this._triggerListeners(listeners);
-            });
-        });
-    }
 
     /**
      *
@@ -312,6 +303,16 @@ export class AppComponent implements OnInit {
         }, 1200);
     }
 
+
+    private _loadApp() {
+        this.contractService.get().then((contracts) => {
+            this.contracts = contracts;
+            this._setListeners(contracts).then((listeners) => {
+                this._triggerListeners(listeners);
+            });
+        });
+    }
+
     private _bootstrap() {
         this.getAccount().then(account => {
 
@@ -341,7 +342,39 @@ export class AppComponent implements OnInit {
         }
     }
 
+
+    private openTx(tx) {
+        if (!tx) {
+            return;
+        }
+        window.open(this.makeEtherScanUrl() + 'address/' + tx, '_blank')
+    }
+
+    private openAddress(address) {
+        if (!address) {
+            return;
+        }
+        window.open(this.makeEtherScanUrl() + 'address/' + address, '_blank')
+    }
+
+    private makeEtherScanUrl() {
+
+        const etherScanUrl = '//etherscan.io/';
+        const etherScanTestNetUrl = '//ropsten.etherscan.io/';
+
+        if (this.getNetwork() === '3') {
+            return etherScanTestNetUrl;
+        } else if (this.getNetwork() === '1') {
+            return etherScanUrl;
+        }
+    }
+
+    private getNetwork() {
+        return window.web3.version.network;
+    }
+
     ngOnInit() {
+
         this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
 
         this._playService.listenBetsWasChange().subscribe(() => {

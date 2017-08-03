@@ -95,13 +95,18 @@
 
                             <app-lottery-icon contractAddress="{{bet?.contractAddress}}"></app-lottery-icon>
 
+                            <!--BET-->
                             <div class="bets--bet">
                                 <span [innerHtml]="bet?.bet" class="bets__bet"></span>
                                 <span [innerHtml]="bet?.timestamp | date: 'HH:mm d-MM'"
                                       class="bets__date"></span>
                             </div>
+                            <!--BET-->
+
+
                             <div class="bets__status">
 
+                                <!--BET STATUS ERROR -->
                                 <div class="bets__status--error"
                                      *ngIf="bet?.isInvalid && !bet?.isConfirmed">
                                     <a href="https://ropsten.etherscan.io/tx/{{bet?.transactionHash}}"
@@ -110,10 +115,10 @@
                                     </a>
                                 </div>
 
+                                <!--BET STATUS PENDING -->
                                 <div class="bets__status--pending"
                                      *ngIf="!bet?.isConfirmed && !bet?.isInvalid">
-                                    <a href="https://ropsten.etherscan.io/address/{{bet?.contractAddress}}"
-                                       target="_blank">
+                                    <a (click)="openAddress(bet?.contractAddress)">
                                         Pending
                                     </a>
                                     <a href="https://ropsten.etherscan.io/tx/{{bet?.transactionHash}}"
@@ -124,10 +129,10 @@
                                     </a>
                                 </div>
 
+                                <!--BET STATUS CONFIRMED -->
                                 <div class="bets__status--confirmed"
                                      *ngIf="bet?.isConfirmed && !bet?.isWinner">
-                                    <a href="https://ropsten.etherscan.io/tx/{{bet?.transactionHash}}"
-                                       target="_blank">
+                                    <a (click)="openTx(bet?.transactionHash)">
                                         <p>Confirmed</p>
                                         <span>
                                             <i [innerHtml]="bet?.fee/1000000000000000000"></i> eth
@@ -135,14 +140,14 @@
                                     </a>
                                 </div>
 
+                                <!--BET STATUS WINNER :) -->
                                 <div class="bets__status--winner"
                                      *ngIf="bet?.isWinner">WINNER!
                                     <div *ngIf="!bet?.withdrawHash">
                                         <button (click)="withdraw(bet)">withdraw</button>
                                     </div>
                                     <div *ngIf="bet?.withdrawHash">
-                                        <a href="https://ropsten.etherscan.io/tx/{{bet?.transactionHash}}"
-                                           target="_blank"
+                                        <a (click)="openTx(bet?.transactionHash)"
                                            [innerHtml]="bet?.withdrawHash"
                                            class="bets__status--withdraw">
                                         </a>
