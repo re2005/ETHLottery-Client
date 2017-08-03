@@ -1,8 +1,23 @@
-# ethlotteryClient
+# ETHLottery Client
+
+This projects is an <a href="https://www.ethereum.org/">Ethereum</a> based lottery.
+
+You have 2 ways of running it
+<p> 1 - Using <a href="https://metamask.io/">MetaMask</a> For Google Chrome</p> 
+<p> 2 - Running your own <a href="https://github.com/ethereum/go-ethereum/wiki/geth">GETH</a> node </p>
+
+
+#### Option 1
+##### Using Chrome, install <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">MetaMask</a> create a account, unlock MetaMask and you're ready to go. 
+
+####Option 2
+#####Starting your Geth node:
+`geth --testnet --fast --rpc --rpcapi --tls --unlock 0 --password "myp" db,eth,net,web3,personal --rpccorsdomain="*"`
+
 
 ## Development server
-
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
 
 ## Code scaffolding
 
@@ -25,4 +40,4 @@ Before running the tests make sure you are serving the app via `ng serve`.
 The project was made by two friends who belives the world should not be in control by the ambicious people who takes advantages by power.
 We all share the same planet and we all want to live!
 
-Live Lottery!
+Life Lottery!
