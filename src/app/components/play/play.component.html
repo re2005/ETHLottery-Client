@@ -10,11 +10,13 @@
                           *ngIf="play"></app-lottery-icon>
         <div class="play-content__bet">
             <span>0x</span>
-            <select #bet1>
+            <select #bet1
+                    [(ngModel)]="bet_1">
                 <option disabled>$</option>
                 <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
             </select>
-            <select #bet2>
+            <select #bet2
+                    [(ngModel)]="bet_2">
                 <option disabled>$</option>
                 <option *ngFor="let bet of bets" [value]="bet">{{bet}}</option>
             </select>

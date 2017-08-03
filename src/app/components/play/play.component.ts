@@ -14,6 +14,8 @@ export class PlayComponent implements OnInit {
     public isBetInvalid: boolean;
     public playErrorMessage: any;
     public bets = ['a', 'b', 'c', 'd', 'e', 'f', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    public bet_1 = '$';
+    public bet_2 = '$';
 
     /**
      * @param {PlayService} _playService
@@ -81,6 +83,12 @@ export class PlayComponent implements OnInit {
             eventAction: 'Bet',
             eventLabel: bet.bet
         });
+        this.clearBet();
+    }
+
+    private clearBet() {
+        this.bet_1 = '$';
+        this.bet_2 = '$';
     }
 
     /**
@@ -104,10 +112,10 @@ export class PlayComponent implements OnInit {
         });
     }
 
-
     public close() {
         this.isBetInvalid = false;
         this.playErrorMessage = null;
+        this.clearBet();
         this._playService.broadcastClosePlayWindow(false);
     }
 

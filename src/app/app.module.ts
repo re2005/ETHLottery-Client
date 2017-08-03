@@ -14,6 +14,7 @@ import {IconGeneratorService} from './services/icon-generator/icon-generator.ser
 import {LotteryIconComponent} from './components/lottery-icon/lottery-icon.component';
 import {ServerSocketService} from './services/server-socket/server-socket.service';
 import {TutorialComponent} from './components/tutorial/tutorial.component';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import {TutorialComponent} from './components/tutorial/tutorial.component';
         BrowserModule,
         HttpModule,
         JsonpModule,
+        FormsModule
     ],
     providers: [GethConnectService,
         ContractService,
