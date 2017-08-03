@@ -347,7 +347,7 @@ export class AppComponent implements OnInit {
         if (!tx) {
             return;
         }
-        window.open(this.makeEtherScanUrl() + 'address/' + tx, '_blank')
+        window.open(this.makeEtherScanUrl() + 'tx/' + tx, '_blank')
     }
 
     private openAddress(address) {
