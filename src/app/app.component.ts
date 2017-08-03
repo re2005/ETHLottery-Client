@@ -41,6 +41,13 @@ export class AppComponent implements OnInit {
     public howToPlay() {
         this._storageService.remove('tutorial');
         window.location.reload();
+
+        window.ga('send', {
+            hitType: 'event',
+            eventCategory: 'Site',
+            eventAction: 'How to play',
+            eventLabel: 'Open'
+        });
     }
 
     public withdraw(bet) {
@@ -59,14 +66,23 @@ export class AppComponent implements OnInit {
 
     public closePlay() {
         this.isPlay = false;
+
+        window.ga('send', {
+            hitType: 'event',
+            eventCategory: this.playContractObject.address,
+            eventAction: 'Close play',
+            eventLabel: 'close-play'
+        });
+
         delete this.playContractObject;
     }
 
     public play(address) {
+
         window.ga('send', {
             hitType: 'event',
-            eventCategory: 'Open play',
-            eventAction: address,
+            eventCategory: address,
+            eventAction: 'Open play',
             eventLabel: 'open-play'
         });
 
@@ -401,6 +417,7 @@ export class AppComponent implements OnInit {
 
         this._playService.listenClosePlayWindow().subscribe((isSuccess) => {
             this.closePlay();
+
             if (isSuccess) {
                 const audio = new Audio('../assets/audio/play-done.mp3');
                 audio.play();
