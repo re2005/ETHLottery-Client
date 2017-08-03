@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
     public isPlay: boolean;
     public playContractObject: any;
     public account: any;
+    private _network: string;
 
     /**
      *
@@ -281,6 +282,14 @@ export class AppComponent implements OnInit {
 
     }
 
+    private setNetwork() {
+        window.web3.version.getNetwork((err, netId) => {
+            if (!err) {
+                this._network = netId;
+            }
+        });
+    }
+
     private keepAlive() {
         setInterval(() => {
 
@@ -319,6 +328,7 @@ export class AppComponent implements OnInit {
             this._setAccount(account);
             this._loadApp();
             this._loadBets();
+            this.setNetwork();
 
             // TODO Magically without this nothing works
             this.keepAlive();
@@ -332,7 +342,7 @@ export class AppComponent implements OnInit {
 
     /**
      *
-     * @param data
+     * @param {Object} data
      */
     private updateConnectionStatus(data) {
         if (data.isConnected && this.connectService.isWeb3Connected()) {
@@ -343,14 +353,22 @@ export class AppComponent implements OnInit {
     }
 
 
-    private openTx(tx) {
+    /**
+     *
+     * @param {string} tx
+     */
+    public openTx(tx) {
         if (!tx) {
             return;
         }
         window.open(this.makeEtherScanUrl() + 'tx/' + tx, '_blank')
     }
 
-    private openAddress(address) {
+    /**
+     *
+     * @param {string} address
+     */
+    public openAddress(address) {
         if (!address) {
             return;
         }
@@ -370,7 +388,7 @@ export class AppComponent implements OnInit {
     }
 
     private getNetwork() {
-        return window.web3.version.network;
+        return this._network;
     }
 
     ngOnInit() {
