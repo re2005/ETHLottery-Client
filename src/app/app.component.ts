@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
                     const isConfirmed = (isSameAddress && isSameTransactionHash);
                     if (isConfirmed && !bet.isConfirmed) {
                         bet.isConfirmed = isConfirmed;
-                        const audio = new Audio('../assets/audio/bet-success.mp3');
+                        const audio = new Audio('../assets/audio/play-success.mp3');
                         audio.play();
                         shouldUpdate = true;
                     }
@@ -402,7 +402,7 @@ export class AppComponent implements OnInit {
         this._playService.listenClosePlayWindow().subscribe((isSuccess) => {
             this.closePlay();
             if (isSuccess) {
-                const audio = new Audio('../assets/audio/play-success.mp3');
+                const audio = new Audio('../assets/audio/play-done.mp3');
                 audio.play();
             }
         });
