@@ -143,6 +143,9 @@
                                 <!--BET STATUS WINNER :) -->
                                 <div class="bets__status--winner"
                                      *ngIf="bet?.isWinner">WINNER!
+
+
+
                                     <div *ngIf="!bet?.withdrawHash">
                                         <button (click)="withdraw(bet)">withdraw</button>
                                     </div>

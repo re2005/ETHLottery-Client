@@ -134,7 +134,7 @@ export class AppComponent implements OnInit {
                         audio.play();
                         shouldUpdate = true;
                     }
-                    if (event.event === 'Result' && isConfirmed) {
+                    if (event.event === 'Result' && bet.isConfirmed) {
                         bet.isWinner = ((bet.bet === event.args._result) === bet.isConfirmed);
                         shouldUpdate = true;
                     }
@@ -183,6 +183,9 @@ export class AppComponent implements OnInit {
 
     private updateContractAllEvents(event) {
 
+        if (event.event === 'Result') {
+            console.log(event)
+        }
         if (event.event !== 'Open') {
             this._updateBets(event);
         }
@@ -216,11 +219,11 @@ export class AppComponent implements OnInit {
         });
     }
 
-    private getContractListenToEvents(contract) {
-        const result = '0x0000000000000000000000000000000000000000000000000000000000000000';
-        const hasNoResult = contract.resultHash === result;
-        return contract.open && hasNoResult;
-    }
+    // private getContractListenToEvents(contract) {
+    //     const result = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    //     const hasNoResult = contract.resultHash === result;
+    //     return contract.open && hasNoResult;
+    // }
 
     private _setListeners(contracts) {
         const eventListeners = [];
@@ -228,10 +231,8 @@ export class AppComponent implements OnInit {
             window.web3.eth.getBlockNumber((e, result) => {
                 const block = result - 100000;
                 contracts.forEach(contract => {
-                    if (this.getContractListenToEvents(contract.contractData)) {
-                        const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
-                        eventListeners.push(allEvents);
-                    }
+                    const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
+                    eventListeners.push(allEvents);
                 });
                 resolve(eventListeners);
             });
@@ -333,6 +334,7 @@ export class AppComponent implements OnInit {
         this.contractService.get().then((contracts) => {
             this.contracts = contracts;
             this._setListeners(contracts).then((listeners) => {
+
                 this._triggerListeners(listeners);
             });
         });
