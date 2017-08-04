@@ -1,6 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {PlayService} from '../../services/play/play.service';
 import {AccountService} from '../../services/account/account.service';
+import {EtherscanService} from '../../services/etherscan/etherscan.service';
+
 import _ from 'lodash';
 
 @Component({
@@ -22,7 +24,13 @@ export class PlayComponent implements OnInit {
      * @param {AccountService} _accountService
      */
     constructor(private _playService: PlayService,
-                private _accountService: AccountService) {
+                private _accountService: AccountService,
+                private _etherscanService: EtherscanService) {
+    }
+
+
+    public openAddress(address) {
+        this._etherscanService.openAddress(address);
     }
 
     /**

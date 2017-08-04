@@ -47,11 +47,15 @@
         font-family: $primary-font;
     }
 
-    app-lottery-icon {
+    .link {
         width: 60px;
         margin-right: 10px;
         display: inline-block;
         vertical-align: bottom;
+        cursor: pointer;
+        &:hover {
+            filter: brightness(0.9);
+        }
     }
 
     button {

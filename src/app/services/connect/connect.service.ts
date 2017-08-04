@@ -4,7 +4,7 @@ import web3 from 'web3';
 
 
 @Injectable()
-export class GethConnectService {
+export class ConnectService {
 
     constructor() {
     }

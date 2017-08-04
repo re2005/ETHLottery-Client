@@ -6,8 +6,14 @@
     </h3>
 
     <div class="play-content">
-        <app-lottery-icon contractAddress="{{play.address}}"
-                          *ngIf="play"></app-lottery-icon>
+
+        <div (click)="openAddress(play.address)"
+             *ngIf="play"
+             title="Check this contract on Etherscan"
+             class="link">
+            <app-lottery-icon contractAddress="{{play.address}}"></app-lottery-icon>
+        </div>
+
         <div class="play-content__bet">
             <span>0x</span>
             <select #bet1

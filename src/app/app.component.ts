@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {GethConnectService} from './services/geth-connect/geth-connect.service';
+import {ConnectService} from './services/connect/connect.service';
 import {AccountService} from './services/account/account.service';
 import {ContractService} from './services/contract/contract.service';
 import {PlayService} from './services/play/play.service';
 import _ from 'lodash';
 import {StorageService} from './services/storage/storage.service';
+import {EtherscanService} from './services/etherscan/etherscan.service';
 
 @Component({
     selector: 'app-root',
@@ -25,17 +26,19 @@ export class AppComponent implements OnInit {
 
     /**
      *
-     * @param {GethConnectService} connectService
+     * @param {ConnectService} connectService
      * @param {ContractService} contractService
      * @param {AccountService} _accountService
      * @param {PlayService} _playService
      * @param {StorageService} _storageService
+     * @param {EtherscanService} _etherscanService
      */
-    constructor(private connectService: GethConnectService,
+    constructor(private connectService: ConnectService,
                 private contractService: ContractService,
                 private _accountService: AccountService,
                 private _playService: PlayService,
-                private _storageService: StorageService) {
+                private _storageService: StorageService,
+                private _etherscanService: EtherscanService) {
     }
 
     public howToPlay() {
@@ -93,6 +96,10 @@ export class AppComponent implements OnInit {
             return
         }
         this.openAddress(address);
+    }
+
+    public openAddress(address) {
+        this._etherscanService.openAddress(address);
     }
 
     /**
@@ -183,9 +190,6 @@ export class AppComponent implements OnInit {
 
     private updateContractAllEvents(event) {
 
-        if (event.event === 'Result') {
-            console.log(event)
-        }
         if (event.event !== 'Open') {
             this._updateBets(event);
         }
@@ -218,12 +222,6 @@ export class AppComponent implements OnInit {
             });
         });
     }
-
-    // private getContractListenToEvents(contract) {
-    //     const result = '0x0000000000000000000000000000000000000000000000000000000000000000';
-    //     const hasNoResult = contract.resultHash === result;
-    //     return contract.open && hasNoResult;
-    // }
 
     private _setListeners(contracts) {
         const eventListeners = [];
@@ -370,44 +368,6 @@ export class AppComponent implements OnInit {
         }
     }
 
-
-    /**
-     *
-     * @param {string} tx
-     */
-    public openTx(tx) {
-        if (!tx) {
-            return;
-        }
-        window.open(this.makeEtherScanUrl() + 'tx/' + tx, '_blank')
-    }
-
-    /**
-     *
-     * @param {string} address
-     */
-    public openAddress(address) {
-        if (!address) {
-            return;
-        }
-        window.open(this.makeEtherScanUrl() + 'address/' + address, '_blank')
-    }
-
-    private makeEtherScanUrl() {
-
-        const etherScanUrl = '//etherscan.io/';
-        const etherScanTestNetUrl = '//ropsten.etherscan.io/';
-
-        if (this.getNetwork() === '3') {
-            return etherScanTestNetUrl;
-        } else if (this.getNetwork() === '1') {
-            return etherScanUrl;
-        }
-    }
-
-    private getNetwork() {
-        return this._network;
-    }
 
     ngOnInit() {
 
