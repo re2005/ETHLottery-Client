@@ -115,6 +115,18 @@ header {
     .right {
         text-align: right;
     }
+
+    .slack {
+        margin-right: 30px;
+        color: $color-green;
+        text-decoration: none;
+
+        img {
+            margin-right: 10px;
+            max-width: 30px;
+            vertical-align: middle;
+        }
+    }
 }
 
 .play-wrap {
