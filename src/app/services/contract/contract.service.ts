@@ -23,7 +23,7 @@ export class ContractService {
      * @param value
      * @return {number}
      */
-    private convertWeiToEther(value) {
+    public convertWeiToEther(value) {
         return window.web3.fromWei(value, 'ether')
     }
 
@@ -34,6 +34,9 @@ export class ContractService {
      * @return {number}
      */
     private calculateJackpot(jackpot, ownerFee) {
+        if (ownerFee.c[0] === 0) {
+            return jackpot;
+        }
         return this.convertWeiToEther(jackpot) - (this.convertWeiToEther(jackpot) * ownerFee / 100);
     }
 

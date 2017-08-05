@@ -51,11 +51,19 @@
                                 <app-lottery-icon contractAddress="{{contract.address}}"></app-lottery-icon>
 
                                 <div *ngIf="contract.contractData.open">
-                                    <p>bets <span
-                                            [innerHtml]="contract.contractData.total/contract.contractData.fee"></span>
+                                    bets
+                                    <div *ngIf="contract.contractData.fee == 0">
+                                        <span
+                                                [innerHtml]="contract.contractData.total"></span>
+                                        /
+                                        <span [innerHtml]="contract.contractData.jackpot"></span>
+                                    </div>
+                                    <div *ngIf="contract.contractData.fee != 0">
+                                        <span
+                                                [innerHtml]="contract.contractData.total/contract.contractData.fee"></span>
                                         /
                                         <span [innerHtml]="contract.contractData.jackpot/contract.contractData.fee"></span>
-                                    </p>
+                                    </div>
                                 </div>
 
                                 <div *ngIf="!contract.contractData.open && (contract.contractData.resultHash !== '0x0000000000000000000000000000000000000000000000000000000000000000')">

@@ -1,8 +1,8 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, OnChanges} from '@angular/core';
 import {PlayService} from '../../services/play/play.service';
 import {AccountService} from '../../services/account/account.service';
 import {EtherscanService} from '../../services/etherscan/etherscan.service';
-
+import {ContractService} from '../../services/contract/contract.service';
 import _ from 'lodash';
 
 @Component({
@@ -22,10 +22,12 @@ export class PlayComponent implements OnInit {
     /**
      * @param {PlayService} _playService
      * @param {AccountService} _accountService
+     * @param {ContractService} _contractService
      */
     constructor(private _playService: PlayService,
                 private _accountService: AccountService,
-                private _etherscanService: EtherscanService) {
+                private _etherscanService: EtherscanService,
+                private _contractService: ContractService) {
     }
 
 
@@ -171,6 +173,10 @@ export class PlayComponent implements OnInit {
         });
     }
 
+    convertWeiToEther(value) {
+        return this._contractService.convertWeiToEther(value);
+    }
+
     ngOnInit() {
         this._accountService.getAccount().subscribe((account) => {
             if (account && this.play) {
@@ -178,6 +184,12 @@ export class PlayComponent implements OnInit {
                 this.playErrorMessage = null;
             }
         });
+    }
+
+    ngOnChanges(changes) {
+        if (changes['play'] && this.play) {
+            this.play.contractData.feeConverted = this.convertWeiToEther(this.play.contractData.fee);
+        }
     }
 
 }

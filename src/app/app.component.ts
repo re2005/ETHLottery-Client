@@ -98,8 +98,20 @@ export class AppComponent implements OnInit {
         this.openAddress(address);
     }
 
+    /**
+     *
+     * @param address
+     */
     public openAddress(address) {
         this._etherscanService.openAddress(address);
+    }
+
+    /**
+     *
+     * @param address
+     */
+    public openTx(address) {
+        this._etherscanService.openTx(address);
     }
 
     /**
