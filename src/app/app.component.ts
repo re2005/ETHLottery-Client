@@ -202,6 +202,10 @@ export class AppComponent implements OnInit {
 
     private updateContractAllEvents(event) {
 
+        if (!event) {
+            return;
+        }
+
         if (event.event !== 'Open') {
             this._updateBets(event);
         }
@@ -210,8 +214,8 @@ export class AppComponent implements OnInit {
 
             if (event.address.toLowerCase() === contract.address.toLowerCase()) {
 
-                if (event.event === 'Total') {
-                    contract.contractData.total = event.args._total;
+                if (event.event === 'Balance') {
+                    contract.contractData.balance = event.args._total;
                     contract.contractData.scale = this.calculateScale(event.args._total, contract.contractData.jackpot);
                 }
                 if (event.event === 'Open') {
@@ -235,12 +239,17 @@ export class AppComponent implements OnInit {
         });
     }
 
+    private getBlockNumber(address) {
+
+    }
+
     private _setListeners(contracts) {
         const eventListeners = [];
         return new Promise((resolve) => {
             window.web3.eth.getBlockNumber((e, result) => {
                 const block = result - 100000;
                 contracts.forEach(contract => {
+                    // debugger
                     const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
                     eventListeners.push(allEvents);
                 });

@@ -51,16 +51,6 @@ export class ContractService {
         });
     }
 
-    private getTotal() {
-        return new Promise((resolve, reject) => {
-            this._contract.total((error, total) => {
-                if (error) {
-                    reject(error);
-                }
-                resolve(total);
-            });
-        });
-    }
 
     private getOwnerFee() {
         return new Promise((resolve, reject) => {
@@ -98,7 +88,6 @@ export class ContractService {
     public getBalance() {
 
         return new Promise((resolve) => {
-
             window.web3.eth.getBalance(this._contract.address, (error, balance) => {
                 if (!error) {
                     resolve(balance);
@@ -164,7 +153,6 @@ export class ContractService {
             this.getIsOpen(),
             this.getFee(),
             this.getOwnerFee(),
-            this.getTotal(),
             this.getResult(),
             this.getJackpot(),
             this.getName(),
@@ -176,13 +164,12 @@ export class ContractService {
                 open: values[0],
                 fee: values[1],
                 ownerFee: values[2],
-                total: values[3],
-                result: values[4],
-                jackpot: values[5],
-                name: values[6],
-                resultHash: values[7],
-                resultBlock: values[8],
-                balance: values[9],
+                result: values[3],
+                jackpot: values[4],
+                name: values[5],
+                resultHash: values[6],
+                resultBlock: values[7],
+                balance: values[8],
                 address: contract.address
             };
         });
@@ -214,15 +201,18 @@ export class ContractService {
     public get() {
         const that = this;
         this._contracts = [];
-        const currentContracts = this._contractManagerService.getCurrentContract();
+        let _contractsArray: any;
         return new Promise((resolve) => {
-            currentContracts.forEach(contractAddress => {
-                const _contract = this._getContractForAddress(contractAddress);
-                _contract.address = contractAddress;
-                that._contracts.push(_contract);
-            });
-            this.getContractsData().then(() => {
-                resolve(this._contracts);
+            this._contractManagerService.getCurrentContracts().then(contractsArray => {
+                _contractsArray = contractsArray;
+                _contractsArray.forEach(contractAddress => {
+                    const _contract = this._getContractForAddress(contractAddress);
+                    _contract.address = contractAddress;
+                    that._contracts.push(_contract);
+                });
+                this.getContractsData().then(() => {
+                    resolve(this._contracts);
+                });
             });
         });
     }

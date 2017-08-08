@@ -48,7 +48,7 @@
 
         <button (click)="playBet(bet1.value, bet2.value)">
             Try your luck
-            <span>for <i [innerHtml]="play?.contractData.fee/1000000000000000000"></i> eth</span>
+            <span>for <i [innerHtml]="play?.contractData.feeConverted"></i> eth</span>
         </button>
     </div>
 

@@ -3,6 +3,8 @@
     <app-loading [hidden]="isWeb3Connected"
                  [retryConnect]="retryConnect"></app-loading>
 
+    <app-admin></app-admin>
+
     <div [ngClass]="{'is-loaded': isWeb3Connected}"
          class="app-content">
 
@@ -54,13 +56,13 @@
                                     bets
                                     <div *ngIf="contract.contractData.fee == 0">
                                         <span
-                                                [innerHtml]="contract.contractData.total"></span>
+                                                [innerHtml]="contract.contractData.balance"></span>
                                         /
                                         <span [innerHtml]="contract.contractData.jackpot"></span>
                                     </div>
                                     <div *ngIf="contract.contractData.fee != 0">
                                         <span
-                                                [innerHtml]="contract.contractData.total/contract.contractData.fee"></span>
+                                                [innerHtml]="contract.contractData.balance/contract.contractData.fee"></span>
                                         /
                                         <span [innerHtml]="contract.contractData.jackpot/contract.contractData.fee"></span>
                                     </div>
@@ -109,7 +111,7 @@
                             <!--BET-->
                             <div class="bets--bet">
                                 <span [innerHtml]="bet?.bet" class="bets__bet"></span>
-                                <span [innerHtml]="bet?.timestamp | date: 'HH:mm d-MM'"
+                                <span [innerHtml]="bet?.timestamp | date: 'HH:mm d/MM'"
                                       class="bets__date"></span>
                             </div>
                             <!--BET-->

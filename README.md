@@ -12,7 +12,7 @@ You have 2 ways of running it
 
 #### Option 2
 ##### Starting your Geth node:
-`geth --testnet --fast --rpc --rpcapi --tls --unlock 0 --password "myp" db,eth,net,web3,personal --rpccorsdomain="*"`
+`./geth --testnet --fast --rpc --rpcapi db,eth,net,web3,personal --unlock 0 --password "your_passrd-txt-file" --rpccorsdomain="*" console`
 
 
 ## Development server

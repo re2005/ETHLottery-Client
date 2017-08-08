@@ -15,6 +15,7 @@ import {LotteryIconComponent} from './components/lottery-icon/lottery-icon.compo
 import {TutorialComponent} from './components/tutorial/tutorial.component';
 import {FormsModule} from '@angular/forms';
 import {EtherscanService} from './services/etherscan/etherscan.service';
+import {AdminComponent} from './components/admin/admin.component';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import {EtherscanService} from './services/etherscan/etherscan.service';
         PlayComponent,
         LoadingComponent,
         LotteryIconComponent,
-        TutorialComponent
+        TutorialComponent,
+        AdminComponent
     ],
     imports: [
         BrowserModule,
