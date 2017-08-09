@@ -1,0 +1,12 @@
+@import "../../../assets/css/index";
+
+
+.admin {
+    position: fixed;
+    left: 0;
+    width: 200px;
+    bottom: 0;
+    top: 0;
+    z-index: 1000;
+    background: $color-gray-03;
+}

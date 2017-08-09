@@ -1,5 +1,14 @@
-<p>
-    admin works!
-    <input #address>
-    <button (click)="registerContract(address.value)">register</button>
-</p>
+<div class="admin">
+    <div class="admin-content">
+        <button (click)="deploy()">deploy</button>
+        <hr>
+        <button (click)="lottery()">lottery</button>
+        <hr>
+        <button (click)="lotteryManual('0x31f8cee77c4d55823c90eee25c64cd7fe082fe25fea0eb3dbfaebd616692d8aa')">manual lottery
+        </button>
+        <hr>
+        <button (click)="accumulate()">accumulate</button>
+        <hr>
+        <button (click)="destruct()">destruct</button>
+    </div>
+</div>

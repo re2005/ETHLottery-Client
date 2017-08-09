@@ -6,6 +6,7 @@ import {PlayService} from './services/play/play.service';
 import _ from 'lodash';
 import {StorageService} from './services/storage/storage.service';
 import {EtherscanService} from './services/etherscan/etherscan.service';
+import {ContractManagerService} from './services/contract-manager/contract-manager.service'
 
 @Component({
     selector: 'app-root',
@@ -23,6 +24,8 @@ export class AppComponent implements OnInit {
     public playContractObject: any;
     public account: any;
     private _network: string;
+    public isOnwer = false;
+    public isAdminOpen = false;
 
     /**
      *
@@ -32,13 +35,15 @@ export class AppComponent implements OnInit {
      * @param {PlayService} _playService
      * @param {StorageService} _storageService
      * @param {EtherscanService} _etherscanService
+     * @param {ContractManagerService} _contractManagerService
      */
     constructor(private connectService: ConnectService,
                 private contractService: ContractService,
                 private _accountService: AccountService,
                 private _playService: PlayService,
                 private _storageService: StorageService,
-                private _etherscanService: EtherscanService) {
+                private _etherscanService: EtherscanService,
+                private _contractManagerService: ContractManagerService) {
     }
 
     public howToPlay() {
@@ -200,6 +205,42 @@ export class AppComponent implements OnInit {
         });
     }
 
+    private lottery(contract) {
+        contract.lottery(({
+            from: contract.contractData.ownerAddress,
+            gas: 200000
+        }), (error, result) => {
+            if (!error) {
+                console.log(result)
+            } else {
+                this.lottery(contract);
+            }
+        });
+    }
+
+    private waitBlocks(contract, blockNumber) {
+
+        const interVal = setInterval(() => {
+            window.web3.eth.getBlockNumber((e, result) => {
+
+                console.log(blockNumber.plus(10).toString(10), result);
+
+                if (result > (blockNumber.plus(10).toString(10))) {
+                    this.lottery(contract);
+                    clearInterval(interVal);
+                }
+            });
+        }, 5000);
+    }
+
+    private callLottery(contract) {
+        contract.result_block((error, result) => {
+            if (!error) {
+                this.waitBlocks(contract, result);
+            }
+        });
+    }
+
     private updateContractAllEvents(event) {
 
         if (!event) {
@@ -215,11 +256,14 @@ export class AppComponent implements OnInit {
             if (event.address.toLowerCase() === contract.address.toLowerCase()) {
 
                 if (event.event === 'Balance') {
-                    contract.contractData.balance = event.args._total;
-                    contract.contractData.scale = this.calculateScale(event.args._total, contract.contractData.jackpot);
+                    contract.contractData.balance = event.args._balance;
+                    contract.contractData.scale = this.calculateScale(event.args._balance, contract.contractData.jackpot);
                 }
                 if (event.event === 'Open') {
                     contract.contractData.open = event.args._open;
+                    if (this.isOnwer && !contract.contractData.open) {
+                        this.callLottery(contract);
+                    }
                 }
                 if (event.event === 'Result') {
                     contract.contractData.result = event.args._result;
@@ -239,17 +283,12 @@ export class AppComponent implements OnInit {
         });
     }
 
-    private getBlockNumber(address) {
-
-    }
-
     private _setListeners(contracts) {
         const eventListeners = [];
         return new Promise((resolve) => {
             window.web3.eth.getBlockNumber((e, result) => {
                 const block = result - 100000;
                 contracts.forEach(contract => {
-                    // debugger
                     const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
                     eventListeners.push(allEvents);
                 });
@@ -286,7 +325,7 @@ export class AppComponent implements OnInit {
         return this._accountService.getBalance(account);
     }
 
-    private getAccount() {
+    public getAccount() {
         return this._accountService.get();
     }
 
@@ -314,10 +353,6 @@ export class AppComponent implements OnInit {
         this._loadBets();
     }
 
-    private shouldBlocksBeenCounted() {
-
-    }
-
     private setNetwork() {
         window.web3.version.getNetwork((err, netId) => {
             if (!err) {
@@ -327,6 +362,7 @@ export class AppComponent implements OnInit {
     }
 
     private keepAlive() {
+
         setInterval(() => {
 
             if (_.isUndefined(this.account.address)) {
@@ -336,6 +372,8 @@ export class AppComponent implements OnInit {
             }
 
         }, 1000);
+
+
     }
 
     private tryReconnect() {
@@ -405,6 +443,13 @@ export class AppComponent implements OnInit {
                 const audio = new Audio('../assets/audio/play-done.mp3');
                 audio.play();
             }
+        });
+
+        Promise.all([
+            this.getAccount(),
+            this._contractManagerService.getOwner()
+        ]).then(data => {
+            this.isOnwer = data[0] === data[1];
         });
 
         this._accountService.getAccount().subscribe((account) => {

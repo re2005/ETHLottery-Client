@@ -144,6 +144,40 @@ export class ContractService {
         });
     }
 
+
+    private getOwnerAddress() {
+        return new Promise((resolve, reject) => {
+            this._contract.owner((error, owner) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(owner);
+            });
+        });
+    }
+
+    private getManagerAddress() {
+        return new Promise((resolve, reject) => {
+            this._contract.manager_address((error, owner) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(owner);
+            });
+        });
+    }
+
+    private getWinnersCount() {
+        return new Promise((resolve, reject) => {
+            this._contract.winners_count((error, winners) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(winners);
+            });
+        });
+    }
+
     public getContractData(contract) {
 
         // TODO This here sounds ODD or we have to pass the contrat into every method bellow
@@ -158,7 +192,10 @@ export class ContractService {
             this.getName(),
             this.getResultHash(),
             this.getResultBlock(),
-            this.getBalance()
+            this.getBalance(),
+            this.getOwnerAddress(),
+            this.getManagerAddress(),
+            this.getWinnersCount()
         ]).then(values => {
             return this._contractData = {
                 open: values[0],
@@ -170,6 +207,9 @@ export class ContractService {
                 resultHash: values[6],
                 resultBlock: values[7],
                 balance: values[8],
+                ownerAddress: values[9],
+                managerAddress: values[10],
+                winners: values[11],
                 address: contract.address
             };
         });
@@ -190,7 +230,7 @@ export class ContractService {
             Promise.all(contractsPromise).then(data => {
                 for (let _i = 0; _i < data.length; _i++) {
                     this._contracts[_i]['contractData'] = data[_i];
-                    this._contracts[_i].contractData.scale = this.calculateScale(this._contracts[_i]['contractData'].total, this._contracts[_i]['contractData'].jackpot);
+                    this._contracts[_i].contractData.scale = this.calculateScale(this._contracts[_i]['contractData'].balance, this._contracts[_i]['contractData'].jackpot);
                     this._contracts[_i].contractData.jackpotCalculated = this.calculateJackpot(this._contracts[_i].contractData.jackpot, this._contracts[_i].contractData.ownerFee);
                 }
                 resolve(this._contracts);
@@ -213,6 +253,23 @@ export class ContractService {
                 this.getContractsData().then(() => {
                     resolve(this._contracts);
                 });
+            });
+        });
+    }
+
+    /**
+     *
+     * @param {string} address
+     */
+    public register(_contract) {
+        return new Promise(resolve => {
+            _contract.Register((error, result) => {
+                if (!error) {
+                    console.log(result);
+                    resolve(result);
+                } else {
+                    console.error(error);
+                }
             });
         });
     }
