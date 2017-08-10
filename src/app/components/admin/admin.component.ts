@@ -20,7 +20,7 @@ export class AdminComponent implements OnInit {
             gas: 2000000
         }, (error, result) => {
             if (!error) {
-                console.log(result);
+                console.info('Accumulate: ' + result);
             }
         });
     }
@@ -33,9 +33,9 @@ export class AdminComponent implements OnInit {
                 from: this.playContract.contractData.ownerAddress,
                 gas: 2000000
             }, (error, result) => {
-                console.log(result);
+                console.info('Register: ' + result);
                 if (!error) {
-                    if (this.playContract.winners === 0) {
+                    if (this.playContract.contractData.winners == 0) {
                         this.accumulate(contract.address);
                     }
                 }
@@ -47,7 +47,7 @@ export class AdminComponent implements OnInit {
     public deploy() {
         const data = this.playContract.contractData;
         const newContract = window.web3.eth.contract(abi);
-        const accumulate = this.playContract.winners === 0 ? this.playContract.contractData.balance : 0;
+        const accumulate = this.playContract.contractData.winners == 0 ? this.playContract.contractData.balance : 0;
 
         newContract.new(
             data.managerAddress,

@@ -218,6 +218,14 @@ export class AppComponent implements OnInit {
         });
     }
 
+    public calculateCurrentBets(balance, fee) {
+        return Math.floor(balance / fee);
+    }
+
+    public calculateTotalBets(jackpot, fee) {
+        return Math.ceil(jackpot / fee);
+    }
+
     private waitBlocks(contract, blockNumber) {
 
         const interVal = setInterval(() => {
@@ -261,7 +269,8 @@ export class AppComponent implements OnInit {
                 }
                 if (event.event === 'Open') {
                     contract.contractData.open = event.args._open;
-                    if (this.isOnwer && !contract.contractData.open) {
+                    debugger
+                    if (this.isOnwer && !contract.contractData.resultHash && !contract.contractData.open) {
                         this.callLottery(contract);
                     }
                 }
@@ -361,6 +370,10 @@ export class AppComponent implements OnInit {
         });
     }
 
+    private setManagerListerners() {
+
+    }
+
     private keepAlive() {
 
         setInterval(() => {
@@ -404,6 +417,7 @@ export class AppComponent implements OnInit {
             this._loadApp();
             this._loadBets();
             this.setNetwork();
+            this.setManagerListerners();
 
             // TODO Magically without this nothing works
             this.keepAlive();

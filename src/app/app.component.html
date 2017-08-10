@@ -68,9 +68,9 @@
                                     </div>
                                     <div *ngIf="contract.contractData.fee != 0">
                                         <span
-                                                [innerHtml]="contract.contractData.balance/contract.contractData.fee"></span>
+                                                [innerHtml]="calculateCurrentBets(contract.contractData.balance,contract.contractData.fee)"></span>
                                         /
-                                        <span [innerHtml]="contract.contractData.jackpot/contract.contractData.fee"></span>
+                                        <span [innerHtml]="calculateTotalBets(contract.contractData.jackpot,contract.contractData.fee)"></span>
                                     </div>
                                 </div>
 

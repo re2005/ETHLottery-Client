@@ -11,10 +11,6 @@ export class ContractManagerService {
     constructor() {
     }
 
-    public deployContract() {
-        // window.web3.eth.contract(abi).new(manager, fee, jackpot, owner_fee, { from: owner, data: code, gas: 3000000 });
-    }
-
     /**
      *
      * @param {String} contractAddress
