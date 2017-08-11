@@ -13,14 +13,13 @@ export class AdminComponent implements OnInit {
 
     @Input() playContract: any;
 
-
     public accumulate(address) {
         this.playContract.accumulate(address, {
             from: this.playContract.contractData.ownerAddress,
             gas: 2000000
         }, (error, result) => {
             if (!error) {
-                console.info('Accumulate: ' + result);
+                console.log('Accumulate: ' + result);
             }
         });
     }
@@ -33,7 +32,7 @@ export class AdminComponent implements OnInit {
                 from: this.playContract.contractData.ownerAddress,
                 gas: 2000000
             }, (error, result) => {
-                console.info('Register: ' + result);
+                console.log('Register: ' + result);
                 if (!error) {
                     if (this.playContract.contractData.winners == 0) {
                         this.accumulate(contract.address);
@@ -67,7 +66,7 @@ export class AdminComponent implements OnInit {
 
     public lotteryManual(tx) {
         this.playContract.manual_lottery(tx, ({from: this.playContract.ownerAddress, gas: 200000}), (error, result) => {
-            debugger
+            console.log('manual_lottery: ' + result);
         });
     }
 
@@ -77,13 +76,13 @@ export class AdminComponent implements OnInit {
                 gas: 200000
             }
         ), (error, result) => {
-            debugger
+            console.log('lottery: ' + result);
         });
     }
 
     public destruct() {
         this.playContract.destruct(({from: this.playContract.ownerAddress, gas: 200000}), (error, result) => {
-            debugger
+            console.log('destruct: ' + result);
         });
     }
 
