@@ -52,7 +52,8 @@
                             </div>
 
                             <a [ngClass]="{'is-closed': !contract.contractData.open}"
-                               (click)="play(contract.contractData.address)">
+                               (click)="play(contract.contractData.address)"
+                               *ngIf="contract.contractData.name !== '0x'">
                                 <h1>
                                     <span [innerHtml]="contract.contractData.jackpotCalculated"></span>
                                 </h1>

@@ -425,13 +425,11 @@ export class AppComponent implements OnInit {
         }, 1200);
     }
 
-
     private _loadApp() {
         this.contracts = [];
         this.contractService.get().then((contracts) => {
             this.contracts = contracts;
             this._setListeners(contracts).then((listeners) => {
-
                 this._triggerListeners(listeners);
             });
         });
@@ -446,11 +444,11 @@ export class AppComponent implements OnInit {
             this.setNetwork();
             this.setManagerListerners();
 
-            // TODO Magically without this nothing works
+            // Magically without this nothing works
             this.keepAlive();
         });
 
-        // TODO this is just to show loading screen
+        // This is just to show loading screen
         setTimeout(() => {
             this.isWeb3Connected = this.connectService.isWeb3Connected();
         }, 1200);

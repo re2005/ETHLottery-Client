@@ -1,4 +1,4 @@
-@import "../../../assets/css/index";
+@import "../../../assets/css/variables";
 
 .play {
     top: 20px;
@@ -91,5 +91,24 @@
         padding: 6px 0;
         font-size: .9rem;
         color: $color-green;
+    }
+}
+
+.alerts {
+
+    div {
+        border: 1px solid gray;
+        background: rgba(123, 123, 123, 0.2);
+        padding: 20px;
+    }
+
+    .success {
+        border: 1px solid greenyellow;
+    }
+
+    .error {
+        border: 1px solid $color-red;
+        background: $color-red;
+        color: $color-white;
     }
 }

@@ -1,4 +1,7 @@
-@import "../assets/css/index";
+@import "../assets/css/variables";
+@import "../assets/css/sidebar";
+@import "../assets/css/list";
+@import "../assets/css/bubbles";
 
 .app-body {
     margin: auto;
@@ -59,10 +62,6 @@
         display: none;
         font-size: 12px;
         line-height: 20px;
-
-        .loading {
-            @extend .color-loop;
-        }
 
         &.show {
             display: block !important;
