@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
-import {contracts} from './contracts';
 import {abiManager} from './abi-manager';
 
 @Injectable()
 export class ContractManagerService {
 
-    private managerAddress = '0x8b43eE82E80776192c3A72d3558b7968181fFf09';
+    private managerAddress = '0x450fa40f5537c34f1f5cfbb8329289e0a0299733';
     private managerData: any;
 
     constructor() {
