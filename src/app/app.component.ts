@@ -269,7 +269,6 @@ export class AppComponent implements OnInit {
                 }
                 if (event.event === 'Open') {
                     contract.contractData.open = event.args._open;
-                    debugger
                     if (this.isOnwer && !contract.contractData.resultHash && !contract.contractData.open) {
                         this.callLottery(contract);
                     }
