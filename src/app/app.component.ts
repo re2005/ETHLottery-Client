@@ -427,7 +427,7 @@ export class AppComponent implements OnInit {
 
 
     private _loadApp() {
-        delete this.contracts;
+        this.contracts = [];
         this.contractService.get().then((contracts) => {
             this.contracts = contracts;
             this._setListeners(contracts).then((listeners) => {
