@@ -298,7 +298,7 @@ export class AppComponent implements OnInit {
                 const block = result - 100000;
                 contracts.forEach(contract => {
                     const hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
-                    if (contract.contractData.hash === hash) {
+                    if (contract.contractData.resultHash === hash) {
                         const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
                         eventListeners.push(allEvents);
                     }
