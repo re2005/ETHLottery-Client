@@ -38,12 +38,14 @@
             </div>
 
             <div class="container--flex">
-                <section class="lottery-list" [ngClass]="{'is-play': isPlay}">
+                <section class="lottery-list"
+                         [ngClass]="{'is-play': isPlay}">
 
                     <ul>
                         <li *ngFor="let contract of contracts"
                             id="{{contract.address}}"
-                            [ngStyle]="{'transform': contract.contractData.scale}">
+                            [ngStyle]="{'transform': contract.contractData.scale}"
+                            [ngClass]="{'is-closed': !contract.contractData.open}">
 
                             <div *ngIf="isOnwer">
                                 <button (click)="isAdminOpen = true">admin</button>

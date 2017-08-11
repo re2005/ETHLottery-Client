@@ -32,6 +32,11 @@
             margin: 40px 60px;
             display: inline-flex;
 
+            &.is-closed {
+                margin: 0;
+                transform: scale(.5) !important;
+            }
+
             a {
                 margin: 25px 0;
                 cursor: pointer;
@@ -47,6 +52,7 @@
 
                 &.is-closed {
                     opacity: (.6);
+                    margin: 0;
                 }
 
                 h1 {

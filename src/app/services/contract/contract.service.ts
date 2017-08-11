@@ -248,7 +248,7 @@ export class ContractService {
                 _contractsArray.forEach(contractAddress => {
                     const _contract = this._getContractForAddress(contractAddress);
                     _contract.address = contractAddress;
-                    that._contracts.push(_contract);
+                    that._contracts.unshift(_contract);
                 });
                 this.getContractsData().then(() => {
                     resolve(this._contracts);

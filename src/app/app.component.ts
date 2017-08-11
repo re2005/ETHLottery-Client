@@ -297,8 +297,11 @@ export class AppComponent implements OnInit {
             window.web3.eth.getBlockNumber((e, result) => {
                 const block = result - 100000;
                 contracts.forEach(contract => {
-                    const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
-                    eventListeners.push(allEvents);
+                    const hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
+                    if (contract.contractData.hash === hash) {
+                        const allEvents = contract.allEvents({fromBlock: block, toBlock: 'latest'});
+                        eventListeners.push(allEvents);
+                    }
                 });
                 resolve(eventListeners);
             });
@@ -369,8 +372,32 @@ export class AppComponent implements OnInit {
         });
     }
 
-    private setManagerListerners() {
+    private hasContractAddress(address) {
+        return new Promise((resolve) => {
+            let hasContract;
+            _.some(this.contracts, contract => {
+                hasContract = address === contract.address;
+                return hasContract;
+            });
+            resolve(hasContract);
+        });
+    }
 
+    private refreshLotteries() {
+        this._loadApp();
+    }
+
+    private setManagerListerners() {
+        this._contractManagerService.listenEvent().subscribe(event => {
+            const newAddress = event.args.lottery;
+            if (newAddress) {
+                this.hasContractAddress(newAddress).then(hasContract => {
+                    if (!hasContract) {
+                        this.refreshLotteries();
+                    }
+                });
+            }
+        });
     }
 
     private keepAlive() {
@@ -400,6 +427,7 @@ export class AppComponent implements OnInit {
 
 
     private _loadApp() {
+        delete this.contracts;
         this.contractService.get().then((contracts) => {
             this.contracts = contracts;
             this._setListeners(contracts).then((listeners) => {
@@ -463,6 +491,7 @@ export class AppComponent implements OnInit {
             this._contractManagerService.getOwner()
         ]).then(data => {
             this.isOnwer = data[0] === data[1];
+            this._contractManagerService.setListeners();
         });
 
         this._accountService.getAccount().subscribe((account) => {
