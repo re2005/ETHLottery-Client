@@ -8,7 +8,7 @@ import {Component, OnInit, Input} from '@angular/core';
 export class BlockCounterComponent implements OnInit {
 
     @Input() blockNumber: any;
-    public waitingLottery: any;
+    public waitingLottery = false;
     public blockWaiting: number;
 
     constructor() {
