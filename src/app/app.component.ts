@@ -101,6 +101,7 @@ export class AppComponent implements OnInit {
             return
         }
         this.openAddress(address);
+        delete this.playContractObject;
     }
 
     /**
@@ -226,29 +227,6 @@ export class AppComponent implements OnInit {
         return Math.ceil(jackpot / fee);
     }
 
-    private waitBlocks(contract, blockNumber) {
-
-        const interVal = setInterval(() => {
-            window.web3.eth.getBlockNumber((e, result) => {
-
-                console.log(blockNumber.plus(10).toString(10), result);
-
-                if (result > (blockNumber.plus(10).toString(10))) {
-                    this.lottery(contract);
-                    clearInterval(interVal);
-                }
-            });
-        }, 5000);
-    }
-
-    private callLottery(contract) {
-        contract.result_block((error, result) => {
-            if (!error) {
-                this.waitBlocks(contract, result);
-            }
-        });
-    }
-
     private updateContractAllEvents(event) {
 
         if (!event) {
@@ -269,8 +247,8 @@ export class AppComponent implements OnInit {
                 }
                 if (event.event === 'Open') {
                     contract.contractData.open = event.args._open;
-                    if (this.isOnwer && !contract.contractData.resultHash && !contract.contractData.open) {
-                        this.callLottery(contract);
+                    if (contract.contractData.open) {
+                        contract.contractData.resultBlockNumber = event.blockNumber;
                     }
                 }
                 if (event.event === 'Result') {
@@ -336,6 +314,7 @@ export class AppComponent implements OnInit {
         return this._accountService.getBalance(account);
     }
 
+
     public getAccount() {
         return this._accountService.get();
     }
@@ -383,8 +362,26 @@ export class AppComponent implements OnInit {
         });
     }
 
-    private refreshLotteries() {
-        this._loadApp();
+
+    private listenEventsForNewContract(contract) {
+        window.web3.eth.getBlockNumber((e, result) => {
+            const block = result - 10000;
+            contract.allEvents({fromBlock: block, toBlock: 'latest'}).watch((error, event) => {
+                this.updateContractAllEvents(event);
+            });
+        });
+    }
+
+    private makeContractForAddress(address) {
+        const newContract = this.contractService._getContractForAddress(address);
+        this.contractService.incrementContractData(newContract).then(contract => {
+            this.contracts.unshift(contract);
+            this.listenEventsForNewContract(contract);
+        });
+    }
+
+    private includeContract(address) {
+        this.makeContractForAddress(address);
     }
 
     private setManagerListerners() {
@@ -393,7 +390,8 @@ export class AppComponent implements OnInit {
             if (newAddress) {
                 this.hasContractAddress(newAddress).then(hasContract => {
                     if (!hasContract) {
-                        this.refreshLotteries();
+                        this.includeContract(newAddress);
+                        // this.refreshLotteries();
                     }
                 });
             }
@@ -411,8 +409,6 @@ export class AppComponent implements OnInit {
             }
 
         }, 1000);
-
-
     }
 
     private tryReconnect() {

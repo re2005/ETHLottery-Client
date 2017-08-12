@@ -43,41 +43,48 @@
 
                     <ul>
                         <li *ngFor="let contract of contracts"
-                            id="{{contract.address}}"
-                            [ngStyle]="{'transform': contract.contractData.scale}"
-                            [ngClass]="{'is-closed': !contract.contractData.open}">
+                            id="{{contract?.address}}"
+                            [ngStyle]="{'transform': contract.contractData?.scale}"
+                            [ngClass]="{'is-closed': !contract.contractData?.open}">
 
                             <div *ngIf="isOnwer">
                                 <button (click)="isAdminOpen = true">admin</button>
                             </div>
 
-                            <a [ngClass]="{'is-closed': !contract.contractData.open}"
-                               (click)="play(contract.contractData.address)"
-                               *ngIf="contract.contractData.name !== '0x'">
-                                <h1>
-                                    <span [innerHtml]="contract.contractData.jackpotCalculated"></span>
+                            <a [ngClass]="{'is-closed': !contract.contractData?.open}"
+                               (click)="play(contract.contractData?.address)"
+                               *ngIf="contract.contractData?.name !== '0x'">
+                                <h1 title="{{contract.contractData?.jackpotCalculated}}">
+                                    <span [innerHtml]="contract.contractData?.jackpotCalculated"></span>
                                 </h1>
 
                                 <app-lottery-icon contractAddress="{{contract.address}}"></app-lottery-icon>
 
-                                <div *ngIf="contract.contractData.open">
-                                    bets
-                                    <div *ngIf="contract.contractData.fee == 0">
+                                <div *ngIf="contract.contractData?.open">
+                                    <div class="bets-title">bets</div>
+                                    <div *ngIf="contract.contractData?.fee == 0"
+                                         class="bets-amount">
                                         <span
-                                                [innerHtml]="contract.contractData.balance"></span>
+                                                [innerHtml]="contract.contractData?.balance"></span>
                                         /
-                                        <span [innerHtml]="contract.contractData.jackpot"></span>
+                                        <span [innerHtml]="contract.contractData?.jackpot"></span>
                                     </div>
-                                    <div *ngIf="contract.contractData.fee != 0">
+                                    <div *ngIf="contract.contractData?.fee != 0">
                                         <span
-                                                [innerHtml]="calculateCurrentBets(contract.contractData.balance,contract.contractData.fee)"></span>
+                                                [innerHtml]="calculateCurrentBets(contract.contractData?.balance,contract.contractData?.fee)"></span>
                                         /
-                                        <span [innerHtml]="calculateTotalBets(contract.contractData.jackpot,contract.contractData.fee)"></span>
+                                        <span [innerHtml]="calculateTotalBets(contract.contractData?.jackpot,contract.contractData?.fee)"></span>
                                     </div>
                                 </div>
 
-                                <div *ngIf="!contract.contractData.open && (contract.contractData.resultHash !== '0x0000000000000000000000000000000000000000000000000000000000000000')">
-                                    result <span [innerHtml]="contract.contractData.result"></span>
+                                <div class="result"
+                                     *ngIf="!contract.contractData?.open && (contract.contractData?.resultHash !== '0x0000000000000000000000000000000000000000000000000000000000000000')">
+                                    result <span [innerHtml]="contract.contractData?.result"></span>
+                                </div>
+
+                                <div *ngIf="!contract.contractData?.open && (contract.contractData?.resultHash === '0x0000000000000000000000000000000000000000000000000000000000000000')">
+                                    <app-block-counter
+                                            blockNumber="{{contract.contractData?.resultBlock}}"></app-block-counter>
                                 </div>
 
                             </a>

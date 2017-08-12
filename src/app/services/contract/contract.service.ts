@@ -180,7 +180,7 @@ export class ContractService {
 
     public getContractData(contract) {
 
-        // TODO This here sounds ODD or we have to pass the contrat into every method bellow
+        // TODO This here sounds ODD or we have to pass the contract into every method bellow
         this._contract = contract;
 
         return Promise.all([
@@ -219,6 +219,19 @@ export class ContractService {
         const size = total ? 1 * total / jackpot : 0;
         const scale = 1 + size;
         return 'scale(' + scale + ')';
+    }
+
+
+    public incrementContractData(contract) {
+        const contractDataPromise = this.getContractData(contract);
+        return new Promise((resolve) => {
+            contractDataPromise.then(data => {
+                contract['contractData'] = data;
+                contract.contractData.scale = this.calculateScale(contract['contractData'].balance, contract['contractData'].jackpot);
+                contract.contractData.jackpotCalculated = this.calculateJackpot(contract.contractData.jackpot, contract.contractData.ownerFee);
+                resolve(contract);
+            });
+        });
     }
 
     public getContractsData() {
@@ -278,7 +291,7 @@ export class ContractService {
      *
      * @param {String} contractAddress
      */
-    private _getContractForAddress(contractAddress) {
+    public _getContractForAddress(contractAddress) {
         return window.web3.eth.contract(abi).at(contractAddress);
     }
 }

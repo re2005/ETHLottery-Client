@@ -1,0 +1,11 @@
+<div *ngIf="!waitingLottery">
+    Blocks until result
+    <p [innerHtml]="blockWaiting">
+        calculating
+    </p>
+</div>
+<div *ngIf="waitingLottery">
+    <p>
+        <img src="../../assets/img/animation.gif"> Waiting for result any time!
+    </p>
+</div>

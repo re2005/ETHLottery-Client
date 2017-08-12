@@ -16,6 +16,7 @@ import {TutorialComponent} from './components/tutorial/tutorial.component';
 import {FormsModule} from '@angular/forms';
 import {EtherscanService} from './services/etherscan/etherscan.service';
 import {AdminComponent} from './components/admin/admin.component';
+import {BlockCounterComponent} from './components//block-counter/block-counter.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import {AdminComponent} from './components/admin/admin.component';
         LoadingComponent,
         LotteryIconComponent,
         TutorialComponent,
-        AdminComponent
+        AdminComponent,
+        BlockCounterComponent
     ],
     imports: [
         BrowserModule,
