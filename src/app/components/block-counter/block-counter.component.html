@@ -1,13 +1,11 @@
 <div class="blocks-counter">
     <div *ngIf="!waitingLottery">
-        Blocks until result
-        <p [innerHtml]="blockWaiting">
-            calculating
-        </p>
+        Result in...
+        <span [innerHtml]="blockWaiting"></span>
     </div>
     <div *ngIf="waitingLottery">
         <p>
-            <img src="../../../assets/images/animation.gif"> Result any time!
+            <img src="../../../assets/images/animation.gif"> Getting result!
         </p>
     </div>
 </div>
