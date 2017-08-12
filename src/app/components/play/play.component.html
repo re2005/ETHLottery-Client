@@ -7,6 +7,9 @@
 
     <div class="play-content">
 
+        <h3 [innerHtml]="play.contractData.jackpotCalculated"
+        class="jackpot"></h3>
+
         <div (click)="openAddress(play.address)"
              *ngIf="play"
              title="Check this contract on Etherscan"

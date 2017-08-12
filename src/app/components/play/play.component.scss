@@ -48,14 +48,20 @@
     }
 
     .link {
-        width: 60px;
-        margin-right: 10px;
+        width: 160px;
         display: inline-block;
         vertical-align: bottom;
         cursor: pointer;
+
         &:hover {
             filter: brightness(0.9);
         }
+    }
+
+    .jackpot {
+        padding: 10px 0 6px 26px;
+        background: url(/assets/images/ether.svg) no-repeat left center;
+        margin: 4px 0;
     }
 
     button {
