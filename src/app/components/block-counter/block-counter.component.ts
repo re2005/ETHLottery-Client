@@ -18,6 +18,9 @@ export class BlockCounterComponent implements OnInit {
         const interVal = setInterval(() => {
             window.web3.eth.getBlockNumber((e, result) => {
 
+                if (this.blockNumber === 0) {
+                    return;
+                }
                 const lotteryBlockNumber = this.blockNumber + 20;
                 this.blockWaiting = lotteryBlockNumber - result;
 

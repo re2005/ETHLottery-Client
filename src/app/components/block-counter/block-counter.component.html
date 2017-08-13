@@ -1,9 +1,9 @@
 <div class="blocks-counter">
-    <div [hidden]="waitingLottery === false">
+    <div *ngIf="!waitingLottery">
         Result in...
         <span [innerHtml]="blockWaiting"></span>
     </div>
-    <div [hidden]="waitingLottery">
+    <div *ngIf="waitingLottery">
         <p>
             <img src="../../../assets/images/animation.gif"> Getting result!
         </p>
