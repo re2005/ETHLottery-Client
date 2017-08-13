@@ -2,7 +2,14 @@
   "name": "ethlottery-client",
   "version": "0.0.1",
   "license": "MIT",
-  "author": "Renato Cardoso #re2005",
+  "contributors": [
+    {
+      "name": "Renato Cardoso"
+    },
+    {
+      "name": "Renato Cavallari"
+    }
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

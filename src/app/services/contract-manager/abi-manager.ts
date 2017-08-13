@@ -2,7 +2,7 @@ export const abiManager = [{
     'constant': true,
     'inputs': [],
     'name': 'lotteries',
-    'outputs': [{'name': '', 'type': 'address[]', 'value': []}],
+    'outputs': [{'name': '', 'type': 'address[]'}],
     'payable': false,
     'type': 'function'
 }, {
@@ -23,12 +23,12 @@ export const abiManager = [{
     'constant': true,
     'inputs': [],
     'name': 'owner',
-    'outputs': [{'name': '', 'type': 'address', 'value': '0xc0cd4ce9649ce764c0116ddbb474941ef0c5ed3d'}],
+    'outputs': [{'name': '', 'type': 'address'}],
     'payable': false,
     'type': 'function'
 }, {'inputs': [], 'payable': false, 'type': 'constructor'}, {
     'anonymous': false,
-    'inputs': [{'indexed': false, 'name': 'lottery', 'type': 'address'}],
+    'inputs': [{'indexed': false, 'name': '_lottery', 'type': 'address'}],
     'name': 'Register',
     'type': 'event'
-}];
+}, {'anonymous': false, 'inputs': [], 'name': 'Destroy', 'type': 'event'}];
