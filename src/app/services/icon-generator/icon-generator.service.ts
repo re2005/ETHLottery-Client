@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {denodeify} from "q";
 
 @Injectable()
 export class IconGeneratorService {

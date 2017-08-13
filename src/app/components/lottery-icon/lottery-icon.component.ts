@@ -1,5 +1,4 @@
 import {Component, OnInit, Input} from '@angular/core';
-
 import {IconGeneratorService} from '../../services/icon-generator/icon-generator.service'
 
 @Component({
