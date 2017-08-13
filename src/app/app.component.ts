@@ -25,7 +25,6 @@ export class AppComponent implements OnInit {
     public account: any;
     private _network: string;
     public isOnwer = false;
-    public isAdminOpen = false;
 
     /**
      *
@@ -384,14 +383,13 @@ export class AppComponent implements OnInit {
         this.makeContractForAddress(address);
     }
 
-    private setManagerListerners() {
+    private setManagerListeners() {
         this._contractManagerService.listenEvent().subscribe(event => {
             const newAddress = event.args.lottery;
             if (newAddress) {
                 this.hasContractAddress(newAddress).then(hasContract => {
                     if (!hasContract) {
                         this.includeContract(newAddress);
-                        // this.refreshLotteries();
                     }
                 });
             }
@@ -399,15 +397,12 @@ export class AppComponent implements OnInit {
     }
 
     private keepAlive() {
-
         setInterval(() => {
-
             if (_.isUndefined(this.account.address)) {
                 this.setAccount();
             } else {
                 this._updateBalance(this.account.address);
             }
-
         }, 1000);
     }
 
@@ -438,7 +433,7 @@ export class AppComponent implements OnInit {
             this._loadApp();
             this._loadBets();
             this.setNetwork();
-            this.setManagerListerners();
+            this.setManagerListeners();
 
             // Magically without this nothing works
             this.keepAlive();
@@ -480,13 +475,7 @@ export class AppComponent implements OnInit {
             }
         });
 
-        Promise.all([
-            this.getAccount(),
-            this._contractManagerService.getOwner()
-        ]).then(data => {
-            this.isOnwer = data[0] === data[1];
-            this._contractManagerService.setListeners();
-        });
+        this._contractManagerService.setListeners();
 
         this._accountService.getAccount().subscribe((account) => {
             if (!this.account) {

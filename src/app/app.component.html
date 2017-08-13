@@ -3,10 +3,6 @@
     <app-loading [hidden]="isWeb3Connected"
                  [retryConnect]="retryConnect"></app-loading>
 
-
-    <app-admin [playContract]="playContractObject"
-               *ngIf="isAdminOpen"></app-admin>
-
     <div [ngClass]="{'is-loaded': isWeb3Connected}"
          class="app-content">
 
@@ -46,10 +42,6 @@
                             id="{{contract?.address}}"
                             [ngStyle]="{'transform': contract.contractData?.scale}"
                             [ngClass]="{'is-closed': !contract.contractData?.open}">
-
-                            <div *ngIf="isOnwer">
-                                <button (click)="isAdminOpen = true">admin</button>
-                            </div>
 
                             <a [ngClass]="{'is-closed': !contract.contractData?.open}"
                                (click)="play(contract.contractData?.address)"

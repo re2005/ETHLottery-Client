@@ -1,22 +1,20 @@
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
-import {ConnectService} from './services/connect/connect.service';
-import {ContractService} from './services/contract/contract.service';
-import {ContractManagerService} from './services/contract-manager/contract-manager.service';
-import {StorageService} from './services/storage/storage.service'
-import {HttpModule, JsonpModule} from '@angular/http';
-import {AccountService} from './services/account/account.service';
-import {PlayComponent} from './components/play/play.component';
-import {LoadingComponent} from './components/loading/loading.component';
+import {BrowserModule} from '@angular/platform-browser';
 import {PlayService} from './services/play/play.service';
+import {PlayComponent} from './components/play/play.component';
+import {ConnectService} from './services/connect/connect.service';
+import {StorageService} from './services/storage/storage.service';
+import {AccountService} from './services/account/account.service';
+import {ContractService} from './services/contract/contract.service';
+import {LoadingComponent} from './components/loading/loading.component';
+import {EtherscanService} from './services/etherscan/etherscan.service';
+import {TutorialComponent} from './components/tutorial/tutorial.component';
 import {IconGeneratorService} from './services/icon-generator/icon-generator.service';
 import {LotteryIconComponent} from './components/lottery-icon/lottery-icon.component';
-import {TutorialComponent} from './components/tutorial/tutorial.component';
-import {FormsModule} from '@angular/forms';
-import {EtherscanService} from './services/etherscan/etherscan.service';
-import {AdminComponent} from './components/admin/admin.component';
-import {BlockCounterComponent} from './components//block-counter/block-counter.component';
+import {BlockCounterComponent} from './components/block-counter/block-counter.component';
+import {ContractManagerService} from './services/contract-manager/contract-manager.service';
 
 @NgModule({
     declarations: [
@@ -25,13 +23,10 @@ import {BlockCounterComponent} from './components//block-counter/block-counter.c
         LoadingComponent,
         LotteryIconComponent,
         TutorialComponent,
-        AdminComponent,
         BlockCounterComponent
     ],
     imports: [
         BrowserModule,
-        HttpModule,
-        JsonpModule,
         FormsModule
     ],
     providers: [ConnectService,
