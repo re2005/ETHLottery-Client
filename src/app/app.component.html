@@ -42,7 +42,6 @@
                             id="{{contract?.address}}"
                             [ngStyle]="{'transform': contract.contractData?.scale}"
                             [ngClass]="{'is-closed': !contract.contractData?.open}">
-
                             <a [ngClass]="{'is-closed': !contract.contractData?.open}"
                                (click)="play(contract.contractData?.address)"
                                *ngIf="contract.contractData?.name !== '0x'">
@@ -76,7 +75,7 @@
 
                                 <div *ngIf="!contract.contractData?.open && (contract.contractData?.resultHash === '0x0000000000000000000000000000000000000000000000000000000000000000')">
                                     <app-block-counter
-                                            blockNumber="{{contract.contractData?.resultBlock}}"></app-block-counter>
+                                            resultBlock="{{contract.contractData?.resultBlock}}"></app-block-counter>
                                 </div>
 
                             </a>

@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 
+
 @Component({
     selector: 'app-block-counter',
     templateUrl: './block-counter.component.html',
@@ -7,23 +8,26 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class BlockCounterComponent implements OnInit {
 
-    @Input() blockNumber: any;
+    @Input() resultBlock: any;
     public waitingLottery: boolean;
     public blockWaiting: number;
+    private lotteryResultBlock: number;
 
     constructor() {
     }
 
-    private updateBlockNumber() {
-        const interVal = setInterval(() => {
-            window.web3.eth.getBlockNumber((e, result) => {
+    private updateResultBlock() {
+        this.lotteryResultBlock = parseInt(this.resultBlock, 10) + 10;
 
-                if (this.blockNumber === 0) {
+        const interVal = setInterval(() => {
+            if (this.resultBlock === 0) {
+                return;
+            }
+            window.web3.eth.getBlockNumber((error, result) => {
+                if (error) {
                     return;
                 }
-                const lotteryBlockNumber = this.blockNumber + 20;
-                this.blockWaiting = lotteryBlockNumber - result;
-
+                this.blockWaiting = this.lotteryResultBlock - result;
                 if (this.blockWaiting < 1) {
                     this.waitingLottery = true;
                     clearInterval(interVal);
@@ -35,8 +39,17 @@ export class BlockCounterComponent implements OnInit {
 
     ngOnInit() {
         this.waitingLottery = false;
-        this.blockNumber = parseInt(this.blockNumber, 10);
-        this.updateBlockNumber();
+        this.resultBlock = parseInt(this.resultBlock, 10);
+        this.updateResultBlock();
     }
 
+}
+
+
+declare global {
+    interface Window {
+        Web3: any,
+        web3: any,
+        ga: any
+    }
 }

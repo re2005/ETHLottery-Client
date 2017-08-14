@@ -246,8 +246,8 @@ export class AppComponent implements OnInit {
                 }
                 if (event.event === 'Open') {
                     contract.contractData.open = event.args._open;
-                    if (contract.contractData.open) {
-                        contract.contractData.resultBlockNumber = event.blockNumber;
+                    if (!contract.contractData.open) {
+                        contract.contractData.resultBlock = event.blockNumber + 10;
                     }
                 }
                 if (event.event === 'Result') {
@@ -385,7 +385,10 @@ export class AppComponent implements OnInit {
 
     private setManagerListeners() {
         this._contractManagerService.listenEvent().subscribe(event => {
-            const newAddress = event.args.lottery;
+            if (!event) {
+                return;
+            }
+            const newAddress = event.args._lottery;
             if (newAddress) {
                 this.hasContractAddress(newAddress).then(hasContract => {
                     if (!hasContract) {
