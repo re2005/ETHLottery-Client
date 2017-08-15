@@ -28,7 +28,7 @@ export class ContractManagerService {
 
         window.web3.eth.getBlockNumber((e, result) => {
             const block = result - 10000;
-            this.managerData.allEvents({fromBlock: block, toBlock: 'latest'}).watch((error, event) => {
+            this.managerData.Register({fromBlock: block, toBlock: 'latest'}).watch((error, event) => {
                 this.broadcastEvent(event);
             });
         });
