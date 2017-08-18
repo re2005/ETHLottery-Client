@@ -236,15 +236,16 @@ export class ContractService {
 
     public getContractsData() {
         const contractsPromise = [];
-        this._contracts.forEach(contract => {
-            contractsPromise.push(this.getContractData(contract));
-        });
+        for (const key in this._contracts) {
+            contractsPromise.push(this.getContractData(this._contracts[key]));
+        }
         return new Promise((resolve) => {
             Promise.all(contractsPromise).then(data => {
                 for (let _i = 0; _i < data.length; _i++) {
-                    this._contracts[_i]['contractData'] = data[_i];
-                    this._contracts[_i].contractData.scale = this.calculateScale(this._contracts[_i]['contractData'].balance, this._contracts[_i]['contractData'].jackpot);
-                    this._contracts[_i].contractData.jackpotCalculated = this.calculateJackpot(this._contracts[_i].contractData.jackpot, this._contracts[_i].contractData.ownerFee);
+                    this._contracts[data[_i].address]['contractData'] = data[_i];
+                    this._contracts[data[_i].address].contractData.scale = this.calculateScale(this._contracts[data[_i].address]['contractData'].balance, this._contracts[data[_i].address]['contractData'].jackpot);
+                    this._contracts[data[_i].address].contractData.jackpotCalculated = this.calculateJackpot(this._contracts[data[_i].address].contractData.jackpot, this._contracts[data[_i].address].contractData.ownerFee);
+
                 }
                 resolve(this._contracts);
             });
@@ -253,7 +254,7 @@ export class ContractService {
 
     public get() {
         const that = this;
-        this._contracts = [];
+        this._contracts = {};
         let _contractsArray: any;
         return new Promise((resolve) => {
             this._contractManagerService.getCurrentContracts().then(contractsArray => {
@@ -261,7 +262,7 @@ export class ContractService {
                 _contractsArray.forEach(contractAddress => {
                     const _contract = this._getContractForAddress(contractAddress);
                     _contract.address = contractAddress;
-                    that._contracts.unshift(_contract);
+                    that._contracts[contractAddress] = _contract;
                 });
                 this.getContractsData().then(() => {
                     resolve(this._contracts);

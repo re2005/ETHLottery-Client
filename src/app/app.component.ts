@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Pipe, PipeTransform} from '@angular/core';
 import {ConnectService} from './services/connect/connect.service';
 import {AccountService} from './services/account/account.service';
 import {ContractService} from './services/contract/contract.service';
@@ -16,7 +16,7 @@ import {ContractManagerService} from './services/contract-manager/contract-manag
 export class AppComponent implements OnInit {
 
     public withdrawMessage: string;
-    public bets: Array<any>;
+    public bets: Object;
     public isWeb3Connected: any;
     public retryConnect = 0;
     public contracts: any;
@@ -125,13 +125,7 @@ export class AppComponent implements OnInit {
      * @return {Object<any>}
      */
     private getContractForAddress(address) {
-        let playContract;
-        this.contracts.forEach(contract => {
-            if (contract.address === address) {
-                playContract = contract;
-            }
-        });
-        return playContract;
+        return this.contracts[address];
     }
 
     private isContractOpen(contractAddress) {
@@ -147,27 +141,27 @@ export class AppComponent implements OnInit {
     private _parseBets(event) {
         let shouldUpdate = false;
         return new Promise((resolve) => {
-            this.bets.forEach(bet => {
-                const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
-                if (isSameAddress) {
-                    const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
-                    const isConfirmed = (isSameAddress && isSameTransactionHash);
-                    if (isConfirmed && !bet.isConfirmed) {
-                        bet.isConfirmed = isConfirmed;
-                        const audio = new Audio('../assets/audio/play-success.mp3');
-                        audio.play();
-                        shouldUpdate = true;
-                    }
-                    if (event.event === 'Result' && bet.isConfirmed) {
-                        bet.isWinner = ((bet.bet === event.args._result) === bet.isConfirmed);
-                        shouldUpdate = true;
-                    }
-                    if (!this.isContractOpen(bet.contractAddress) && !isConfirmed) {
-                        bet.isInvalid = true;
-                        shouldUpdate = true;
-                    }
-                }
-            });
+            // this.bets.forEach(bet => {
+            //     const isSameAddress = bet.contractAddress.toLowerCase() === event.address.toLowerCase();
+            //     if (isSameAddress) {
+            //         const isSameTransactionHash = bet.transactionHash.toLowerCase() === event.transactionHash.toLowerCase();
+            //         const isConfirmed = (isSameAddress && isSameTransactionHash);
+            //         if (isConfirmed && !bet.isConfirmed) {
+            //             bet.isConfirmed = isConfirmed;
+            //             const audio = new Audio('../assets/audio/play-success.mp3');
+            //             audio.play();
+            //             shouldUpdate = true;
+            //         }
+            //         if (event.event === 'Result' && bet.isConfirmed) {
+            //             bet.isWinner = ((bet.bet === event.args._result) === bet.isConfirmed);
+            //             shouldUpdate = true;
+            //         }
+            //         if (!this.isContractOpen(bet.contractAddress) && !isConfirmed) {
+            //             bet.isInvalid = true;
+            //             shouldUpdate = true;
+            //         }
+            //     }
+            // });
             if (shouldUpdate) {
                 resolve(this.bets);
             } else {
@@ -364,8 +358,10 @@ export class AppComponent implements OnInit {
 
     private listenEventsForNewContract(contract) {
         window.web3.eth.getBlockNumber((e, result) => {
-            const block = result - 10000;
-            contract.allEvents({fromBlock: block, toBlock: 'latest'}).watch((error, event) => {
+            if (e) {
+                console.error('Error getting current block number: ', e);
+            }
+            contract.allEvents({fromBlock: result, toBlock: 'latest'}).watch((error, event) => {
                 this.updateContractAllEvents(event);
             });
         });
@@ -420,12 +416,12 @@ export class AppComponent implements OnInit {
     }
 
     private _loadApp() {
-        this.contracts = [];
+        this.contracts = {};
         this.contractService.get().then((contracts) => {
             this.contracts = contracts;
-            this._setListeners(contracts).then((listeners) => {
-                this._triggerListeners(listeners);
-            });
+            // this._setListeners(contracts).then((listeners) => {
+            //     this._triggerListeners(listeners);
+            // });
         });
     }
 

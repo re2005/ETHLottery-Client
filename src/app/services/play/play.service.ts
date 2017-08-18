@@ -8,7 +8,6 @@ export class PlayService {
 
     private _play: Subject<any> = new Subject<any>();
     private _bets: Subject<any> = new Subject<any>();
-    private _betsData: any;
 
     /**
      * @param {StorageService} storageService
@@ -34,13 +33,14 @@ export class PlayService {
     }
 
     setBet(account, _bet) {
-        this._betsData = [];
+        let bets = {};
         this.getBets(account).then(data => {
             if (data) {
-                this._betsData = data;
+                bets = data;
             }
-            this._betsData.unshift(_bet);
-            this.storageService.set(account, this._betsData);
+            bets[_bet.contractAddress] = bets[_bet.contractAddress] || {};
+            bets[_bet.contractAddress][_bet.bet] = _bet;
+            this.storageService.set(account, bets);
             this.broadcastBetsWasChange();
         });
     }

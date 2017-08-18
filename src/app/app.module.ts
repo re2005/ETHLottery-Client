@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
+import {KeyValuesPipe} from './key-values.pipe';
 import {BrowserModule} from '@angular/platform-browser';
 import {PlayService} from './services/play/play.service';
 import {PlayComponent} from './components/play/play.component';
@@ -23,7 +24,8 @@ import {ContractManagerService} from './services/contract-manager/contract-manag
         LoadingComponent,
         LotteryIconComponent,
         TutorialComponent,
-        BlockCounterComponent
+        BlockCounterComponent,
+        KeyValuesPipe
     ],
     imports: [
         BrowserModule,

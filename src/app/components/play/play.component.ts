@@ -54,19 +54,15 @@ export class PlayComponent implements OnInit {
     }
 
     private isBetDuplicated(currentBet) {
+
         return new Promise((resolve) => {
             let isDuplicated;
             this._playService.getBets(this.play.account).then(bets => {
-                if (!bets) {
+                if (!bets || !bets[currentBet.contractAddress]) {
                     resolve(false);
                     return;
                 }
-                _.some(bets, bet => {
-                    const isSameAddress = currentBet.contractAddress.toLowerCase() === bet.contractAddress.toLowerCase();
-                    const isSameBet = currentBet.bet === bet.bet;
-                    isDuplicated = (isSameAddress && isSameBet);
-                    return isDuplicated;
-                });
+                isDuplicated = bets[currentBet.contractAddress][currentBet.bet];
                 resolve(isDuplicated);
             });
         });
