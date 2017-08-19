@@ -15,12 +15,14 @@
             <div class="right">
                 <div *ngIf="!account?.address"
                      class="meta-mask">
-                    Please <strong>unlock</strong> MetaMask <img src="../assets/images/metamask.png">
+                    Please <strong>unlock</strong> MetaMask <img src="../assets/images/metamask.gif">
                 </div>
-                <a class="slack"
-                   href="https://lifelottery.herokuapp.com/"
-                   target="_blank"><img src="../assets/images/slack.png"> Join us!</a>
-                <button (click)="howToPlay()">See tutorial</button>
+                <div>
+                    <a class="slack"
+                       href="https://lifelottery.herokuapp.com/"
+                       target="_blank"><img src="../assets/images/slack.png"> Join us!</a>
+                    <button (click)="howToPlay()">See tutorial</button>
+                </div>
             </div>
         </header>
 
@@ -92,9 +94,17 @@
 
                     <ul class="bets">
 
-                        <h3 *ngIf="!bets">
-                            No Bets yet, :)
-                        </h3>
+                        <div *ngIf="!bets" class="no-bets">
+                            <h3>No Bets yet, :)</h3>
+                            <br><br>
+                            <h4>If you are curious about how it works we have created a page with some information</h4>
+                            <br><br>
+                            <p>Check our contract code</p>
+                            <br>
+                            <button (click)="openAddress('0xbf6608b9a5eb9095e5e4ff453e01e736448ca0b6')">
+                                Open EtherScan
+                            </button>
+                        </div>
 
                         <div *ngIf="withdrawMessage"
                              class="bets__withdraw-error-message">
@@ -173,7 +183,7 @@
                                          *ngIf="betValue?.isWinner">WINNER!
 
                                         <div *ngIf="!betValue?.withdrawHash">
-                                            <button (click)="withdraw(bet)">withdraw</button>
+                                            <button (click)="withdraw(betValue)">withdraw</button>
                                         </div>
                                         <div *ngIf="betValue?.withdrawHash">
                                             <a (click)="openTx(betValue?.transactionHash)"

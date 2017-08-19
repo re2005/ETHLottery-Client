@@ -182,7 +182,8 @@
     }
 
     &__withdraw-error-message {
-        width: 200px;
+        margin: 20px;
+        width: 300px;
         height: 60px;
         display: block;
         margin-top: 6px;
@@ -192,8 +193,9 @@
         text-overflow: ellipsis;
 
         span {
+            color: $color-red;
             display: block;
-            padding: 5px 0;
+            padding: 10px 0;
             cursor: pointer;
             &:hover {
                 text-decoration: underline;

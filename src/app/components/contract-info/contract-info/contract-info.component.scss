@@ -6,9 +6,15 @@
     margin-right: 10px;
     display: inline-block;
 }
+
+.bets-title {
+    display: inline;
+}
+
 .bets-current {
     opacity: .6;
 }
+
 .is-closed {
     color: $color-gray-01;
     font-size: .7rem;
@@ -25,7 +31,7 @@
     background-size: 16px;
     width: 100%;
     height: 25px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .bets-jackpot, .contract-info {
