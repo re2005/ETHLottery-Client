@@ -1,0 +1,31 @@
+.lottery-icon {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.is-closed {
+
+    .lottery-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.result {
+    display: none;
+}
+
+.bets-jackpot {
+    padding: 2px 0 2px 22px;
+    background: url(/assets/images/ether.svg) no-repeat left center;
+    background-size: 16px;
+    width: 100%;
+    height: 25px;
+}
+
+.bets-jackpot, .contract-info {
+    display: inline-block;
+    vertical-align: top;
+}

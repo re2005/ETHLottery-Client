@@ -9,6 +9,6 @@ export class KeyValuesPipe implements PipeTransform {
         if (!value) {
             return;
         }
-        return Object.keys(value).map(key => value[key]);
+        return Object.keys(value).map(key => value[key]).reverse();
     }
 }

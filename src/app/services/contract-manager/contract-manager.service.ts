@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Observable';
 export class ContractManagerService {
 
     private _event: Subject<any> = new Subject<any>();
-    private managerAddress = '0x7Cf11C347dC959191cC17ab744984b60E9A85a7c';
+    private managerAddress = '0xbf6608b9a5eb9095e5e4ff453e01e736448ca0b6';
     private managerData: any;
 
     constructor() {
@@ -22,15 +22,10 @@ export class ContractManagerService {
     }
 
     public setListeners() {
-        if (!this.managerData) {
-            this.makeManagerObject();
-        }
-
-        window.web3.eth.getBlockNumber((e, result) => {
-            const block = result - 10000;
-            this.managerData.Register({fromBlock: block, toBlock: 'latest'}).watch((error, event) => {
+        this.managerData.Register().watch((error, event) => {
+            if (!error) {
                 this.broadcastEvent(event);
-            });
+            }
         });
     }
 

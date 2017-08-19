@@ -1,11 +1,16 @@
 'use strict';
-import {Injectable} from '@angular/core';
 import abi from './abi';
+import {Injectable} from '@angular/core';
+import {StorageService} from '../storage/storage.service';
 import {ContractManagerService} from '../../services/contract-manager/contract-manager.service';
+
+import {Subject} from 'rxjs/Subject';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ContractService {
 
+    private _contractsSubscriber: Subject<any> = new Subject<any>();
     private _contracts: any;
     private _contract: any;
     private _contractData: Object;
@@ -13,10 +18,32 @@ export class ContractService {
     /**
      *
      * @param {ContractManagerService} _contractManagerService
+     * @param {StorageService} _storageService
      */
-    constructor(private _contractManagerService: ContractManagerService) {
+    constructor(private _contractManagerService: ContractManagerService,
+                private _storageService: StorageService) {
     }
 
+
+    public getContracts() {
+        return this._contracts;
+    }
+
+    public broadcastContracts(contracts): void {
+        this._contractsSubscriber.next(contracts);
+    }
+
+    public listenContracts(): Observable<any> {
+        return this._contractsSubscriber.asObservable();
+    }
+
+    /**
+     *
+     * @param {Object} contracts
+     */
+    public setContracts(contracts) {
+        this._contracts = contracts;
+    }
 
     /**
      *
@@ -245,7 +272,6 @@ export class ContractService {
                     this._contracts[data[_i].address]['contractData'] = data[_i];
                     this._contracts[data[_i].address].contractData.scale = this.calculateScale(this._contracts[data[_i].address]['contractData'].balance, this._contracts[data[_i].address]['contractData'].jackpot);
                     this._contracts[data[_i].address].contractData.jackpotCalculated = this.calculateJackpot(this._contracts[data[_i].address].contractData.jackpot, this._contracts[data[_i].address].contractData.ownerFee);
-
                 }
                 resolve(this._contracts);
             });

@@ -54,19 +54,10 @@
 
                                 <div *ngIf="contract.contractData?.open">
                                     <div class="bets-title">bets</div>
-                                    <div *ngIf="contract.contractData?.fee == 0"
-                                         class="bets-amount">
-                                        <span
-                                                [innerHtml]="contract.contractData?.balance"></span>
-                                        /
-                                        <span [innerHtml]="contract.contractData?.jackpot"></span>
-                                    </div>
-                                    <div *ngIf="contract.contractData?.fee != 0">
-                                        <span
-                                                [innerHtml]="calculateCurrentBets(contract.contractData?.balance,contract.contractData?.fee)"></span>
-                                        /
-                                        <span [innerHtml]="calculateTotalBets(contract.contractData?.jackpot,contract.contractData?.fee)"></span>
-                                    </div>
+                                    <span
+                                            [innerHtml]="calculateCurrentBets(contract.contractData?.balance,contract.contractData?.fee)"></span>
+                                    /
+                                    <span [innerHtml]="calculateTotalBets(contract.contractData?.jackpot,contract.contractData?.fee)"></span>
                                 </div>
 
                                 <div class="result"
@@ -89,7 +80,7 @@
                     <div class="sidebar__account-info"
                          [hidden]="!account?.address">
                         <div class="balance">
-                            Balance
+                            Account balance
                             <span>{{account?.balance/1000000000000000000}}</span>
                         </div>
                         <a href="//ropsten.etherscan.io/address/{{account?.address}}"
@@ -110,12 +101,12 @@
                             <span (click)="withdrawMessage = null">dismiss</span>
                         </div>
 
-                        <div *ngFor="let bet of bets | keyValues"
-                             [ngClass]="{'is-winner': betValue?.isWinner}">
+                        <div *ngFor="let bet of bets | keyValues:bet">
 
-                            <li *ngFor="let betValue of bet | keyValues">
+                            <app-contract-info contractAddress="{{bet | getKey:'contractAddress'}}"></app-contract-info>
 
-                                <app-lottery-icon contractAddress="{{betValue?.contractAddress}}"></app-lottery-icon>
+                            <li *ngFor="let betValue of bet | keyValues"
+                                [ngClass]="{'is-winner': betValue?.isWinner}">
 
                                 <!--BET-->
                                 <div class="bets--bet">
@@ -179,6 +170,7 @@
                                     </div>
                                 </div>
                             </li>
+
                         </div>
                     </ul>
                 </aside>

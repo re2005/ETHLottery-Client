@@ -51,9 +51,7 @@ export class PlayService {
 
     updateBets(account, bets) {
         this.storageService.set(account, bets).then(() => {
-            this.broadcastBetsWasChange();
+            // this.broadcastBetsWasChange(bets);
         });
-
     }
-
 }

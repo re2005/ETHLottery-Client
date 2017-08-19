@@ -3,7 +3,6 @@ import {PlayService} from '../../services/play/play.service';
 import {AccountService} from '../../services/account/account.service';
 import {EtherscanService} from '../../services/etherscan/etherscan.service';
 import {ContractService} from '../../services/contract/contract.service';
-import _ from 'lodash';
 
 @Component({
     selector: 'app-play',

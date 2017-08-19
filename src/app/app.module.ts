@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
-import {KeyValuesPipe} from './key-values.pipe';
+import {GetKeyPipe} from './pipes/get-key.pipe';
+import {KeyValuesPipe} from './pipes/key-values.pipe';
 import {BrowserModule} from '@angular/platform-browser';
 import {PlayService} from './services/play/play.service';
 import {PlayComponent} from './components/play/play.component';
@@ -16,6 +17,7 @@ import {IconGeneratorService} from './services/icon-generator/icon-generator.ser
 import {LotteryIconComponent} from './components/lottery-icon/lottery-icon.component';
 import {BlockCounterComponent} from './components/block-counter/block-counter.component';
 import {ContractManagerService} from './services/contract-manager/contract-manager.service';
+import {ContractInfoComponent} from './components/contract-info/contract-info/contract-info.component';
 
 @NgModule({
     declarations: [
@@ -25,7 +27,9 @@ import {ContractManagerService} from './services/contract-manager/contract-manag
         LotteryIconComponent,
         TutorialComponent,
         BlockCounterComponent,
-        KeyValuesPipe
+        KeyValuesPipe,
+        GetKeyPipe,
+        ContractInfoComponent
     ],
     imports: [
         BrowserModule,

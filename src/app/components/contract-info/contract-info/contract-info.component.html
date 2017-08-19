@@ -1,0 +1,36 @@
+<div>
+
+    <app-lottery-icon contractAddress="{{address}}"
+                      class="lottery-icon"></app-lottery-icon>
+
+    <div class="contract-info">
+
+        <div *ngIf="contractData?.open">
+            <h1 title="{{contractData?.jackpotCalculated}}"
+                class="bets-jackpot">
+                <span [innerHtml]="contractData?.jackpotCalculated"></span>
+            </h1>
+
+            <div class="bets-current">
+                <div class="bets-title">bets</div>
+                <span
+                        [innerHtml]="calculateCurrentBets(contractData?.balance,contractData?.fee)"></span>
+                /
+                <span [innerHtml]="calculateTotalBets(contractData?.jackpot,contractData?.fee)"></span>
+            </div>
+        </div>
+        <div *ngIf="!contractData?.open">
+            <div *ngIf="!contractData?.open && (contractData?.resultHash === '0x0000000000000000000000000000000000000000000000000000000000000000')">
+                <app-block-counter
+                        resultBlock="{{contractData?.resultBlock}}"></app-block-counter>
+            </div>
+        </div>
+
+        <div class="result"
+             *ngIf="!contractData?.open && (contractData?.resultHash !== '0x0000000000000000000000000000000000000000000000000000000000000000')">
+            Result <span [innerHtml]="contractData?.result"></span>
+        </div>
+    </div>
+
+
+</div>
