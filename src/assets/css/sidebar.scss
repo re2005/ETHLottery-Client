@@ -125,6 +125,15 @@
             cursor: pointer;
         }
 
+        &--looser {
+            cursor: pointer;
+            padding: 4px 0;
+
+            p {
+                color: orange;
+            }
+        }
+
         &--winner {
             color: $color-green;
 

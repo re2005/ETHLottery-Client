@@ -14,6 +14,7 @@ export class ContractService {
     private _contracts: any;
     private _contract: any;
     private _contractData: Object;
+    private _constractInstance: any;
 
     /**
      *
@@ -205,6 +206,17 @@ export class ContractService {
         });
     }
 
+    private getCreateBlock() {
+        return new Promise((resolve, reject) => {
+            this._contract.create_block((error, createBlock) => {
+                if (error) {
+                    reject(error);
+                }
+                resolve(createBlock);
+            });
+        });
+    }
+
     public getContractData(contract) {
 
         // TODO This here sounds ODD or we have to pass the contract into every method bellow
@@ -222,7 +234,8 @@ export class ContractService {
             this.getBalance(),
             this.getOwnerAddress(),
             this.getManagerAddress(),
-            this.getWinnersCount()
+            this.getWinnersCount(),
+            this.getCreateBlock()
         ]).then(values => {
             return this._contractData = {
                 open: values[0],
@@ -237,6 +250,7 @@ export class ContractService {
                 ownerAddress: values[9],
                 managerAddress: values[10],
                 winners: values[11],
+                createBlock: values[12],
                 address: contract.address
             };
         });
@@ -279,6 +293,7 @@ export class ContractService {
     }
 
     public get() {
+        this._constractInstance = window.web3.eth.contract(abi);
         const that = this;
         this._contracts = {};
         let _contractsArray: any;
@@ -319,6 +334,6 @@ export class ContractService {
      * @param {String} contractAddress
      */
     public _getContractForAddress(contractAddress) {
-        return window.web3.eth.contract(abi).at(contractAddress);
+        return this._constractInstance.at(contractAddress);
     }
 }

@@ -25,8 +25,7 @@ export class ContractInfoComponent implements OnInit {
         return Math.ceil(jackpot / fee);
     }
 
-    public play(){
-
+    public play() {
     }
 
     ngOnInit() {

@@ -8,6 +8,7 @@ import {ContractService} from './services/contract/contract.service';
 import {EtherscanService} from './services/etherscan/etherscan.service';
 import {ContractManagerService} from './services/contract-manager/contract-manager.service'
 
+
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -23,13 +24,11 @@ export class AppComponent implements OnInit {
     public isPlay: boolean;
     public playContractObject: any;
     public account: any;
-    private _network: string;
-    public isOnwer = false;
 
     /**
      *
      * @param {ConnectService} connectService
-     * @param {ContractService} contractService
+     * @param {ContractService} _contractService
      * @param {AccountService} _accountService
      * @param {PlayService} _playService
      * @param {StorageService} _storageService
@@ -129,14 +128,12 @@ export class AppComponent implements OnInit {
     }
 
 
-    private _parseBets(event) {
+    private _parseBetsForPlay(event) {
         let shouldUpdate = false;
         let bet;
         return new Promise((resolve) => {
 
-            if (!_.isUndefined(this.bets[event.address])) {
-                bet = this.bets[event.address][event.args._byte];
-            }
+            bet = this.getBet(event.address, event.args._byte);
 
             if (bet) {
                 if (!bet.isConfirmed) {
@@ -178,8 +175,37 @@ export class AppComponent implements OnInit {
         });
     }
 
-    private _updateBets(event) {
-        this._parseBets(event).then((bets) => {
+    private getBet(address, bet) {
+        if (this.bets[address] != undefined && this.bets[address][bet] != undefined) {
+            return this.bets[address][bet];
+        }
+    }
+
+    private setBetsInvalid(address) {
+        const bets = this.bets[address];
+        if (bets !== undefined) {
+            for (const bet in bets) {
+                bets[bet].isLooser = true;
+                if (!bets[bet].isConfirmed) {
+                    bets[bet].isInvalid = true;
+                }
+            }
+            this._playService.updateBets(this.account.address, this.bets);
+        }
+    }
+
+    private _parseBetsForResult(event) {
+        const bet = this.getBet(event.address, event.args._result);
+        if (!bet) {
+            this.setBetsInvalid(event.address);
+        } else {
+            bet.isWinner = ((bet.bet === event.args._result) === bet.isConfirmed);
+            this._playService.updateBets(this.account.address, this.bets);
+        }
+    }
+
+    private _updateBetsPlay(event) {
+        this._parseBetsForPlay(event).then((bets) => {
             if (bets) {
                 this._playService.updateBets(this.account.address, bets);
             }
@@ -221,17 +247,10 @@ export class AppComponent implements OnInit {
         const _contract = this.contracts[event.address];
 
         switch (event.event) {
-            case 'Open':
-                _contract.contractData.open = event.args._open;
-                if (!event.args._open) {
-                    _contract.contractData.resultBlock = event.blockNumber + 10;
-                }
-                // TODO check the bets to cancel when it's pending and Open is = false
-                break;
             case 'Play':
                 console.log('Play: ', event.args._time, event.args._byte);
                 if (event.args._sender === this.account.address && this.bets) {
-                    this._updateBets(event);
+                    this._updateBetsPlay(event);
                 }
                 break;
             case 'Balance':
@@ -240,22 +259,24 @@ export class AppComponent implements OnInit {
                 _contract.contractData.scale =
                     this.calculateScale(event.args._balance, _contract.contractData.jackpot);
                 break;
+            case 'Open':
+                _contract.contractData.open = event.args._open;
+                if (!event.args._open) {
+                    _contract.contractData.resultBlock = event.blockNumber + 10;
+                }
+                // TODO check the bets to cancel when it's pending and Open is = false
+                break;
             case 'Result':
                 _contract.contractData.result = event.args._result;
-
                 this.getResultHash(_contract).then(resultHash => {
                     _contract.contractData.resultHash = resultHash;
                 });
-                this._updateBets(event);
-                // TODO check the bets
+                this._parseBetsForResult(event);
                 break;
             case 'Withdraw':
                 console.log('Withdraw: ', event.args._amount);
                 break;
             case 'Accumulate':
-                _contract.allEvents.stopWatching();
-                break;
-            case 'Destroy':
                 _contract.allEvents.stopWatching();
                 break;
         }
@@ -285,36 +306,59 @@ export class AppComponent implements OnInit {
         // });
     }
 
-    private _triggerListeners(eventListeners) {
-        eventListeners.forEach(allEvents => {
-            allEvents.watch((error, event) => {
-                this.updateContractAllEvents(event);
-            });
+    private getAllPlayEvents(contract) {
+        window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
+            if (!errorBlock) {
+                this.contracts[contract].Play({_sender: [this.account.address]},
+                    {
+                        fromBlock: this.contracts[contract].contractData.createBlock,
+                        toBlock: resultBlock
+                    }, (error, result) => {
+                        if (!error) {
+                            this._updateBetsPlay(result);
+                        }
+                    });
+            }
         });
     }
 
-    private _setListeners(contracts) {
+    private getAllResultEvents(contract) {
+        window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
+            if (!errorBlock) {
+                this.contracts[contract].Result({_sender: [this.account.address]},
+                    {
+                        fromBlock: this.contracts[contract].contractData.createBlock,
+                        toBlock: resultBlock
+                    }, (error, result) => {
+                        if (!error) {
+                            this._parseBetsForResult(result);
+                        }
+                    });
+            }
+        });
+    };
 
-        const eventListeners = [];
-        const hash = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    private _setListeners() {
+        for (const contract in this.contracts) {
+            if (this.contracts[contract].contractData.resultHash == 0) {
 
-        return new Promise((resolve) => {
-            window.web3.eth.getBlockNumber((e, result) => {
-                const block = result - 1000;
-                for (const contract in contracts) {
-                    if (contracts[contract].contractData.resultHash === hash) {
-                        const allEvents = contracts[contract].allEvents({
-                            fromBlock: block,
-                            toBlock: 'latest'
-                        });
-                        eventListeners.push(allEvents);
-                    }
+                this.contracts[contract].eventsObject = this.contracts[contract].allEvents((error, event) => {
+                    this.updateContractAllEvents(event);
+                });
+
+                if (this.account.address) {
+                    setTimeout(() => {
+                        this.getAllPlayEvents(contract);
+                        this.getAllResultEvents(contract);
+                    }, 5000);
                 }
-                resolve(eventListeners);
-            });
-        });
+            } else {
+                setTimeout(() => {
+                    this.getAllResultEvents(contract);
+                }, 5000);
+            }
+        }
     }
-
 
     /**
      *
@@ -375,14 +419,6 @@ export class AppComponent implements OnInit {
         this._loadBets();
     }
 
-    private setNetwork() {
-        window.web3.version.getNetwork((err, netId) => {
-            if (!err) {
-                this._network = netId;
-            }
-        });
-    }
-
     private listenEventsForNewContract(contract) {
         contract.allEvents().watch((error, event) => {
             this.updateContractAllEvents(event);
@@ -439,9 +475,7 @@ export class AppComponent implements OnInit {
         this._contractService.get().then((contracts) => {
             this.contracts = contracts;
             this._contractService.broadcastContracts(contracts);
-            this._setListeners(contracts).then((listeners) => {
-                this._triggerListeners(listeners);
-            });
+            this._setListeners();
         });
     }
 
@@ -451,11 +485,9 @@ export class AppComponent implements OnInit {
             this._setAccount(account);
             this._loadApp();
             this._loadBets();
-            this.setNetwork();
             this._contractManagerService.setListeners();
             this.setManagerListener();
 
-            // Magically without this nothing works
             this.keepAlive();
         });
 

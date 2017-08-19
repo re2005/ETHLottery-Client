@@ -19,18 +19,21 @@
                 <span [innerHtml]="calculateTotalBets(contractData?.jackpot,contractData?.fee)"></span>
             </div>
         </div>
+
         <div *ngIf="!contractData?.open">
-            <div *ngIf="!contractData?.open && (contractData?.resultHash === '0x0000000000000000000000000000000000000000000000000000000000000000')">
+            <div *ngIf="contractData?.resultHash === '0x0000000000000000000000000000000000000000000000000000000000000000'">
                 <app-block-counter
                         resultBlock="{{contractData?.resultBlock}}"></app-block-counter>
             </div>
-        </div>
 
-        <div class="result"
-             *ngIf="!contractData?.open && (contractData?.resultHash !== '0x0000000000000000000000000000000000000000000000000000000000000000')">
-            Result <span [innerHtml]="contractData?.result"></span>
+            <div *ngIf="contractData?.resultHash != '0x0000000000000000000000000000000000000000000000000000000000000000'"
+                 class="">
+                Result: <span [innerHtml]="contractData?.result"></span>
+                <p class="is-closed">
+                    This lottery is closed
+                </p>
+            </div>
         </div>
     </div>
-
 
 </div>

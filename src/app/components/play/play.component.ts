@@ -153,9 +153,11 @@ export class PlayComponent implements OnInit {
             contractAddress: this.play.address,
             isConfirmed: false,
             isWinner: false,
+            isLooser: false,
             isInvalid: false,
             withdrawHash: false,
-            transactionHash: null
+            transactionHash: null,
+            withdrawConfirmed: null
         };
 
         this.isBetDuplicated(_bet).then(isDuplicated => {

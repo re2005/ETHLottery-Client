@@ -49,7 +49,8 @@ export class ContractManagerService {
      * @param {String} contractAddress
      */
     private _getContractForAddress(contractAddress) {
-        return window.web3.eth.contract(abiManager).at(contractAddress);
+        const manager = window.web3.eth.contract(abiManager);
+        return manager.at(contractAddress);
     }
 
 

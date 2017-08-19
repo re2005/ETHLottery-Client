@@ -24,8 +24,8 @@ export class PlayService {
         return this._play.asObservable();
     }
 
-    broadcastBetsWasChange(): void {
-        this._bets.next();
+    broadcastBetsWasChange(bets): void {
+        this._bets.next(bets);
     }
 
     listenBetsWasChange(): Observable<any> {
@@ -41,7 +41,7 @@ export class PlayService {
             bets[_bet.contractAddress] = bets[_bet.contractAddress] || {};
             bets[_bet.contractAddress][_bet.bet] = _bet;
             this.storageService.set(account, bets);
-            this.broadcastBetsWasChange();
+            this.broadcastBetsWasChange(bets);
         });
     }
 
@@ -51,7 +51,7 @@ export class PlayService {
 
     updateBets(account, bets) {
         this.storageService.set(account, bets).then(() => {
-            // this.broadcastBetsWasChange(bets);
+            this.broadcastBetsWasChange(bets);
         });
     }
 }

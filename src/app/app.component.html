@@ -46,6 +46,7 @@
                             <a [ngClass]="{'is-closed': !contract.contractData?.open}"
                                (click)="play(contract.contractData?.address)"
                                *ngIf="contract.contractData?.name !== '0x'">
+
                                 <h1 title="{{contract.contractData?.jackpotCalculated}}">
                                     <span [innerHtml]="contract.contractData?.jackpotCalculated"></span>
                                 </h1>
@@ -91,7 +92,7 @@
 
                     <ul class="bets">
 
-                        <h3 *ngIf="bets?.length < 1">
+                        <h3 *ngIf="!bets">
                             No Bets yet, :)
                         </h3>
 
@@ -101,7 +102,7 @@
                             <span (click)="withdrawMessage = null">dismiss</span>
                         </div>
 
-                        <div *ngFor="let bet of bets | keyValues:bet">
+                        <div *ngFor="let bet of bets | keyValues:'bet'">
 
                             <app-contract-info contractAddress="{{bet | getKey:'contractAddress'}}"></app-contract-info>
 
@@ -144,9 +145,23 @@
 
                                     <!--BET STATUS CONFIRMED -->
                                     <div class="bets__status--confirmed"
-                                         *ngIf="betValue?.isConfirmed && !betValue?.isWinner">
+                                         *ngIf="betValue?.isConfirmed && !betValue?.isWinner && !betValue?.isLooser"
+                                         [ngClass]="{'is-looser': betValue.isLooser}">
+
                                         <a (click)="openTx(betValue?.transactionHash)">
                                             <p>Confirmed</p>
+                                            <span>
+                                            <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
+                                        </span>
+                                        </a>
+                                    </div>
+
+                                    <!--BET STATUS LOOSER -->
+                                    <div class="bets__status--looser"
+                                         *ngIf="betValue?.isLooser && !betValue?.isInvalid">
+
+                                        <a (click)="openTx(betValue?.transactionHash)">
+                                            <p>Looser bet :(</p>
                                             <span>
                                             <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
                                         </span>
@@ -156,7 +171,6 @@
                                     <!--BET STATUS WINNER :) -->
                                     <div class="bets__status--winner"
                                          *ngIf="betValue?.isWinner">WINNER!
-
 
                                         <div *ngIf="!betValue?.withdrawHash">
                                             <button (click)="withdraw(bet)">withdraw</button>
@@ -186,10 +200,10 @@
     </div>
 </div>
 
-<div class="bubbles">
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
+<!--<div class="bubbles">-->
+<!--<div></div>-->
+<!--<div></div>-->
+<!--<div></div>-->
+<!--<div></div>-->
+<!--<div></div>-->
+<!--</div>-->
