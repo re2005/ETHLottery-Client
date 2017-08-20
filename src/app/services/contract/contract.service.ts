@@ -283,9 +283,12 @@ export class ContractService {
         return new Promise((resolve) => {
             Promise.all(contractsPromise).then(data => {
                 for (let _i = 0; _i < data.length; _i++) {
-                    this._contracts[data[_i].address]['contractData'] = data[_i];
-                    this._contracts[data[_i].address].contractData.scale = this.calculateScale(this._contracts[data[_i].address]['contractData'].balance, this._contracts[data[_i].address]['contractData'].jackpot);
-                    this._contracts[data[_i].address].contractData.jackpotCalculated = this.calculateJackpot(this._contracts[data[_i].address].contractData.jackpot, this._contracts[data[_i].address].contractData.ownerFee);
+                    const _contract = this._contracts[data[_i].address];
+                    _contract['contractData'] = data[_i];
+                    _contract.contractData.scale =
+                        this.calculateScale(_contract.contractData.balance, _contract.contractData.jackpot);
+                    _contract.contractData.jackpotCalculated =
+                        this.calculateJackpot(_contract.contractData.jackpot, _contract.contractData.ownerFee);
                 }
                 resolve(this._contracts);
             });
@@ -308,23 +311,6 @@ export class ContractService {
                 this.getContractsData().then(() => {
                     resolve(this._contracts);
                 });
-            });
-        });
-    }
-
-    /**
-     *
-     * @param {string} address
-     */
-    public register(_contract) {
-        return new Promise(resolve => {
-            _contract.Register((error, result) => {
-                if (!error) {
-                    console.log(result);
-                    resolve(result);
-                } else {
-                    console.error(error);
-                }
             });
         });
     }

@@ -3,6 +3,7 @@ import {PlayService} from '../../services/play/play.service';
 import {AccountService} from '../../services/account/account.service';
 import {EtherscanService} from '../../services/etherscan/etherscan.service';
 import {ContractService} from '../../services/contract/contract.service';
+import {BetsService} from '../../services/bets/bets.service';
 
 @Component({
     selector: 'app-play',
@@ -19,14 +20,18 @@ export class PlayComponent implements OnInit {
     public bet_2 = '$';
 
     /**
+     *
      * @param {PlayService} _playService
      * @param {AccountService} _accountService
+     * @param {EtherscanService} _etherscanService
      * @param {ContractService} _contractService
+     * @param {BetsService} _betsService
      */
     constructor(private _playService: PlayService,
                 private _accountService: AccountService,
                 private _etherscanService: EtherscanService,
-                private _contractService: ContractService) {
+                private _contractService: ContractService,
+                private _betsService: BetsService) {
     }
 
 
@@ -144,21 +149,13 @@ export class PlayComponent implements OnInit {
 
         this.isBetInvalid = false;
 
-        const _bet = {
-            gas: 2000000,
-            bet: '0x' + bet1 + bet2,
-            fee: this.play.contractData.fee,
-            account: this.play.account,
-            timestamp: Date.now(),
-            contractAddress: this.play.address,
-            isConfirmed: false,
-            isWinner: false,
-            isLooser: false,
-            isInvalid: false,
-            withdrawHash: false,
-            transactionHash: null,
-            withdrawConfirmed: null
-        };
+        const _bet = this._betsService.makeBet({
+                bet: '0x' + bet1 + bet2,
+                fee: this.play.contractData.fee,
+                accountAddress: this.play.account,
+                contractAddress: this.play.address
+            }
+        );
 
         this.isBetDuplicated(_bet).then(isDuplicated => {
             if (isDuplicated) {

@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {StorageService} from '../storage/storage.service';
 import {Subject} from 'rxjs/Subject';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {StorageService} from '../storage/storage.service';
 
 @Injectable()
 export class PlayService {

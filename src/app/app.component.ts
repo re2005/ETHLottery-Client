@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {Component, OnInit} from '@angular/core';
 import {PlayService} from './services/play/play.service';
+import {BetsService} from './services/bets/bets.service';
 import {StorageService} from './services/storage/storage.service';
 import {ConnectService} from './services/connect/connect.service';
 import {AccountService} from './services/account/account.service';
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit {
 
     public withdrawMessage: string;
     public bets: Object;
+    public betsRestored: Array<any>;
     public isWeb3Connected: any;
     public retryConnect = 0;
     public contracts: any;
@@ -33,6 +35,7 @@ export class AppComponent implements OnInit {
      * @param {StorageService} _storageService
      * @param {EtherscanService} _etherscanService
      * @param {ContractManagerService} _contractManagerService
+     * @param {BetsService} _betsService
      */
     constructor(private connectService: ConnectService,
                 private _contractService: ContractService,
@@ -40,7 +43,8 @@ export class AppComponent implements OnInit {
                 private _playService: PlayService,
                 private _storageService: StorageService,
                 private _etherscanService: EtherscanService,
-                private _contractManagerService: ContractManagerService) {
+                private _contractManagerService: ContractManagerService,
+                private _betsService: BetsService) {
     }
 
     public howToPlay() {
@@ -139,35 +143,62 @@ export class AppComponent implements OnInit {
         return this.contracts[address];
     }
 
+    private restoreBetsFromEvents(event) {
+        this.betsRestored = this.betsRestored || [];
+        const _bet = this._betsService.makeRestoredBet({
+                bet: event.args._byte,
+                accountAddress: event.args._sender,
+                contractAddress: event.address
+            }
+        );
+        this.betsRestored.push(_bet);
+    }
+
     private _updateBetsForPlay(event) {
+        if (!this.bets) {
+            return
+        }
         const bet = this.getBet(event.address, event.args._byte);
         if (bet) {
             if (!bet.isConfirmed) {
                 bet.isConfirmed = bet.transactionHash === event.transactionHash;
                 this._playService.updateBets(this.account.address, this.bets);
                 this._updateBalance(this.account.address);
+                const audio = new Audio('../assets/audio/play-success.mp3');
+                audio.play();
             }
+        } else {
+            this.restoreBetsFromEvents(event);
         }
     }
 
     private getBet(address, bet) {
-        if (this.account.address) {
+        if (this.account.address && this.bets) {
             if (!_.isUndefined(this.bets[address]) && !_.isUndefined(this.bets[address][bet])) {
                 return this.bets[address][bet];
             }
         }
     }
 
+    private getBets(address) {
+        if (this.account.address && this.bets) {
+            return this.bets[address];
+        }
+    }
+
     private setBetsInvalid(address) {
+        if (!this.bets) return;
         const bets = this.bets[address];
         if (bets !== undefined) {
             for (const bet in bets) {
-                bets[bet].isLooser = true;
-                if (!bets[bet].isConfirmed) {
-                    bets[bet].isInvalid = true;
+                if (!bets[bet].isLooser && !bets[bet].isInvalid) {
+                    bets[bet].isLooser = true;
+                    if (!bets[bet].isConfirmed) {
+                        bets[bet].isInvalid = true;
+                    }
+                    this._playService.updateBets(this.account.address, this.bets);
                 }
             }
-            this._playService.updateBets(this.account.address, this.bets);
         }
     }
 
@@ -176,8 +207,26 @@ export class AppComponent implements OnInit {
         if (!bet) {
             this.setBetsInvalid(event.address);
         } else {
-            bet.isWinner = ((bet.bet === event.args._result) === bet.isConfirmed);
-            this._playService.updateBets(this.account.address, this.bets);
+            if ((bet.bet === event.args._result) === bet.isConfirmed && !bet.isWinner) {
+                bet.isWinner = true;
+                const audio = new Audio('../assets/audio/winner.mp3');
+                audio.play();
+                this._playService.updateBets(this.account.address, this.bets);
+            }
+        }
+    }
+
+
+    private _parseBetsForWithdraw(event) {
+        const bets = this.getBets(event.address);
+        if (bets) {
+            for (const bet in bets) {
+                if (bets[bet].isWinner) {
+                    bets[bet].withdrawConfirmed = true;
+                    this._updateBalance(this.account.address);
+                    this._playService.updateBets(this.account.address, this.bets);
+                }
+            }
         }
     }
 
@@ -217,7 +266,6 @@ export class AppComponent implements OnInit {
 
         switch (event.event) {
             case 'Play':
-                console.log('Play: ', event.args._time, event.args._byte);
                 if (event.args._sender === this.account.address && this.bets) {
                     this._updateBetsForPlay(event);
                 }
@@ -233,8 +281,6 @@ export class AppComponent implements OnInit {
                 if (!event.args._open) {
                     _contract.contractData.resultBlock = event.blockNumber + 10;
                 }
-                // TODO check the bets to cancel when it's pending and Open is = false
-                // For now it's been done on result event as well
                 break;
             case 'Result':
                 _contract.contractData.result = event.args._result;
@@ -244,10 +290,10 @@ export class AppComponent implements OnInit {
                 this._parseBetsForResult(event);
                 break;
             case 'Withdraw':
-                console.log('Withdraw: ', event.args._amount);
+                this._parseBetsForWithdraw(event);
                 break;
             case 'Accumulate':
-                _contract.allEvents.stopWatching();
+                _contract.eventsObject.stopWatching();
                 break;
         }
     }

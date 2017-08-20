@@ -26,14 +26,14 @@
                         resultBlock="{{contractData?.resultBlock}}"></app-block-counter>
             </div>
 
-            <div *ngIf="contractData?.resultHash != '0x0000000000000000000000000000000000000000000000000000000000000000'"
-                 class="">
+            <div *ngIf="contractData?.resultHash != '0x0000000000000000000000000000000000000000000000000000000000000000'">
                 Result: <span [innerHtml]="contractData?.result"></span>
                 <p class="is-closed">
                     This lottery is closed
                 </p>
+                <span (click)="removeBets(address)"
+                      class="remove-bet">remove bets</span>
             </div>
         </div>
     </div>
-
 </div>

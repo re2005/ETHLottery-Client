@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Observable';
 export class ContractManagerService {
 
     private _event: Subject<any> = new Subject<any>();
-    private managerAddress = '0xbf6608b9a5eb9095e5e4ff453e01e736448ca0b6';
+    private managerAddress = '0x46C050208F327d7c1d4F624DD94900e475a6c01d';
     private managerData: any;
 
     constructor() {

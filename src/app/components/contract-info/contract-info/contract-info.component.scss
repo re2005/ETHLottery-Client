@@ -11,6 +11,20 @@
     display: inline;
 }
 
+.remove-bet {
+    font-size: .7rem;
+    background: $color-gray-04;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: $color-red;
+
+    &:hover {
+        background: $color-red;
+        color: $color-white;
+    }
+}
+
 .bets-current {
     opacity: .6;
 }

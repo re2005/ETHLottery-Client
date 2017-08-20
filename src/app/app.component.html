@@ -108,95 +108,115 @@
 
                         <div *ngIf="withdrawMessage"
                              class="bets__withdraw-error-message">
-                            <h3 [innerHtml]="withdrawMessage"></h3>
                             <span (click)="withdrawMessage = null">dismiss</span>
+                            <h3 [innerHtml]="withdrawMessage"></h3>
                         </div>
 
                         <div *ngFor="let bet of bets | keyValues:'bet'">
 
                             <app-contract-info contractAddress="{{bet | getKey:'contractAddress'}}"></app-contract-info>
 
-                            <li *ngFor="let betValue of bet | keyValues"
-                                [ngClass]="{'is-winner': betValue?.isWinner}">
+                            <div class="bet-list">
 
-                                <!--BET-->
-                                <div class="bets--bet">
-                                    <span [innerHtml]="betValue?.bet" class="bets__bet"></span>
-                                    <span [innerHtml]="betValue?.timestamp | date: 'HH:mm d/MM'"
-                                          class="bets__date"></span>
-                                </div>
-                                <!--BET-->
+                                <li *ngFor="let betValue of bet | keyValues"
+                                    [ngClass]="{'is-winner': betValue?.isWinner}">
 
-
-                                <div class="bets__status">
-
-                                    <!--BET STATUS ERROR -->
-                                    <div class="bets__status--error"
-                                         *ngIf="betValue?.isInvalid && !betValue?.isConfirmed">
-                                        <a href="https://ropsten.etherscan.io/tx/{{betValue?.transactionHash}}"
-                                           target="_blank">
-                                            Cancelled
-                                        </a>
+                                    <!--BET-->
+                                    <div class="bets--bet">
+                                        <span [innerHtml]="betValue?.bet" class="bets__bet"></span>
+                                        <span [innerHtml]="betValue?.timestamp | date: 'HH:mm d/MM'"
+                                              class="bets__date"></span>
                                     </div>
+                                    <!--BET-->
 
-                                    <!--BET STATUS PENDING -->
-                                    <div class="bets__status--pending"
-                                         *ngIf="!betValue?.isConfirmed && !betValue?.isInvalid">
-                                        <a (click)="openAddress(betValue?.contractAddress)">
-                                            Pending
-                                        </a>
-                                        <a href="https://ropsten.etherscan.io/tx/{{betValue?.transactionHash}}"
-                                           target="_blank">
+
+                                    <div class="bets__status">
+
+                                        <!--BET STATUS ERROR -->
+                                        <div class="bets__status--error"
+                                             *ngIf="betValue?.isInvalid && !betValue?.isConfirmed">
+                                            <a href="https://ropsten.etherscan.io/tx/{{betValue?.transactionHash}}"
+                                               target="_blank">
+                                                Cancelled
+                                            </a>
+                                        </div>
+
+                                        <!--BET STATUS PENDING -->
+                                        <div class="bets__status--pending"
+                                             *ngIf="!betValue?.isConfirmed && !betValue?.isInvalid">
+                                            <a (click)="openAddress(betValue?.contractAddress)">
+                                                Pending
+                                            </a>
+                                            <a href="https://ropsten.etherscan.io/tx/{{betValue?.transactionHash}}"
+                                               target="_blank">
                                         <span class="bets__status--withdraw">
                                             {{betValue?.transactionHash}}
                                         </span>
-                                        </a>
-                                    </div>
-
-                                    <!--BET STATUS CONFIRMED -->
-                                    <div class="bets__status--confirmed"
-                                         *ngIf="betValue?.isConfirmed && !betValue?.isWinner && !betValue?.isLooser"
-                                         [ngClass]="{'is-looser': betValue.isLooser}">
-
-                                        <a (click)="openTx(betValue?.transactionHash)">
-                                            <p>Confirmed</p>
-                                            <span>
-                                            <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
-                                        </span>
-                                        </a>
-                                    </div>
-
-                                    <!--BET STATUS LOOSER -->
-                                    <div class="bets__status--looser"
-                                         *ngIf="betValue?.isLooser && !betValue?.isInvalid">
-
-                                        <a (click)="openTx(betValue?.transactionHash)">
-                                            <p>Looser bet :(</p>
-                                            <span>
-                                            <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
-                                        </span>
-                                        </a>
-                                    </div>
-
-                                    <!--BET STATUS WINNER :) -->
-                                    <div class="bets__status--winner"
-                                         *ngIf="betValue?.isWinner">WINNER!
-
-                                        <div *ngIf="!betValue?.withdrawHash">
-                                            <button (click)="withdraw(betValue)">withdraw</button>
-                                        </div>
-                                        <div *ngIf="betValue?.withdrawHash">
-                                            <a (click)="openTx(betValue?.transactionHash)"
-                                               [innerHtml]="betValue?.withdrawHash"
-                                               class="bets__status--withdraw">
                                             </a>
                                         </div>
+
+                                        <!--BET STATUS CONFIRMED -->
+                                        <div class="bets__status--confirmed"
+                                             *ngIf="betValue?.isConfirmed && !betValue?.isWinner && !betValue?.isLooser"
+                                             [ngClass]="{'is-looser': betValue.isLooser}">
+
+                                            <a (click)="openTx(betValue?.transactionHash)">
+                                                <p>Confirmed</p>
+                                                <span>
+                                            <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
+                                        </span>
+                                            </a>
+                                        </div>
+
+                                        <!--BET STATUS LOOSER -->
+                                        <div class="bets__status--looser"
+                                             *ngIf="betValue?.isLooser && !betValue?.isInvalid && !betValue?.isWinner">
+
+                                            <a (click)="openTx(betValue?.transactionHash)">
+                                                <p>Looser bet :(</p>
+                                                <span>
+                                            <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
+                                        </span>
+                                            </a>
+                                        </div>
+
+                                        <!--BET STATUS WINNER :) -->
+                                        <div class="bets__status--winner"
+                                             *ngIf="betValue?.isWinner">
+                                            <span *ngIf="betValue.withdrawConfirmed">
+                                                ✓
+                                            </span> WINNER!
+                                            <div *ngIf="!betValue?.withdrawHash">
+                                                <button (click)="withdraw(betValue)">withdraw</button>
+                                            </div>
+                                            <div *ngIf="betValue?.withdrawHash">
+                                                <a (click)="openTx(betValue?.transactionHash)"
+                                                   [innerHtml]="betValue?.withdrawHash"
+                                                   class="bets__status--withdraw">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
+
+                            </div>
 
                         </div>
                     </ul>
+
+                    <div *ngIf="betsRestored"
+                         class="removed-bets">
+                        <h2>
+                            Bets you have removed
+                        </h2>
+                        <ul>
+                            <li *ngFor="let bet of betsRestored">
+                                <app-lottery-icon contractAddress="{{bet.contractAddress}}"
+                                                  class="lottery-icon"></app-lottery-icon>
+                                {{bet.bet}}
+                            </li>
+                        </ul>
+                    </div>
                 </aside>
 
                 <div [ngClass]="{'is-play':isPlay}"

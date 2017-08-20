@@ -166,3 +166,24 @@ header {
         margin: 0;
     }
 }
+
+.removed-bets {
+
+    margin-top: 20px;
+
+    h2 {
+        margin-bottom: 10px;
+        font-size: .8rem;
+    }
+
+    li {
+        list-style: none;
+        display: block;
+        margin: 10px 0;
+    }
+
+    .lottery-icon {
+        width: 24px;
+        display: inline-block;
+    }
+}

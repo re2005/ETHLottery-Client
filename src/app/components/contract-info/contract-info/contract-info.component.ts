@@ -2,6 +2,7 @@ import {Component, OnInit, Input, OnChanges} from '@angular/core';
 import {ContractService} from '../../../services/contract/contract.service';
 import {PlayService} from '../../../services/play/play.service';
 
+
 @Component({
     selector: 'app-contract-info',
     templateUrl: './contract-info.component.html',
@@ -15,6 +16,20 @@ export class ContractInfoComponent implements OnInit {
 
     constructor(private _contractService: ContractService,
                 private _playService: PlayService) {
+    }
+
+    public removeBets(address) {
+        const confirmation = prompt('Are you sure?\nThis will remove all bets from this lottery.\nTo confirm please write "delete":', '');
+        if (confirmation === 'delete') {
+            window.web3.eth.getAccounts((error, accounts: any) => {
+                if (!error) {
+                    this._playService.getBets(accounts[0]).then(bets => {
+                        delete bets[address];
+                        this._playService.updateBets(accounts[0], bets);
+                    });
+                }
+            });
+        }
     }
 
     public calculateCurrentBets(balance, fee) {
@@ -46,6 +61,4 @@ export class ContractInfoComponent implements OnInit {
             }
         }
     }
-
-
 }
