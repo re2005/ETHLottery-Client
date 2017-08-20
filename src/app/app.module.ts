@@ -5,6 +5,7 @@ import {GetKeyPipe} from './pipes/get-key.pipe';
 import {KeyValuesPipe} from './pipes/key-values.pipe';
 import {BrowserModule} from '@angular/platform-browser';
 import {PlayService} from './services/play/play.service';
+import {BetsService} from './services/bets/bets.service';
 import {PlayComponent} from './components/play/play.component';
 import {ConnectService} from './services/connect/connect.service';
 import {StorageService} from './services/storage/storage.service';
@@ -42,7 +43,8 @@ import {ContractInfoComponent} from './components/contract-info/contract-info/co
         AccountService,
         PlayService,
         IconGeneratorService,
-        EtherscanService
+        EtherscanService,
+        BetsService
     ],
     bootstrap: [AppComponent]
 })
