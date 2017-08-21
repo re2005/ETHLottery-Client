@@ -1,20 +1,16 @@
 import {Injectable} from '@angular/core';
+import {ConnectService} from '../connect/connect.service';
 
 @Injectable()
 export class EtherscanService {
 
+    private network: string;
 
-    constructor() {
-    }
-
-    private getNetwork() {
-        return new Promise((resolve) => {
-            window.web3.version.getNetwork((err, netId) => {
-                if (!err) {
-                    resolve(netId);
-                }
-            });
-        });
+    /**
+     *
+     * @param {ConnectService} _connectService
+     */
+    constructor(private _connectService: ConnectService) {
     }
 
     /**
@@ -25,9 +21,8 @@ export class EtherscanService {
         if (!tx) {
             return;
         }
-        this.getNetwork().then(network => {
-            window.open(this.makeEtherScanUrl(network) + 'tx/' + tx, '_blank')
-        });
+        const network = this._connectService.getNetworkIdSYnc();
+        window.open(this.makeEtherScanUrl(network) + 'tx/' + tx, '_blank')
     }
 
     /**
@@ -38,9 +33,8 @@ export class EtherscanService {
         if (!address) {
             return;
         }
-        this.getNetwork().then(network => {
-            window.open(this.makeEtherScanUrl(network) + 'address/' + address, '_blank')
-        });
+        const network = this._connectService.getNetworkIdSYnc();
+        window.open(this.makeEtherScanUrl(network) + 'address/' + address, '_blank')
     }
 
     /**

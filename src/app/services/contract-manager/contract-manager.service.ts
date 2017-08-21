@@ -2,15 +2,23 @@ import {Injectable} from '@angular/core';
 import {abiManager} from './abi-manager';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import {ConnectService} from '../connect/connect.service';
 
 @Injectable()
 export class ContractManagerService {
 
     private _event: Subject<any> = new Subject<any>();
-    private managerAddress = '0x32B28c99c3afB1fBb56a32074ac92505bbBE0a5B';
+    private managerAddress = {
+        test: '0x32B28c99c3afB1fBb56a32074ac92505bbBE0a5B',
+        main: '0x32B28c99c3afB1fBb56a32074ac92505bbBE0a5B'
+    };
     private managerData: any;
 
-    constructor() {
+    /**
+     *
+     * @param {ConnectService} _connectService
+     */
+    constructor(private _connectService: ConnectService) {
     }
 
     private broadcastEvent(event): void {
@@ -21,7 +29,7 @@ export class ContractManagerService {
         return this._event.asObservable();
     }
 
-    public setListeners() {
+    private setListeners() {
         this.managerData.Register().watch((error, event) => {
             if (!error) {
                 this.broadcastEvent(event);
@@ -29,19 +37,22 @@ export class ContractManagerService {
         });
     }
 
-    public getOwner() {
-        if (!this.managerData) {
-            this.makeManagerObject();
+    private makeManagerAddress(network) {
+        if (network === '3') {
+            return this.managerAddress.test;
+        } else if (network === '1') {
+            return this.managerAddress.main;
         }
-        return new Promise(resolve => {
-            this.managerData.owner((error, owner) => {
-                resolve(owner);
-            });
-        });
     }
 
     private makeManagerObject() {
-        this.managerData = this._getContractForAddress(this.managerAddress);
+        return new Promise(resolve => {
+            this._connectService.getNetworkId().then(network => {
+                const address = this.makeManagerAddress(network);
+                this.managerData = this._getContractForAddress(address);
+                resolve(this.managerData);
+            });
+        })
     }
 
     /**
@@ -54,9 +65,9 @@ export class ContractManagerService {
     }
 
 
-    private getLotteries() {
+    private getLotteries(manager) {
         return new Promise(resolve => {
-            this.managerData.lotteries((error, lotteries) => {
+            manager.lotteries((error, lotteries) => {
                 resolve(lotteries);
             });
         });
@@ -68,9 +79,11 @@ export class ContractManagerService {
      */
     private generateContractsList() {
         return new Promise(resolve => {
-            this.makeManagerObject();
-            this.getLotteries().then(lotteries => {
-                resolve(lotteries);
+            this.makeManagerObject().then(manager => {
+                this.getLotteries(manager).then(lotteries => {
+                    this.setListeners();
+                    resolve(lotteries);
+                });
             });
         });
     }

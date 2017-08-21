@@ -490,7 +490,6 @@ export class AppComponent implements OnInit {
             this._setAccount(account);
             this._loadApp();
             this._loadBets();
-            this._contractManagerService.setListeners();
             this.setManagerListener();
 
             this.keepAlive();
