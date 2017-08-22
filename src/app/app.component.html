@@ -124,7 +124,7 @@
                                     <!--BET-->
                                     <div class="bets--bet">
                                         <span [innerHtml]="betValue?.bet" class="bets__bet"></span>
-                                        <span [innerHtml]="betValue?.timestamp | date: 'HH:mm d/MM'"
+                                        <span [innerHtml]="betValue?.timestamp | date: 'HH:mm:s d/MM'"
                                               class="bets__date"></span>
                                     </div>
                                     <!--BET-->
@@ -208,12 +208,18 @@
                          class="removed-bets">
                         <h2>
                             Bets you have removed
+                            <button (click)="removedBets = !removedBets">
+                                <span [hidden]="removedBets">hide</span>
+                                <span [hidden]="!removedBets">show</span>
+                            </button>
                         </h2>
-                        <ul>
+                        <ul [hidden]="removedBets">
                             <li *ngFor="let bet of betsRestored">
-                                <app-lottery-icon contractAddress="{{bet.contractAddress}}"
-                                                  class="lottery-icon"></app-lottery-icon>
-                                {{bet.bet}}
+                                <a (click)="openAddress(bet.contractAddress)">
+                                    <app-lottery-icon contractAddress="{{bet.contractAddress}}"
+                                                      class="lottery-icon"></app-lottery-icon>
+                                    {{bet.bet}}
+                                </a>
                             </li>
                         </ul>
                     </div>

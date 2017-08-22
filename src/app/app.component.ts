@@ -152,6 +152,7 @@ export class AppComponent implements OnInit {
             }
         );
         this.betsRestored.push(_bet);
+        debugger
     }
 
     private _updateBetsForPlay(event) {
