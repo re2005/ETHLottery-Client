@@ -21,12 +21,12 @@
         </div>
 
         <div *ngIf="!contractData?.open">
-            <div *ngIf="contractData?.resultHash === '0x0000000000000000000000000000000000000000000000000000000000000000'">
+            <div *ngIf="contractData?.resultHash == 0">
                 <app-block-counter
                         resultBlock="{{contractData?.resultBlock}}"></app-block-counter>
             </div>
 
-            <div *ngIf="contractData?.resultHash != '0x0000000000000000000000000000000000000000000000000000000000000000'">
+            <div *ngIf="contractData?.resultHash != 0">
                 Result: <span [innerHtml]="contractData?.result"></span>
                 <p class="is-closed">
                     This lottery is closed
