@@ -64,11 +64,11 @@
                                 </div>
 
                                 <div class="result"
-                                     *ngIf="!contract.contractData?.open && (contract.contractData?.resultHash !== '0x0000000000000000000000000000000000000000000000000000000000000000')">
+                                     *ngIf="!contract.contractData?.open && (contract.contractData?.resultHash != 0)">
                                     result <span [innerHtml]="contract.contractData?.result"></span>
                                 </div>
 
-                                <div *ngIf="!contract.contractData?.open && (contract.contractData?.resultHash === '0x0000000000000000000000000000000000000000000000000000000000000000')">
+                                <div *ngIf="!contract.contractData?.open && (contract.contractData?.resultHash == 0)">
                                     <app-block-counter
                                             resultBlock="{{contract.contractData?.resultBlock}}"></app-block-counter>
                                 </div>
@@ -101,7 +101,7 @@
                             <br><br>
                             <p>Check our contract code</p>
                             <br>
-                            <button (click)="openAddress('0xbf6608b9a5eb9095e5e4ff453e01e736448ca0b6')">
+                            <button (click)="openAddress('0x0FD692E0D7629f169230c513a52934b70f1911bc')">
                                 Open EtherScan
                             </button>
                         </div>
