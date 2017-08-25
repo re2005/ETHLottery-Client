@@ -118,12 +118,51 @@ export class AppComponent implements OnInit {
         delete this.playContractObject;
     }
 
+    public uplodaBets(event) {
+
+        const that = this;
+        const file = event.target.files[0];
+        const r = new FileReader();
+        r.onloadend = function (event) {
+            const data: any = event.target;
+            window.localStorage.setItem(that.account.address, data.result);
+            that._onBetsWasChanged();
+            // that._playService.updateBets(that.account.address, data.result)
+        };
+        r.readAsBinaryString(file);
+        // var files = event.srcElement.files;
+        // console.log(files);
+
+        // let fileList: FileList = event.srcElement.files;
+        // let file: File = fileList[0];
+        // let myReader: FileReader = new FileReader();
+        //
+        // debugger
+        // let formData: FormData = new FormData();
+        // formData.append('uploadFile', file, file.name);
+        // this._storageService.set('re', file);
+    }
+
+
     /**
      *
      * @param address
      */
     public openAddress(address) {
         this._etherscanService.openAddress(address);
+    }
+
+    private makeDownload(text, name, type) {
+        const a = document.createElement('a');
+        const file = new Blob([text], {type: type});
+        a.href = URL.createObjectURL(file);
+        a.download = name;
+        a.click();
+    }
+
+    public downloadBets() {
+        const bets = window.localStorage.getItem(this.account.address);
+        this.makeDownload(bets, this.account.address + '_bets.json', 'application/json');
     }
 
     public makeUrlForAddress(address) {

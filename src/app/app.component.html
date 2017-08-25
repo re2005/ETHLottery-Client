@@ -34,7 +34,7 @@
                     blockchain lottery
                 </h1>
                 <h2>
-                    If no winner the lottery will accumulate!
+                    If there is no winner the lottery will accumulate!
                 </h2>
             </div>
 
@@ -93,14 +93,24 @@
                            target="_blank">{{account?.address}}</a>
                     </div>
 
-                    <h2 class="sidebar__title">My bets</h2>
+                    <h2 class="sidebar__title">My bets
+                        <span *ngIf="bets"
+                              (click)="downloadBets()"
+                              class="download-bets">backup</span></h2>
 
                     <ul class="bets">
 
-                        <div *ngIf="!bets" class="no-bets">
+                        <div *ngIf="!bets"
+                             class="no-bets">
                             <h3>No Bets yet, :)</h3>
                             <br><br>
-                            <h4>If you are curious about how it works we have created a page with some information</h4>
+                            If you have a backup from your bets you can updaload it here:
+                            <input type="file"
+                                   name="bets"
+                                   accept="application/json"
+                                   (change)="uplodaBets($event)">
+                            <br><br>
+                            <h4>Are curious about how it works?</h4>
                             <br><br>
                             <p>Check our contract code</p>
                             <br>
@@ -248,10 +258,10 @@
     </div>
 </div>
 
-<!--<div class="bubbles">-->
-<!--<div></div>-->
-<!--<div></div>-->
-<!--<div></div>-->
-<!--<div></div>-->
-<!--<div></div>-->
-<!--</div>-->
+<div class="bubbles">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>

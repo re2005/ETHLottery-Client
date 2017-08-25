@@ -6,6 +6,10 @@ export class StorageService {
     constructor() {
     }
 
+    getSync(key: string): Promise<any> {
+        return JSON.parse(localStorage.getItem(key));
+    }
+
     get(key: string): Promise<any> {
         return new Promise((resolve, reject) => {
             resolve(JSON.parse(localStorage.getItem(key)));

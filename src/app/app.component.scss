@@ -203,3 +203,12 @@ header {
         display: inline-block;
     }
 }
+
+.download-bets {
+    font-size: .7rem;
+    float: right;
+    cursor: pointer;
+    &:hover {
+        text-decoration: underline;
+    }
+}
