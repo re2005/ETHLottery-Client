@@ -8,9 +8,10 @@ import {ConnectService} from '../connect/connect.service';
 export class ContractManagerService {
 
     private _event: Subject<any> = new Subject<any>();
+
     private managerAddress = {
-        test: '0x32B28c99c3afB1fBb56a32074ac92505bbBE0a5B',
-        main: '0x32B28c99c3afB1fBb56a32074ac92505bbBE0a5B'
+        test: '0xB1FFaF41590778017073DF4a891E71B23795A0B4',
+        main: '0x5f90595055e61755d71c04612e9eceeac34fb789'
     };
     private managerData: any;
 
@@ -37,6 +38,7 @@ export class ContractManagerService {
         });
     }
 
+
     private makeManagerAddress(network) {
         if (network === '3') {
             return this.managerAddress.test;
@@ -46,13 +48,8 @@ export class ContractManagerService {
     }
 
     private makeManagerObject() {
-        return new Promise(resolve => {
-            this._connectService.getNetworkId().then(network => {
-                const address = this.makeManagerAddress(network);
-                this.managerData = this._getContractForAddress(address);
-                resolve(this.managerData);
-            });
-        })
+        this.managerData = this._getContractForAddress(this.managerAddress.main);
+        return this.managerData;
     }
 
     /**
@@ -79,11 +76,10 @@ export class ContractManagerService {
      */
     private generateContractsList() {
         return new Promise(resolve => {
-            this.makeManagerObject().then(manager => {
-                this.getLotteries(manager).then(lotteries => {
-                    this.setListeners();
-                    resolve(lotteries);
-                });
+            const manager = this.makeManagerObject();
+            this.getLotteries(manager).then(lotteries => {
+                this.setListeners();
+                resolve(lotteries);
             });
         });
     }

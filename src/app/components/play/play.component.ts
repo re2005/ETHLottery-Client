@@ -35,8 +35,8 @@ export class PlayComponent implements OnInit {
     }
 
 
-    public openAddress(address) {
-        this._etherscanService.openAddress(address);
+    public makeUrlForAddress(address) {
+        return this._etherscanService.makeUrlForAddress(address);
     }
 
     /**

@@ -1,16 +1,38 @@
 import {Injectable} from '@angular/core';
+
 import {ConnectService} from '../connect/connect.service';
 
 @Injectable()
 export class EtherscanService {
 
-    private network: string;
 
     /**
      *
      * @param {ConnectService} _connectService
      */
     constructor(private _connectService: ConnectService) {
+    }
+
+    private getNetwork() {
+        return new Promise((resolve) => {
+            window.web3.version.getNetwork((err, netId) => {
+                if (!err) {
+                    resolve(netId);
+                }
+            });
+        });
+    }
+
+    public makeUrlForAddress(address) {
+        const network = this._connectService.getNetworkIdSync();
+        const url = this.makeEtherScanUrl(network) + 'address/' + address;
+        return url;
+    }
+
+    public makeUrlForTx(address) {
+        const network = this._connectService.getNetworkIdSync();
+        const url = this.makeEtherScanUrl(network) + 'tx/' + address;
+        return url;
     }
 
     /**
@@ -21,8 +43,9 @@ export class EtherscanService {
         if (!tx) {
             return;
         }
-        const network = this._connectService.getNetworkIdSYnc();
-        window.open(this.makeEtherScanUrl(network) + 'tx/' + tx, '_blank')
+        this.getNetwork().then(network => {
+            window.open(this.makeEtherScanUrl(network) + 'tx/' + tx);
+        });
     }
 
     /**
@@ -33,8 +56,9 @@ export class EtherscanService {
         if (!address) {
             return;
         }
-        const network = this._connectService.getNetworkIdSYnc();
-        window.open(this.makeEtherScanUrl(network) + 'address/' + address, '_blank')
+        this.getNetwork().then(network => {
+            window.open(this.makeEtherScanUrl(network) + 'address/' + address, '_blank');
+        });
     }
 
     /**
@@ -42,7 +66,7 @@ export class EtherscanService {
      * @param network
      * @return {string}
      */
-    private makeEtherScanUrl(network) {
+    public makeEtherScanUrl(network) {
         const etherScanUrl = '//etherscan.io/';
         const etherScanTestNetUrl = '//ropsten.etherscan.io/';
         if (network === '3') {

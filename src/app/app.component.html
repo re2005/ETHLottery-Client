@@ -86,7 +86,7 @@
                             Account balance
                             <span>{{account?.balance/1000000000000000000}}</span>
                         </div>
-                        <a href="//ropsten.etherscan.io/address/{{account?.address}}"
+                        <a href="{{makeUrlForAddress(account?.address)}}"
                            target="_blank">{{account?.address}}</a>
                     </div>
 
@@ -101,9 +101,10 @@
                             <br><br>
                             <p>Check our contract code</p>
                             <br>
-                            <button (click)="openAddress('0x0FD692E0D7629f169230c513a52934b70f1911bc')">
+                            <a href="{{makeUrlForAddress('0x5f90595055e61755d71c04612e9eceeac34fb789')}}"
+                               target="_blank">
                                 Open EtherScan
-                            </button>
+                            </a>
                         </div>
 
                         <div *ngIf="withdrawMessage"
@@ -144,14 +145,17 @@
                                         <!--BET STATUS PENDING -->
                                         <div class="bets__status--pending"
                                              *ngIf="!betValue?.isConfirmed && !betValue?.isInvalid">
-                                            <a (click)="openAddress(betValue?.contractAddress)">
+
+                                            <a href="{{makeUrlForAddress(betValue?.contractAddress)}}"
+                                               target="_blank">
                                                 Pending
                                             </a>
-                                            <a href="https://ropsten.etherscan.io/tx/{{betValue?.transactionHash}}"
+
+                                            <a href="{{makeUrlForTx(betValue?.transactionHash)}}"
                                                target="_blank">
-                                        <span class="bets__status--withdraw">
-                                            {{betValue?.transactionHash}}
-                                        </span>
+                                                <span class="bets__status--withdraw">
+                                                {{betValue?.transactionHash}}
+                                                </span>
                                             </a>
                                         </div>
 
@@ -160,7 +164,8 @@
                                              *ngIf="betValue?.isConfirmed && !betValue?.isWinner && !betValue?.isLooser"
                                              [ngClass]="{'is-looser': betValue.isLooser}">
 
-                                            <a (click)="openTx(betValue?.transactionHash)">
+                                            <a href="{{makeUrlForTx(betValue?.transactionHash)}}"
+                                               target="_blank">
                                                 <p>Confirmed</p>
                                                 <span>
                                             <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
@@ -172,7 +177,8 @@
                                         <div class="bets__status--looser"
                                              *ngIf="betValue?.isLooser && !betValue?.isInvalid && !betValue?.isWinner">
 
-                                            <a (click)="openTx(betValue?.transactionHash)">
+                                            <a href="{{makeUrlForTx(betValue?.transactionHash)}}"
+                                               target="_blank">
                                                 <p>Looser bet :(</p>
                                                 <span>
                                             <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
@@ -190,7 +196,8 @@
                                                 <button (click)="withdraw(betValue)">withdraw</button>
                                             </div>
                                             <div *ngIf="betValue?.withdrawHash">
-                                                <a (click)="openTx(betValue?.transactionHash)"
+                                                <a href="{{makeUrlForTx(betValue?.transactionHash)}}"
+                                                   target="_blank"
                                                    [innerHtml]="betValue?.withdrawHash"
                                                    class="bets__status--withdraw">
                                                 </a>
@@ -198,9 +205,7 @@
                                         </div>
                                     </div>
                                 </li>
-
                             </div>
-
                         </div>
                     </ul>
 
@@ -215,7 +220,8 @@
                         </h2>
                         <ul [hidden]="removedBets">
                             <li *ngFor="let bet of betsRestored">
-                                <a (click)="openAddress(bet.contractAddress)">
+                                <a href="{{makeUrlForAddress(bet.contractAddress)}}"
+                                   target="_blank">
                                     <app-lottery-icon contractAddress="{{bet.contractAddress}}"
                                                       class="lottery-icon"></app-lottery-icon>
                                     {{bet.bet}}

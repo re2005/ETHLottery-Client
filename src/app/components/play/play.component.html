@@ -8,14 +8,15 @@
     <div class="play-content">
 
         <h3 [innerHtml]="play?.contractData.jackpotCalculated"
-        class="jackpot"></h3>
+            class="jackpot"></h3>
 
-        <div (click)="openAddress(play.address)"
-             *ngIf="play"
-             title="Check this contract on Etherscan"
-             class="link">
+        <a href="{{makeUrlForAddress(play.address)}}"
+           target="_blank"
+           *ngIf="play"
+           title="Check this contract on Etherscan"
+           class="link">
             <app-lottery-icon contractAddress="{{play.address}}"></app-lottery-icon>
-        </div>
+        </a>
 
         <div class="play-content__bet">
             <span>0x</span>

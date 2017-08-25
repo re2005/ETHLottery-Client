@@ -1,6 +1,7 @@
 'use strict';
 import {Injectable} from '@angular/core';
 
+
 @Injectable()
 export class ConnectService {
 
@@ -13,11 +14,17 @@ export class ConnectService {
         return window.web3.isConnected();
     }
 
+    public getNetworkIdSync() {
+        return this.netId;
+    };
+
     public getNetworkId() {
         return new Promise((resolve) => {
             if (typeof window.web3 !== 'undefined') {
                 window.web3.version.getNetwork((err, netId) => {
                     if (!err) {
+                        console.log(netId);
+                        this.netId = netId;
                         resolve(netId);
                     }
                 });
@@ -25,32 +32,17 @@ export class ConnectService {
         });
     }
 
-    public getNetworkIdSYnc() {
-        return this.netId;
-    }
 
-    public getMetamask() {
+    startConnection() {
         return new Promise((resolve) => {
             if (typeof window.web3 !== 'undefined') {
                 window.web3 = new window.Web3(window.web3.currentProvider);
                 console.warn('You are connected to MetaMask');
+                this.getNetworkId();
                 resolve({server: 'MetaMask', isConnected: true});
             } else {
                 resolve({server: 'MetaMask', isConnected: false});
             }
-        });
-    }
-
-    startConnection() {
-        return Promise.all([
-            this.getMetamask(),
-            this.getNetworkId()
-        ]).then(values => {
-            this.netId = values[1];
-            return {
-                isConnected: values[0]['isConnected'],
-                server: values[0]['server']
-            };
         });
     }
 }

@@ -126,6 +126,14 @@ export class AppComponent implements OnInit {
         this._etherscanService.openAddress(address);
     }
 
+    public makeUrlForAddress(address) {
+        return this._etherscanService.makeUrlForAddress(address);
+    }
+
+    public makeUrlForTx(address) {
+        return this._etherscanService.makeUrlForTx(address);
+    }
+
     /**
      *
      * @param address
@@ -215,7 +223,6 @@ export class AppComponent implements OnInit {
             }
         }
     }
-
 
     private _parseBetsForWithdraw(event) {
         const bets = this.getBets(event.address);
@@ -315,6 +322,7 @@ export class AppComponent implements OnInit {
     }
 
     private getAllResultEvents(contract) {
+
         window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
             if (!errorBlock) {
                 this.contracts[contract].Result({_sender: [this.account.address]},
@@ -325,6 +333,24 @@ export class AppComponent implements OnInit {
                         if (!error) {
                             if (this.account.address) {
                                 this._parseBetsForResult(result);
+                            }
+                        }
+                    });
+            }
+        });
+    };
+
+    private getAllWithdrawEvents(contract) {
+        window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
+            if (!errorBlock) {
+                this.contracts[contract].Withdraw({_sender: [this.account.address]},
+                    {
+                        fromBlock: this.contracts[contract].contractData.createBlock,
+                        toBlock: resultBlock
+                    }, (error, result) => {
+                        if (!error) {
+                            if (this.account.address) {
+                                this._parseBetsForWithdraw(result);
                             }
                         }
                     });
@@ -345,8 +371,8 @@ export class AppComponent implements OnInit {
     private _setListeners() {
         for (const contract in this.contracts) {
             if (this.contracts[contract].contractData.resultHash == 0) {
-
                 this.contracts[contract].eventsObject = this.contracts[contract].allEvents((error, event) => {
+                    debugger
                     this.updateContractAllEvents(event);
                 });
 
@@ -358,8 +384,22 @@ export class AppComponent implements OnInit {
                 }
             } else {
                 setTimeout(() => {
-                    this.getAllResultEvents(contract);
-                }, 5000);
+                    const result = {
+                        address: this.contracts[contract].address,
+                        args: {
+                            _result: this.contracts[contract].contractData.result
+                        }
+                    };
+                    this._parseBetsForResult(result);
+
+                    if (this.account.address) {
+                        setTimeout(() => {
+                            this.getAllPlayEvents(contract);
+                            this.getAllResultEvents(contract);
+                            this.getAllWithdrawEvents(contract);
+                        }, 5000);
+                    }
+                }, 1000);
             }
         }
     }
@@ -524,7 +564,6 @@ export class AppComponent implements OnInit {
 
         this._playService.listenClosePlayWindow().subscribe((isSuccess) => {
             this.closePlay();
-
             if (isSuccess) {
                 const audio = new Audio('../assets/audio/play-done.mp3');
                 audio.play();
