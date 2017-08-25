@@ -118,9 +118,18 @@
             }
         }
 
-        &--pending a {
-            color: $color-gray-01;
-            cursor: pointer;
+        &--pending {
+            div {
+                display: inline-block;
+            }
+            img {
+                vertical-align: super;
+                display: inline-block;
+            }
+            a {
+                color: $color-gray-01;
+                cursor: pointer;
+            }
         }
 
         &--looser {

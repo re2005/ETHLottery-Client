@@ -23,7 +23,6 @@ export class ConnectService {
             if (typeof window.web3 !== 'undefined') {
                 window.web3.version.getNetwork((err, netId) => {
                     if (!err) {
-                        console.log(netId);
                         this.netId = netId;
                         resolve(netId);
                     }
@@ -31,7 +30,6 @@ export class ConnectService {
             }
         });
     }
-
 
     startConnection() {
         return new Promise((resolve) => {

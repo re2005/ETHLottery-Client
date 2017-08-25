@@ -33,6 +33,9 @@
                     Try your luck with<br>
                     blockchain lottery
                 </h1>
+                <h2>
+                    If no winner the lottery will accumulate!
+                </h2>
             </div>
 
             <div class="container--flex">
@@ -146,17 +149,20 @@
                                         <div class="bets__status--pending"
                                              *ngIf="!betValue?.isConfirmed && !betValue?.isInvalid">
 
-                                            <a href="{{makeUrlForAddress(betValue?.contractAddress)}}"
-                                               target="_blank">
-                                                Pending
-                                            </a>
+                                            <img src="/assets/images/pending.gif">
 
-                                            <a href="{{makeUrlForTx(betValue?.transactionHash)}}"
-                                               target="_blank">
+                                            <div>
+                                                <a href="{{makeUrlForAddress(betValue?.contractAddress)}}"
+                                                   target="_blank">Pending
+                                                </a>
+
+                                                <a href="{{makeUrlForTx(betValue?.transactionHash)}}"
+                                                   target="_blank">
                                                 <span class="bets__status--withdraw">
                                                 {{betValue?.transactionHash}}
                                                 </span>
-                                            </a>
+                                                </a>
+                                            </div>
                                         </div>
 
                                         <!--BET STATUS CONFIRMED -->
