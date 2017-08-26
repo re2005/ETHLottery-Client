@@ -127,22 +127,39 @@ export class AppComponent implements OnInit {
             const data: any = event.target;
             window.localStorage.setItem(that.account.address, data.result);
             that._onBetsWasChanged();
-            // that._playService.updateBets(that.account.address, data.result)
         };
         r.readAsBinaryString(file);
-        // var files = event.srcElement.files;
-        // console.log(files);
-
-        // let fileList: FileList = event.srcElement.files;
-        // let file: File = fileList[0];
-        // let myReader: FileReader = new FileReader();
-        //
-        // debugger
-        // let formData: FormData = new FormData();
-        // formData.append('uploadFile', file, file.name);
-        // this._storageService.set('re', file);
     }
 
+    private checkEtherForContractAddress(address, fromBlock) {
+
+        const url = 'https://api.etherscan.io/api';
+        const params = {
+            module: 'logs',
+            action: 'getLogs',
+            fromBlock: fromBlock,
+            toBlock: 'latest',
+            address: address,
+            apikey: 'FXGY871F6ZW7P77YMDYMQZIPMSGPAPYGWV'
+        };
+        const ether = this._etherscanService.get(url, params);
+        ether.subscribe(data => {
+            if (!data || !this.bets) return;
+            const _result: any = data;
+            const _data = JSON.parse(_result._body);
+            _data.result.forEach(d => {
+                const _bets = this.bets[d.address];
+                if (!_bets) return;
+                for (const _bKey in _bets) {
+                    const _bet = _bets[_bKey];
+                    if (_bet.transactionHash === d.transactionHash && !_bet.isConfirmed) {
+                        _bet.isConfirmed = true;
+                        this._playService.updateBets(this.account.address, this.bets);
+                    }
+                }
+            });
+        });
+    }
 
     /**
      *
@@ -440,6 +457,12 @@ export class AppComponent implements OnInit {
                     }
                 }, 1000);
             }
+
+            // Check Etherscan
+            setTimeout(() => {
+                this.checkEtherForContractAddress(this.contracts[contract].address, this.contracts[contract].contractData.createBlock);
+            }, 5000)
+
         }
     }
 

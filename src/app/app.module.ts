@@ -1,3 +1,4 @@
+import {HttpModule} from '@angular/http';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
@@ -20,6 +21,7 @@ import {BlockCounterComponent} from './components/block-counter/block-counter.co
 import {ContractManagerService} from './services/contract-manager/contract-manager.service';
 import {ContractInfoComponent} from './components/contract-info/contract-info/contract-info.component';
 
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -34,7 +36,8 @@ import {ContractInfoComponent} from './components/contract-info/contract-info/co
     ],
     imports: [
         BrowserModule,
-        FormsModule
+        FormsModule,
+        HttpModule
     ],
     providers: [ConnectService,
         ContractService,

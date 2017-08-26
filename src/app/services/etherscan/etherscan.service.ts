@@ -1,5 +1,5 @@
+import {Http} from '@angular/http';
 import {Injectable} from '@angular/core';
-
 import {ConnectService} from '../connect/connect.service';
 
 @Injectable()
@@ -9,8 +9,15 @@ export class EtherscanService {
     /**
      *
      * @param {ConnectService} _connectService
+     * @param {Http} http
      */
-    constructor(private _connectService: ConnectService) {
+    constructor(private _connectService: ConnectService,
+                private http: Http) {
+    }
+
+
+    public get(url: string, params) {
+        return this.http.get(url, {search: params});
     }
 
     private getNetwork() {
@@ -23,7 +30,7 @@ export class EtherscanService {
         });
     }
 
-    public makeUrlForAddress(address) {
+    makeUrlForAddress(address) {
         const network = this._connectService.getNetworkIdSync();
         const url = this.makeEtherScanUrl(network) + 'address/' + address;
         return url;
