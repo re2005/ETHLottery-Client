@@ -420,6 +420,7 @@ export class AppComponent implements OnInit {
                 this.getAllResultEvents(contract);
             } else {
                 this.getAllPlayEvents(contract);
+                this.getAllWithdrawEvents(contract);
             }
         }
     }
