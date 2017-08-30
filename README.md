@@ -41,8 +41,22 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 Before running the tests make sure you are serving the app via `ng serve`.
 
+## Live official ETHLottery Client demo
 
-The project was made by two friends who belives the world should not be in control by the ambicious people who takes advantages by power.
+There is also a [live demo](https://lifelottery.github.io/) currently running against the main Ethereum network.
+
+Demo requires metamask installed on latest version of google chrome browser.
+
+There is a step by step manual on how to play using the official ETHLottery client.
+
+## official ETHLottery Contract
+
+This is the [link](https://github.com/renasboy/ETHLottery) to the official ETHLottery smart contract.
+
+
+## Inspiration
+
+The project was made by two friends who belive the world should not be in control by a minority of people who take advantage by power.
 We all share the same planet and we all want to live!
 
 Life Lottery!
