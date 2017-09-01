@@ -104,12 +104,14 @@
                              class="no-bets">
                             <h3>No Bets found.</h3>
                             <br><br>
+                            <div *ngIf="account?.address">
                             Load your bets backup file here:
                             <input type="file"
                                    name="bets"
                                    accept="application/json"
                                    (change)="uplodaBets($event)">
                             <br><br>
+                            </div>
                             <h4>Curious about how it works?</h4>
                             <br><br>
                             <p>
