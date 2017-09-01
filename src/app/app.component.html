@@ -15,13 +15,13 @@
             <div class="right">
                 <div *ngIf="!account?.address"
                      class="meta-mask">
-                    Please <strong>unlock</strong> MetaMask <img src="../assets/images/metamask.gif">
+                    <strong>Unlock</strong> your MetaMask <img src="../assets/images/metamask.gif">
                 </div>
                 <div>
                     <a class="slack"
                        href="https://lifelottery.herokuapp.com/"
                        target="_blank"><img src="../assets/images/slack.png"> Join us!</a>
-                    <button (click)="howToPlay()">See tutorial</button>
+                    <button (click)="howToPlay()">How to play?</button>
                 </div>
             </div>
         </header>
@@ -31,10 +31,10 @@
             <div class="container__label">
                 <h1>
                     Try your luck with<br>
-                    blockchain lottery
+                    our blockchain lottery
                 </h1>
                 <h2>
-                    If there is no winner the lottery will accumulate!
+                    NO WINNER = DOUBLED JACKPOT
                 </h2>
             </div>
 
@@ -96,28 +96,24 @@
                     <h2 class="sidebar__title">My bets
                         <span *ngIf="bets"
                               (click)="downloadBets()"
-                              class="download-bets">backup</span></h2>
+                              class="download-bets">backup my bets</span></h2>
 
                     <ul class="bets">
 
                         <div *ngIf="!bets"
                              class="no-bets">
-                            <h3>No Bets yet, :)</h3>
+                            <h3>No Bets found.</h3>
                             <br><br>
-                            If you have a backup from your bets you can updaload it here:
+                            Load your bets backup file here:
                             <input type="file"
                                    name="bets"
                                    accept="application/json"
                                    (change)="uplodaBets($event)">
                             <br><br>
-                            <h4>Are curious about how it works?</h4>
+                            <h4>Curious about how it works?</h4>
                             <br><br>
-                            <p>Check our contract code</p>
-                            <br>
-                            <a href="{{makeUrlForAddress('0x5f90595055e61755d71c04612e9eceeac34fb789')}}"
-                               target="_blank">
-                                Open EtherScan
-                            </a>
+                            <p>
+                            <a href="{{makeUrlForAddress('0x5f90595055e61755d71c04612e9eceeac34fb789')}}" target="_blank">Read our live contract on etherscan.</a></p>
                         </div>
 
                         <div *ngIf="withdrawMessage"
@@ -195,7 +191,7 @@
 
                                             <a href="{{makeUrlForTx(betValue?.transactionHash)}}"
                                                target="_blank">
-                                                <p>Looser bet :(</p>
+                                                <p>Loser bet</p>
                                                 <span>
                                             <i [innerHtml]="betValue?.fee/1000000000000000000"></i> eth
                                         </span>
@@ -228,7 +224,7 @@
                     <div *ngIf="betsRestored"
                          class="removed-bets">
                         <h2>
-                            Bets you have removed
+                            Archived bets
                             <button (click)="removedBets = !removedBets">
                                 <span [hidden]="removedBets">hide</span>
                                 <span [hidden]="!removedBets">show</span>
