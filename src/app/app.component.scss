@@ -212,3 +212,17 @@ header {
         text-decoration: underline;
     }
 }
+
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    background: $color-red;
+    color: $color-white;
+
+    a {
+        float: right;
+        color: $color-white;
+        text-decoration: none;
+        font-size: .7rem;
+    }
+}
