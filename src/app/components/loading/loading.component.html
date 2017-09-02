@@ -1,18 +1,39 @@
 <div class="app-loading">
-    <div class="logo-pic"></div>
 
     <div [ngClass]="{'hidden': retryConnect > 4}">
+        <div class="logo-pic"></div>
         <h1 class="loading color-loop">loading</h1>
     </div>
-    <span [ngClass]="{'show': (retryConnect >= 2 && retryConnect <= 4)}">
-            {{retryConnect}}<br>
-            attempts to connect
-        </span>
-    <span [ngClass]="{'show': retryConnect > 4}">
-        <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">
+
+    <div class="content" [ngClass]="{'show': (retryConnect >= 2 && retryConnect <= 4)}">
+        {{retryConnect}}<br>
+        attempts to connect
+    </div>
+
+    <div class="content" [ngClass]="{'show': retryConnect > 4}">
+
+        <h1>Welcome to Life Lottery !</h1>
+
+        <div class="metamask">
+            <p>To access this website need METAMASK installed in your Google Chrome browser</p>
+        </div>
+
+
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/6Gf_kRE4MJU" frameborder="0"
+                allowfullscreen></iframe>
+
+        <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en"
+           class="link">
             <img src="../../../assets/images/metamask.png">
+            Link to Install metamask
         </a>
-            Please check if META MASK is working or your GETH node was started with these options:<br>
-            <i>./geth --testnet --fast --rpc --rpcapi db,eth,net,web3,personal --rpccorsdomain="*"</i>
-        </span>
+
+        <div class="metamask">
+            <h2>Check how it works!</h2>
+        </div>
+        
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/Io3SaaeN1eE" frameborder="0"
+                allowfullscreen></iframe>
+
+    </div>
 </div>
