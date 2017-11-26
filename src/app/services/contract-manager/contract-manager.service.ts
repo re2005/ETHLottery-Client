@@ -22,6 +22,10 @@ export class ContractManagerService {
     constructor(private _connectService: ConnectService) {
     }
 
+    /**
+     *
+     * @param event
+     */
     private broadcastEvent(event): void {
         this._event.next(event);
     }
@@ -38,7 +42,11 @@ export class ContractManagerService {
         });
     }
 
-
+    /**
+     *
+     * @param {number} network
+     * @return {any}
+     */
     private makeManagerAddress(network) {
         if (network === '3') {
             return this.managerAddress.test;
