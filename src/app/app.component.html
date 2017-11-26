@@ -80,6 +80,31 @@
                             </a>
                         </li>
                     </ul>
+
+                    <!--<div class="previous-bets">-->
+                    <!--<h3>Previous Bets</h3>-->
+
+                    <!--<div *ngFor="let contract of contracts | keyValues"-->
+                    <!--class="contract-item">-->
+                    <!--<app-lottery-icon contractAddress="{{contract.address}}"-->
+                    <!--class="icon"></app-lottery-icon>-->
+
+                    <!--<span *ngIf="!contract.previousBets"-->
+                    <!--class="loading-bets">-->
+                    <!--<img src="/assets/images/pending.gif"> Loading Bets...-->
+                    <!--</span>-->
+
+                    <!--<div *ngFor="let betValues of contract.previousBets"-->
+                    <!--class="list-item">-->
+                    <!--<a href="{{makeUrlForTx(betValues?.hash)}}"-->
+                    <!--target="_blank">-->
+                    <!--{{betValues.time}}-->
+                    <!--{{betValues.bet}}-->
+                    <!--</a>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
                 </section>
 
                 <aside class="sidebar">

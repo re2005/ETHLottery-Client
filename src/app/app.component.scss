@@ -229,3 +229,46 @@ footer {
         font-size: .6rem;
     }
 }
+
+.previous-bets {
+
+    .contract-item {
+        margin: 20px 0;
+        display: inline-block;
+    }
+
+    .icon {
+        width: 40px;
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    .loading-bets {
+        font-size: 14px;
+
+        img {
+            vertical-align: middle;
+        }
+    }
+
+    .list-item {
+        display: inline-block;
+        margin-right: 6px;
+        margin-bottom: 6px;
+
+        a {
+            font-weight: normal;
+            text-decoration: none;
+            font-size: 11px;
+            padding: 4px 6px;
+            background: $color-gray-02;
+            color: $color-gray-01;
+            border-radius: 20%;
+            &:hover {
+                color: $color-white;
+                background: $color-gray-03;
+            }
+        }
+    }
+}

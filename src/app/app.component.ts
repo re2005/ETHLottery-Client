@@ -319,6 +319,22 @@ export class AppComponent implements OnInit {
         return Math.ceil(jackpot / fee);
     }
 
+    /**
+     *
+     * @param event
+     */
+    private restorePreviousBets(event) {
+        if (!this.contracts[event.address].previousBets) {
+            this.contracts[event.address].previousBets = []
+        }
+        this.contracts[event.address].previousBets.push({
+            bet: event.args._byte,
+            hash: event.transactionHash,
+            contractAddress: event.address,
+            time: event.args._time
+        });
+    }
+
     private updateContractAllEvents(event) {
 
         if (!event) {
@@ -332,6 +348,10 @@ export class AppComponent implements OnInit {
                 if (event.args._sender === this.account.address && this.bets) {
                     this._updateBetsForPlay(event);
                 }
+
+                // Commented at the moment, until find the timestamp
+                // this.restorePreviousBets(event);
+
                 break;
             case 'Balance':
                 _contract.contractData.balance =
@@ -378,7 +398,6 @@ export class AppComponent implements OnInit {
     }
 
     private getAllResultEvents(contract) {
-
         window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
             if (!errorBlock) {
                 this.contracts[contract].Result({_sender: [this.account.address]},
@@ -426,12 +445,17 @@ export class AppComponent implements OnInit {
     }
 
     private _setListeners() {
+
         for (const contract in this.contracts) {
+            const _creationBlock = this.contracts[contract].contractData.createBlock;
             if (this.contracts[contract].contractData.resultHash == 0) {
-                this.contracts[contract].eventsObject = this.contracts[contract].allEvents((error, event) => {
-                    debugger
-                    this.updateContractAllEvents(event);
-                });
+                this.contracts[contract].eventsObject = this.contracts[contract].allEvents(
+                    {
+                        fromBlock: _creationBlock,
+                        toBlock: 'latest'
+                    }, (error, event) => {
+                        this.updateContractAllEvents(event);
+                    });
 
                 if (this.account.address) {
                     setTimeout(() => {
@@ -461,7 +485,7 @@ export class AppComponent implements OnInit {
 
             // Check Etherscan
             setTimeout(() => {
-                this.checkEtherForContractAddress(this.contracts[contract].address, this.contracts[contract].contractData.createBlock);
+                this.checkEtherForContractAddress(this.contracts[contract].address, _creationBlock);
             }, 5000)
 
         }
