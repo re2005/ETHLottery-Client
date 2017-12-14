@@ -594,6 +594,12 @@ export class AppComponent implements OnInit {
 
     private tryReconnect() {
         if (this.retryConnect > 5) {
+            window.ga('send', {
+                hitType: 'event',
+                eventCategory: 'Site',
+                eventAction: 'MetaMask',
+                eventLabel: 'NO METAMASK'
+            });
             return;
         }
         setTimeout(() => {
@@ -642,6 +648,11 @@ export class AppComponent implements OnInit {
 
 
     ngOnInit() {
+
+        if (!window.ga) {
+            window.ga = function () {
+            };
+        }
 
         this.connectService.startConnection().then((data) => this.updateConnectionStatus(data));
 
