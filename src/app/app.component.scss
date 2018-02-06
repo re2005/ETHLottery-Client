@@ -222,7 +222,8 @@ footer {
         float: right;
         color: $color-white;
         text-decoration: none;
-        font-size: .7rem;
+        font-size: .9rem;
+        margin-left: 25px;
     }
 
     i {
@@ -270,5 +271,12 @@ footer {
                 background: $color-gray-03;
             }
         }
+    }
+}
+
+.life-slot {
+
+    img {
+        max-width: 80%;
     }
 }

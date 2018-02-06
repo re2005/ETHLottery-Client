@@ -43,3 +43,4 @@ Thumbs.db
 /scripts
 dist.zip
 /README.md
+/package-lock.json
