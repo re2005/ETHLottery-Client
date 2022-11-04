@@ -27,7 +27,7 @@ export class AccountService {
             if (!account) {
                 resolve();
             }
-            window.web3.eth.getBalance(account, (error, balance) => {
+            window.ethereum.eth.getBalance(account, (error, balance) => {
                 if (!error) {
                     resolve(balance);
                 } else {
@@ -38,12 +38,12 @@ export class AccountService {
     }
 
     public get() {
-        return new Promise((resolve) => {
-            window.web3.eth.getAccounts((error, accounts: any) => {
-                if (!error) {
-                    resolve(accounts[0]);
-                }
+        return new Promise(async (resolve) => {
+            const accounts = await window.ethereum.request({
+                method: 'eth_requestAccounts',
+                params: [{ eth_accounts: {} }],
             });
+            resolve(accounts[0]);
         });
     }
 }

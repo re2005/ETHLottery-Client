@@ -382,7 +382,7 @@ export class AppComponent implements OnInit {
     }
 
     private getAllPlayEvents(contract) {
-        window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
+        window.ethereum.eth.getBlockNumber((errorBlock, resultBlock) => {
             if (!errorBlock) {
                 this.contracts[contract].Play({_sender: [this.account.address]},
                     {
@@ -398,7 +398,7 @@ export class AppComponent implements OnInit {
     }
 
     private getAllResultEvents(contract) {
-        window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
+        window.ethereum.eth.getBlockNumber((errorBlock, resultBlock) => {
             if (!errorBlock) {
                 this.contracts[contract].Result({_sender: [this.account.address]},
                     {
@@ -416,7 +416,7 @@ export class AppComponent implements OnInit {
     };
 
     private getAllWithdrawEvents(contract) {
-        window.web3.eth.getBlockNumber((errorBlock, resultBlock) => {
+        window.ethereum.eth.getBlockNumber((errorBlock, resultBlock) => {
             if (!errorBlock) {
                 this.contracts[contract].Withdraw({_sender: [this.account.address]},
                     {
@@ -678,6 +678,7 @@ export class AppComponent implements OnInit {
 
 declare global {
     interface Window {
+        ethereum: any
         Web3: any,
         web3: any,
         ga: any

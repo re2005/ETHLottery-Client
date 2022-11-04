@@ -22,7 +22,7 @@ export class EtherscanService {
 
     private getNetwork() {
         return new Promise((resolve) => {
-            window.web3.version.getNetwork((err, netId) => {
+            window.ethereum.version.getNetwork((err, netId) => {
                 if (!err) {
                     resolve(netId);
                 }

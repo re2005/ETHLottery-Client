@@ -23,7 +23,7 @@ export class BlockCounterComponent implements OnInit {
             if (this.resultBlock === 0) {
                 return;
             }
-            window.web3.eth.getBlockNumber((error, result) => {
+            window.ethereum.eth.getBlockNumber((error, result) => {
                 if (error) {
                     return;
                 }

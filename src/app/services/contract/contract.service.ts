@@ -52,7 +52,7 @@ export class ContractService {
      * @return {number}
      */
     public convertWeiToEther(value) {
-        return window.web3.fromWei(value, 'ether')
+        return window.ethereum.fromWei(value, 'ether')
     }
 
     /**
@@ -116,7 +116,7 @@ export class ContractService {
     public getBalance() {
 
         return new Promise((resolve) => {
-            window.web3.eth.getBalance(this._contract.address, (error, balance) => {
+            window.ethereum.eth.getBalance(this._contract.address, (error, balance) => {
                 if (!error) {
                     resolve(balance);
                 } else {
@@ -296,7 +296,7 @@ export class ContractService {
     }
 
     public get() {
-        this._constractInstance = window.web3.eth.contract(abi);
+        this._constractInstance = window.ethereum.eth.contract(abi);
         const that = this;
         this._contracts = {};
         let _contractsArray: any;

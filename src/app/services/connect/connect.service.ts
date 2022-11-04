@@ -1,5 +1,5 @@
 'use strict';
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 
 @Injectable()
@@ -11,7 +11,7 @@ export class ConnectService {
     }
 
     public isWeb3Connected() {
-        return window.web3.isConnected();
+        return window.ethereum.isConnected();
     }
 
     public getNetworkIdSync() {
@@ -20,26 +20,21 @@ export class ConnectService {
 
     public getNetworkId() {
         return new Promise((resolve) => {
-            if (typeof window.web3 !== 'undefined') {
-                window.web3.version.getNetwork((err, netId) => {
-                    if (!err) {
-                        this.netId = netId;
-                        resolve(netId);
-                    }
-                });
+            if (typeof window.ethereum !== 'undefined') {
+                this.netId = window.ethereum.networkVersion;
             }
         });
     }
 
     startConnection() {
         return new Promise((resolve) => {
-            if (typeof window.web3 !== 'undefined') {
-                window.web3 = new window.Web3(window.web3.currentProvider);
+            if (typeof window.ethereum !== 'undefined') {
+                // window.ethereum = new window.ethereum(window.ethereum.currentProvider);
                 console.warn('You are connected to MetaMask');
                 this.getNetworkId();
-                resolve({server: 'MetaMask', isConnected: true});
+                resolve({ server: 'MetaMask', isConnected: true });
             } else {
-                resolve({server: 'MetaMask', isConnected: false});
+                resolve({ server: 'MetaMask', isConnected: false });
             }
         });
     }

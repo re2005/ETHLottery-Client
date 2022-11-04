@@ -65,7 +65,7 @@ export class ContractManagerService {
      * @param {String} contractAddress
      */
     private _getContractForAddress(contractAddress) {
-        const manager = window.web3.eth.contract(abiManager);
+        const manager = window.ethereum.eth.contract(abiManager);
         return manager.at(contractAddress);
     }
 

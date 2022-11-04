@@ -21,7 +21,7 @@ export class ContractInfoComponent implements OnInit {
     public removeBets(address) {
         const confirmation = prompt('Are you sure?\nThis will remove all bets from this lottery.\nTo confirm please write "delete":', '');
         if (confirmation === 'delete') {
-            window.web3.eth.getAccounts((error, accounts: any) => {
+            window.ethereum.eth.getAccounts((error, accounts: any) => {
                 if (!error) {
                     this._playService.getBets(accounts[0]).then(bets => {
                         delete bets[address];
